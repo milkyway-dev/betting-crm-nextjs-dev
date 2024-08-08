@@ -5,6 +5,7 @@ import ShowEye from "@/component/svg/ShowEye";
 import HideEye from "@/component/svg/HideEye";
 import { useRouter } from "next/navigation";
 import { Field, FormData } from "@/utils/Types";
+import toast from "react-hot-toast";
 
 
 const Page: React.FC = () => {
@@ -41,8 +42,15 @@ const Page: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
-    router.push('/')
+    if (!formData.username) {
+      toast.error('Enter username !')
+    } else if (!formData.password) {
+      toast.error('Enter password !') 
+    } else {
+      console.log(formData);
+      router.push('/')  
+    }
+    
   };
 
   return (
@@ -50,7 +58,7 @@ const Page: React.FC = () => {
       <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-xl py-12 bg-white w-[95%] rounded-3xl px-5 md:px-10 md:w-[60%] lg:w-[40%] xl:w-[30%]">
         <div className="flex items-center justify-center">
           <Image
-            src="/assets/images/Logo.png"
+            src="/assets/images/Dark_Logo.png"
             alt="logo"
             width={500}
             height={200}
@@ -77,7 +85,7 @@ const Page: React.FC = () => {
                 className="outline-none w-full mb-5 border-dark_black border-[2px] border-opacity-60 md:placeholder:text-xl placeholder:text-lg placeholder:font-light placeholder:text-dark_black placeholder:text-center pl-5 pr-16 py-2 rounded-3xl"
               />
             ))}
-            {Fields.find((field) => field.Name === "password") && (
+            {Fields.find((field) => field.Name === "password") && formData?.password.length>0&& (
               <button
                 type="button"
                 onClick={handleShowHidePassword}
@@ -90,7 +98,7 @@ const Page: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="text-white w-full bg-dark_black uppercase text-xl text-center py-2 rounded-full shadow-xl"
+              className="text-white  w-full bg-dark_black uppercase text-xl text-center py-2 rounded-full shadow-xl"
             >
               Login
             </button>
