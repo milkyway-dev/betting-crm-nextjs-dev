@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* General rule for Webkit browsers */
+*::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* Specific for Firefox */
+* {
+    scrollbar-width: none;
+}
+
+/* Specific for IE and older Edge versions */
+* {
+    -ms-overflow-style: none;
+}
