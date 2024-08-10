@@ -1,9 +1,6 @@
-"use client";
 import Header from "@/component/common/Header";
 import Table from "@/component/ui/Table";
-import { RootState } from "@/utils/Types";
 import React from "react";
-import { useSelector } from "react-redux";
 
 const Page = () => {
   const tabs = ["Agents", "Players", "Add"];
@@ -74,15 +71,10 @@ const Page = () => {
       }
     ]
   };
-  const isNotification = useSelector(
-    (state: RootState) => state.globlestate.showNotification
-  );
   return (
     <>
       <div
-        className={`col-span-12 lg:col-span-9 ${
-          isNotification ? "xl:col-span-8" : "xl:col-span-10"
-        } transition-all `}
+        className="col-span-12 lg:col-span-9 xl:col-span-8"
       >
         <Header />
         <Table tabelData={tableData} tabs={tabs} />

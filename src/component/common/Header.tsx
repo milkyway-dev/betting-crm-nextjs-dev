@@ -6,11 +6,8 @@ import Notification from "../svg/Notification";
 import Logout from "../svg/Logout";
 import DarkMode from "../svg/DarkMode";
 import Cookies from 'js-cookie'
-import { useAppDispatch } from "@/utils/hooks";
-import { UpdateNotification } from "@/redux/ReduxSlice";
 
 const Header = () => {
-  const dispatch=useAppDispatch()
   const [dark,setDark] = useState(false)
   const toggleTheme = () => {
     setDark(!dark);
@@ -35,7 +32,7 @@ const Header = () => {
       <div className="flex items-center space-x-3 w-[90%] mx-auto justify-end">
         <button onClick={toggleTheme}>{dark?<LightMode />:<DarkMode />}</button>
         <Setting />
-        <button onClick={()=>dispatch(UpdateNotification(true))}><Notification /></button>
+        <button><Notification /></button>
         <Logout />
       </div>
     </div>

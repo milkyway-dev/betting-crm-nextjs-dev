@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { Field, FormData } from "@/utils/Types";
 import toast from "react-hot-toast";
 import { GetCaptcha } from "@/utils/action";
+import User from "@/component/svg/User";
+import Password from "@/component/svg/Password";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -17,11 +19,13 @@ const Page: React.FC = () => {
       type: "text",
       placeholder: "User Name",
       Name: "username",
+      icon:<User />
     },
     {
       type: "password",
       placeholder: "Password",
       Name: "password",
+      icon:<Password />
     },
     {
       type: "text",
@@ -33,19 +37,18 @@ const Page: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
+    captcha: "",
   });
 
   //Get Captcha Api
   const fetchCaptcha = async () => {
     try {
-      const captcha = await  GetCaptcha();
+      const captcha = await GetCaptcha();
       if (captcha) {
-         setCaptchaSrc(captcha?.responseData?.captcha)
+        setCaptchaSrc(captcha?.responseData?.captcha);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
-
   useEffect(() => {
     fetchCaptcha();
   }, []);
@@ -78,50 +81,54 @@ const Page: React.FC = () => {
       <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-xl py-12 bg-[#0B0B0B] w-[95%] rounded-3xl px-5 md:px-10 md:w-[60%] lg:w-[40%] xl:w-[30%]">
         <div className="flex items-center justify-center">
           <Image
-            src="/assets/images/Dark_Logo.png"
+            src="/assets/images/Dark_Logo.svg"
             alt="logo"
             width={500}
             height={200}
-            className="w-[250px]"
+            className="w-[180px]"
             quality={100}
           />
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="pt-8 relative pb-4">
+          <div className="pt-8  pb-4">
             {Fields.map((item, ind) => (
-              <input
+              <div
                 key={ind}
-                type={
-                  item.type === "password"
-                    ? !showPassword
-                      ? item.type
+                className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] "
+              >
+                {item.icon}
+                <input
+                  type={
+                    item.type === "password"
+                      ? !showPassword
+                        ? item.type
+                        : "text"
                       : "text"
-                    : "text"
-                }
-                name={item.Name}
-                placeholder={item.placeholder}
-                value={formData[item.Name]}
-                onChange={handleChange}
-                className="outline-none w-full mb-5 border-dark_black border-[2px] bg-[#1A1A1A] border-opacity-60 md:placeholder:text-xl placeholder:text-lg placeholder:font-light placeholder:text-white placeholder:text-opacity-50  pl-5 pr-16 py-2 rounded-lg"
-              />
+                  }
+                  name={item.Name}
+                  placeholder={item.placeholder}
+                  value={formData[item.Name]}
+                  onChange={handleChange}
+                  className="outline-none w-full  bg-[#1A1A1A] rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:text-lg placeholder:font-light placeholder:text-white placeholder:text-opacity-50  py-3"
+                />
+                {item.Name == "password" && formData?.password.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleShowHidePassword}
+                    className="text-white pr-4 focus:outline-none"
+                  >
+                    {showPassword ? <HideEye /> : <ShowEye />}
+                  </button>
+                )}
+                {captchaSrc && item.Name == "captcha" && (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: captchaSrc }}
+                    className="h-full border-[#dfdfdfbc]  bg-[#ffffffc5] rounded-md"
+                  ></div>
+                )}
+              </div>
             ))}
-            {Fields.find((field) => field.Name === "password") &&
-              formData?.password.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleShowHidePassword}
-                  className="text-dark_black absolute mt-[.7rem] right-5 focus:outline-none"
-                >
-                  {showPassword ? <HideEye /> : <ShowEye />}
-                </button>
-              )}
           </div>
-          {captchaSrc && (
-            <div
-              dangerouslySetInnerHTML={{ __html: captchaSrc }}
-              className="h-full border-[#dfdfdfbc] bg-[#ffffffc5] rounded-md"
-            ></div>
-          )}
           <div>
             <button
               type="submit"
