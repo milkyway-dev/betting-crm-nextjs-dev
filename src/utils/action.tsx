@@ -23,4 +23,24 @@ export const loginUser = async (data:any) => {
     } finally {
       revalidatePath("/");
     }
-  };
+};
+  
+export const GetCaptcha = async () => {
+  try {
+    const response = await fetch(`${config.server}/auth/captcha`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return { responseData };
+  } catch (error) {
+    console.log("error:", error);
+  }
+};

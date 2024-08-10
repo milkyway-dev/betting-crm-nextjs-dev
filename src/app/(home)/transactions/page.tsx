@@ -4,7 +4,7 @@ import { RootState } from "@/utils/Types";
 import React from "react";
 import { useSelector } from "react-redux";
 
-const page = () => {
+const Page = () => {
   const isNotification = useSelector(
     (state: RootState) => state.globlestate.showNotification
   );
@@ -20,4 +20,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

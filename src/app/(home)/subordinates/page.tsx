@@ -5,7 +5,7 @@ import { RootState } from "@/utils/Types";
 import React from "react";
 import { useSelector } from "react-redux";
 
-const page = () => {
+const Page = () => {
   const tabs = ["Agents", "Players", "Add"];
   const tableData = {
     Thead: [
@@ -91,4 +91,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
