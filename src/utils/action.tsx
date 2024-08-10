@@ -1,10 +1,11 @@
 'use server'
 import { revalidatePath } from "next/cache";
 import { config } from "./config";
+import Cookies from "js-cookie";
 
 export const loginUser = async (data:any) => {
     try {
-      const response = await fetch(`${config.server}/api/users/login`, {
+      const response = await fetch(`${config.server}/auth/login`, {
         method: "POST",
         body: JSON.stringify(data),
         credentials: "include",
@@ -17,11 +18,19 @@ export const loginUser = async (data:any) => {
         return { error: error.message };
       }
       const responseData = await response.json();
-      return { responseData };
+      console.log(responseData);
+      
+      const token = responseData?.token;
+      console.log(token);
+      
+      if(token){  
+       Cookies.set("token", token);      
+      } 
+        return responseData  ;
     } catch (error) {
       console.log("error:", error);
     } finally {
-      revalidatePath("/");
+      // revalidatePath("/");
     }
 };
   

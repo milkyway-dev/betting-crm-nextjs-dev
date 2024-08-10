@@ -12,8 +12,13 @@ export interface FormData {
   username: string;
   password: string;
   [key: string]: string | undefined;
+  captchaToken:string
+  captcha:string
 }
 
+export interface DecodeToken{
+  role:string;
+}
 // Define an interface for the structure of each item in the TopCards array
 export interface TopCardItem {
   Text?: string;

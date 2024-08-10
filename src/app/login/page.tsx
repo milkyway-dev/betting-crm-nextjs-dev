@@ -4,15 +4,19 @@ import Image from "next/image";
 import ShowEye from "@/component/svg/ShowEye";
 import HideEye from "@/component/svg/HideEye";
 import { useRouter } from "next/navigation";
-import { Field, FormData } from "@/utils/Types";
+import { DecodeToken, Field, FormData } from "@/utils/Types";
 import toast from "react-hot-toast";
-import { GetCaptcha } from "@/utils/action";
+import { GetCaptcha, loginUser } from "@/utils/action";
 import User from "@/component/svg/User";
 import Password from "@/component/svg/Password";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 
 const Page: React.FC = () => {
   const router = useRouter();
   const [captchaSrc, setCaptchaSrc] = useState("");
+  const [captchatoken, setCaptchaToken] = useState("");
 
   const Fields: Field[] = [
     {
@@ -37,23 +41,29 @@ const Page: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
+    captchaToken:"",
     captcha: "",
   });
 
-  //Get Captcha Api
   const fetchCaptcha = async () => {
     try {
       const captcha = await GetCaptcha();
       if (captcha) {
-        setCaptchaSrc(captcha?.responseData?.captcha);
+        setCaptchaSrc(captcha.responseData?.captcha);
+        setCaptchaToken(captcha.responseData?.token);
+        setFormData((prevState) => ({
+          ...prevState,
+          captchaToken: captcha.responseData?.token
+        }));
       }
-    } catch (error) {}
+    } catch (error) {
+      // Handle error
+    }
   };
   useEffect(() => {
     fetchCaptcha();
   }, []);
 
-  // State to track if the password input should show or hide the password
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,15 +74,21 @@ const Page: React.FC = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.username) {
       toast.error("Enter username !");
     } else if (!formData.password) {
       toast.error("Enter password !");
     } else {
-      console.log(formData);
-      router.push("/");
+     const response = await loginUser(formData);
+     const token = response?.token;
+      console.log(response, "response");
+      Cookies.set("token", token );
+      const decodedToken = jwtDecode(token) as DecodeToken;
+      if(decodedToken && decodedToken?.role==="agent"||"admin"){
+        router.push("/");
+      }
     }
   };
 
