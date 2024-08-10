@@ -3,11 +3,15 @@ import ThreeDots from "../svg/ThreeDots";
 import Image from "next/image";
 import Tabs from "./Tabs";
 import { TableProps } from "@/utils/Types";
+import SearchBar from "./SearchBar";
 
 const Table: React.FC<TableProps> = ({ tabs, tabelData }) => {
   return (
     <div className="px-10 pt-5">
-      <Tabs tabs={tabs} />
+      <div className="flex items-center justify-between">
+        <Tabs tabs={tabs} />
+        <SearchBar />
+      </div>
       <div
         className={`bg-[#0E0F0F] p-5 border-[1px] rounded-b-2xl rounded-r-2xl border-[#313131]`}
       >

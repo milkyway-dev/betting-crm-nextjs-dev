@@ -42,5 +42,7 @@ export const GetCaptcha = async () => {
     return { responseData };
   } catch (error) {
     console.log("error:", error);
+  } finally {
+    revalidatePath("/");
   }
 };
