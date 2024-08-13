@@ -18,15 +18,17 @@ export default async function RootLayout({
 
   let tabs = ["players", "add"];
   if (userRole === "admin") {
-    tabs.unshift("agents")
+    tabs.unshift("agents");
   }
 
   return (
     <>
       <div className="col-span-12 lg:col-span-9 xl:col-span-8">
         <Header />
-        <Tabs tabs={tabs} initialTab="add" />
-        {children}
+        <div className="p-5">
+          <Tabs tabs={tabs} initialTab="add" />
+          {children}
+        </div>
       </div>
     </>
   );

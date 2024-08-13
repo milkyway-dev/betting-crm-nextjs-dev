@@ -75,8 +75,6 @@ export type AddFormData = {
 export type EditFormData = {
   UpdatePassword: string;
   UpdateStatus: string;
-  Recharge: string;
-  Redeem: string;
 };
 
 export interface ModalProps {
