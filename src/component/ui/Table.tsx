@@ -9,12 +9,12 @@ import TableThreeDots from "./TableThreeDots";
 const Table: React.FC<TableProps> = ({  fieldsHeadings, fieldData, data}) => {
   return (
     <>
-      <div className="px-10 pt-5">
+      <div className="overflow-x-scroll">
       <div className="flex items-center justify-between">
           {/* <SearchBar /> */}
       </div>
       <div
-        className={`bg-[#0E0F0F] p-5 border-[1px] rounded-b-2xl rounded-r-2xl border-[#313131]`}
+        className={`bg-[#0E0F0F] h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-l-2xl  md:rounded-l-none w-[700px] md:w-auto rounded-r-2xl border-[#313131]`}
       >
         <table className="w-full ">
           <thead className="text-white border-b border-[#858585] font-semibold">
@@ -52,7 +52,7 @@ const Table: React.FC<TableProps> = ({  fieldsHeadings, fieldData, data}) => {
                 return (
                   <td key={idx} className="pt-6">
 
-                  {data[field] == "Active" ? (
+                  {data[field] == "active" ? (
                     <span className="bg-green-700 bg-opacity-30 text-green-500 px-4 py-2 rounded-xl">
                       {data[field]}
                     </span>
@@ -74,7 +74,7 @@ const Table: React.FC<TableProps> = ({  fieldsHeadings, fieldData, data}) => {
                   
                 case "actions":
                  return (
-                     <TableThreeDots />
+                     <TableThreeDots data={data}/>
                    )  
                 
                 default:

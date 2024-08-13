@@ -25,7 +25,7 @@ export default async function RootLayout({
     <>
       <div className="col-span-12 lg:col-span-9 xl:col-span-8">
         <Header />
-        <div className="p-5">
+        <div className="px-4 md:px-10 pt-5">
           <Tabs tabs={tabs} initialTab="add" />
           {children}
         </div>

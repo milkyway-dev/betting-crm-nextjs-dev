@@ -19,7 +19,7 @@ export default function RootLayout({
     <>
       <Toaster position="bottom-center" />
       <Providers>
-        <div className="grid grid-cols-12 lg:h-screen bg-bg_dashboard">
+        <div className="grid grid-cols-12 overflow-y-scroll h-screen bg-bg_dashboard">
           <Sidebar />
           {children}
           <Notifications />

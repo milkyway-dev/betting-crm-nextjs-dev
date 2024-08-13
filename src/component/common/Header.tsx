@@ -32,7 +32,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="text-white flex items-center py-4 border-b-[.5px] border-[#313131] justify-end">
+    <div className="text-white flex items-center sticky top-0 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] justify-end">
       <div className="flex items-center space-x-3 w-[90%] mx-auto justify-end">
         <button onClick={toggleTheme}>{dark?<LightMode />:<DarkMode />}</button>
         <Setting />
