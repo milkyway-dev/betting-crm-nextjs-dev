@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { config } from "./config";
 import Cookies from "js-cookie";
+import { getCookie } from "./utils";
 
 export const loginUser = async (data:any) => {
     try {
@@ -55,3 +56,35 @@ export const GetCaptcha = async () => {
     revalidatePath("/");
   }
 };
+
+
+export const getAllAgents = async () => {  
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/agent/all`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const agents = data.agents;
+    console.log(agents);
+    
+    return {agents};
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}

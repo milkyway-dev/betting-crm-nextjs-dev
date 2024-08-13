@@ -16,7 +16,7 @@ const Sidebar = () => {
     },
     {
       text: "Subordinates",
-      Link: "/subordinates",
+      Link: "/subordinates/agents",
     },
     {
       text: "transactions",

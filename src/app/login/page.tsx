@@ -16,7 +16,6 @@ import { jwtDecode } from "jwt-decode";
 const Page: React.FC = () => {
   const router = useRouter();
   const [captchaSrc, setCaptchaSrc] = useState("");
-  const [captchatoken, setCaptchaToken] = useState("");
 
   const Fields: Field[] = [
     {
@@ -50,14 +49,14 @@ const Page: React.FC = () => {
       const captcha = await GetCaptcha();
       if (captcha) {
         setCaptchaSrc(captcha.responseData?.captcha);
-        setCaptchaToken(captcha.responseData?.token);
         setFormData((prevState) => ({
           ...prevState,
           captchaToken: captcha.responseData?.token
         }));
       }
-    } catch (error) {
-      // Handle error
+    } catch (error:any) {
+      console.log(error);
+      
     }
   };
   useEffect(() => {
@@ -77,20 +76,32 @@ const Page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.username) {
-      toast.error("Enter username !");
+      toast.error("Enter username!");
     } else if (!formData.password) {
-      toast.error("Enter password !");
+      toast.error("Enter password!");
     } else {
-     const response = await loginUser(formData);
-     const token = response?.token;
-      console.log(response, "response");
-      Cookies.set("token", token );
-      const decodedToken = jwtDecode(token) as DecodeToken;
-      if(decodedToken && decodedToken?.role==="agent"||"admin"){
-        router.push("/");
+      try {
+        const response = await loginUser(formData);
+        if (response?.error) {
+          toast.error(response.error);
+          fetchCaptcha(); 
+        } else {
+          const token = response?.token;
+          console.log(response, "response");
+          Cookies.set("token", token);
+          const decodedToken = jwtDecode(token) as DecodeToken;
+          if (decodedToken && (decodedToken.role === "agent" || decodedToken.role === "admin")) {
+            router.push("/");
+          }
+        }
+      } catch (error) {
+        toast.error("An unknown error occurred");
+        console.log(error);
+        fetchCaptcha();
       }
     }
   };
+  
 
   return (
     <div className="relative bg-gradient-to-r from-[#202020] to-[#0A0C0C] h-screen w-screen">

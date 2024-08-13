@@ -17,8 +17,10 @@ export interface FormData {
 }
 
 export interface DecodeToken{
-  role:string;
+  role:any;
 }
+
+
 // Define an interface for the structure of each item in the TopCards array
 export interface TopCardItem {
   Text?: string;
@@ -54,10 +56,15 @@ interface TableDataType {
 
 // Props interface for the Table component
 export interface TableProps {
-  tabs: string[];
-  tabelData: TableDataType;
+  fieldsHeadings: string[];
+  fieldData: string[];
+  
+  data:string[]
 }
 
 export interface TabProps {
   tabs: string[];
+  initialTab?: string;
+
 }
+
