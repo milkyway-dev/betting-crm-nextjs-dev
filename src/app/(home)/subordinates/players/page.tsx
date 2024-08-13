@@ -3,7 +3,7 @@ import { config } from "@/utils/config";
 import { getCookie } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
-export const getAllPlayers = async () => {  
+async function getAllPlayers(){  
   const token = await getCookie();
   try {
     const response = await fetch(`${config.server}/player/all`, {
@@ -34,7 +34,7 @@ export const getAllPlayers = async () => {
   }
 }
 
-const Page = async () => {
+const page = async () => {
   const data = await getAllPlayers();
   
   const fieldsHeadings = [
@@ -65,4 +65,4 @@ const Page = async () => {
   );
 };
 
-export default Page;
+export default page;
