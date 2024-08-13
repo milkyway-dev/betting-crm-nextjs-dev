@@ -2,14 +2,17 @@
 import React, { useState } from "react";
 import ThreeDots from "../svg/ThreeDots";
 import Modal from "./Modal";
+import { TableThreeDotsProps } from "@/utils/Types";
 
-const TableThreeDots = () => {
+const TableThreeDots: React.FC<TableThreeDotsProps>  = ({data}) => {
   const [open, setOPen] = useState(false)
   const [type,setType]=useState('s')
   const handelOpen = (state:boolean,Type:string) => {
     setOPen(state)
     setType(Type)
   }
+  console.log(data);
+  
   const handelClose = () => {
 
     setOPen(false)
@@ -27,7 +30,7 @@ const TableThreeDots = () => {
           </button>
         </div>
       </td>
-      <Modal isOpen={open} Type={type} onClose={handelClose}/>
+      <Modal isOpen={open} Type={type} onClose={handelClose} data={data}/>
     </>
   );
 };

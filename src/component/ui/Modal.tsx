@@ -1,38 +1,72 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
+import { deleteAgent, deletePlayer, updateAgent, updatePlayer } from "@/utils/action";
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose=()=>{},  Type, data }) => {
+console.log(data,"d");
 
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
-    UpdatePassword: "",
-    UpdateStatus: "",
-    Recharge: "",
-    Redeem: "",
+    id:data._id,
+    password: "",
+    status: data.status,
+   
   });
-
-  const handelSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent the default form submission behavior
+   
+  const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); 
 
     // Constructing an object from the form data
     const dataObject: EditFormData = {
       ...formData,
-      UpdatePassword: formData.UpdatePassword.trim(), // Trim whitespace
-      Recharge: formData.Recharge.trim(), // Trim whitespace
-      Redeem: formData.Redeem.trim(), // Trim whitespace
+      password: formData.password.trim(), // Trim whitespace
+      status: formData.status
     };
 
-    console.log(dataObject);
+    if(data.role==="agent"){
+
+    const response = await updateAgent(formData);
+    if (response?.error) {
+      return alert(response?.error || "Can't Update Agent");
+    }
+    onClose();
+  
+  }else{
+      const response = await updatePlayer(formData);
+      if (response?.error) {
+        return alert(response?.error || "Can't Update Player");
+      }
+      onClose();
+
+    }     
 
     // Reset form data after logging
     setFormData({
-      UpdatePassword: "",
-      UpdateStatus: "",
-      Recharge: "",
-      Redeem: "",
+      id:"",
+      password: "",
+      status: "",
     });
   };
+
+  const onConfirm = async()=>{
+    const id = data?._id
+   if(data.role==="agent"){
+    const response = await deleteAgent(id) 
+    if (response?.error) {
+      return alert(response?.error || "Can't Delete Agent");
+    }
+    onClose();
+
+   }else{
+      const response = await deletePlayer(id);
+      if (response?.error) {
+        return alert(response?.error || "Can't Delete Player");
+      }
+      onClose();
+
+     }
+  }
   //Edit
   if (!isOpen) return null;
 
@@ -91,11 +125,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
                   <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                     <input
                       type="password"
-                      name="UpdatePassword"
+                      name="password"
                       placeholder="Enter new password"
-                      value={formData.UpdatePassword}
+                      value={formData.password}
                       onChange={(e) =>
-                        setFormData({ ...formData, UpdatePassword: e.target.value })
+                        setFormData({ ...formData, password: e.target.value })
                       }
                       className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                     />
@@ -107,17 +141,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
                   </div>
                   <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
                     <select
-                      name="UpdateStatus"
-                      value={formData.UpdateStatus}
+                      name="status"
+                      value={formData.status}
                       onChange={(e) =>
-                        setFormData({ ...formData, UpdateStatus: e.target.value })
+                        setFormData({ ...formData, status: e.target.value })
                       }
                       className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base text-white text-opacity-40 py-2.5 appearance-none"
                       style={{ paddingRight: "30px" }}
                     >
                       <option value="">Select</option>
                       <option value="active">Active</option>
-                      <option value="Inactive">InActive</option>
+                      <option value="inactive">InActive</option>
                     </select>
                     <span className="pr-4 text-white text-opacity-40">
                       <ChevronDown />
@@ -125,40 +159,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
                   </div>
                 </div>
 
-                <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                    Recharge
-                  </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
-                    <input
-                      type="text"
-                      name="Recharge"
-                      placeholder="Enter amount"
-                      value={formData.Recharge}
-                      onChange={(e) =>
-                        setFormData({ ...formData, Recharge: e.target.value })
-                      }
-                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                    Redeem
-                  </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
-                    <input
-                      type="text"
-                      name="Redeem"
-                      placeholder="Enter redeemed amount"
-                      value={formData.Redeem}
-                      onChange={(e) =>
-                        setFormData({ ...formData, Redeem: e.target.value })
-                      }
-                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
-                    />
-                  </div>
-                </div>
+               
 
                 <div className="flex space-x-4 justify-center pt-4">
                   <button

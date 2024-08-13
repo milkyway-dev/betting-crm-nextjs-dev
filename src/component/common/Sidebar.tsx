@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
@@ -11,7 +11,6 @@ const Sidebar = () => {
   const [toggle,setToggle]=useState(false)
   const router = usePathname();
   const [user, setUser] = useState<any | null>(null);
-  const tab = usePathname();
   const [nav, setNav] = useState([
     {
       text: "Home",
@@ -38,9 +37,10 @@ const Sidebar = () => {
         )
       );
     }
-    }
+  };
   useEffect(() => {
     fetchUser();
+    
   }, []); 
 
   
