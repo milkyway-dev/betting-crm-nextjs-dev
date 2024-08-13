@@ -49,9 +49,9 @@ const Sidebar = () => {
   
   return (
     <>
-      {!toggle?<button onClick={()=>setToggle(!toggle)} className="absolute top-[1.55%] lg:hidden left-[4%]"><HamBurger /></button>:
-      <button onClick={()=>setToggle(!toggle)} className="absolute top-[1%] lg:hidden left-[3%] z-[51]"><Close /></button>}
-      <div className={`flex flex-col fixed ${!toggle?'-left-[200%]':'left-0'} z-50 transition-all top-0  h-screen  lg:h-auto  bg-dark_black lg:bg-transparent lg:static items-center justify-between px-4 py-10  col-span-3 border-r-[.5px] border-[#313131] xl:col-span-2`}>
+      {!toggle?<button onClick={()=>setToggle(!toggle)} className="absolute top-[1.55%] z-[51] lg:hidden left-[4%]"><HamBurger /></button>:
+      <button onClick={()=>setToggle(!toggle)} className="absolute top-[1%] lg:hidden left-[3%] z-[56]"><Close /></button>}
+      <div className={`flex flex-col fixed ${!toggle?'-left-[200%]':'left-0'}  z-[55] transition-all top-0  h-screen   bg-dark_black lg:bg-transparent lg:static items-center justify-between px-4 py-10  col-span-3 border-r-[.5px] border-[#313131] xl:col-span-2`}>
         <div>
           <div className="flex items-center justify-center">
             <Image
@@ -70,6 +70,7 @@ const Sidebar = () => {
                 <>
                   <li
                     key={ind}
+                    onClick={()=>setToggle(!toggle)} 
                     className="flex flex-col items-center justify-center font-light text-white"
                   >
                     <Link

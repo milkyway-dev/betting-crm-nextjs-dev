@@ -9,12 +9,12 @@ import TableThreeDots from "./TableThreeDots";
 const Table: React.FC<TableProps> = ({  fieldsHeadings, fieldData, data}) => {
   return (
     <>
-      <div className="px-10 pt-5  capitalize ">
+      <div className="overflow-x-scroll">
       <div className="flex items-center justify-between">
           {/* <SearchBar /> */}
       </div>
       <div
-        className={`bg-[#0E0F0F] p-5 border-[1px] rounded-b-2xl rounded-r-2xl border-[#313131]`}
+        className={`bg-[#0E0F0F] h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-l-2xl  md:rounded-l-none w-[700px] md:w-auto rounded-r-2xl border-[#313131]`}
       >
         <table className="w-full ">
           <thead className="text-white border-b border-[#858585] font-semibold">
