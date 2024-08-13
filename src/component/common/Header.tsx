@@ -6,9 +6,13 @@ import Notification from "../svg/Notification";
 import Logout from "../svg/Logout";
 import DarkMode from "../svg/DarkMode";
 import Cookies from 'js-cookie'
+import { deleteCookie } from "@/utils/utils";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [dark,setDark] = useState(false)
+  const router = useRouter();
+
   const toggleTheme = () => {
     setDark(!dark);
     document.body.classList.toggle('dark');

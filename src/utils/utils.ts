@@ -17,6 +17,7 @@ export const getCurrentUser = async () => {
   const token = await getCookie();
   const user = jwt.decode(token as string);
   return user;
+  
 };
 
 export const formatDate = (dateString: string) => {

@@ -1,15 +1,18 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { useParams, usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
+import { getCurrentUser } from "@/utils/utils";
 
 const Sidebar = () => {
   const [toggle,setToggle]=useState(false)
   const router = usePathname();
-  const nav = [
+  const [user, setUser] = useState<any | null>(null);
+  const tab = usePathname();
+  const [nav, setNav] = useState([
     {
       text: "Home",
       Link: "/",
@@ -22,7 +25,28 @@ const Sidebar = () => {
       text: "transactions",
       Link: "/transactions",
     },
-  ];
+  ]);
+  const fetchUser = async () => {
+    const currentUser:any = await getCurrentUser(); 
+    setUser(currentUser); 
+    if (currentUser?.role === "agent") {
+      setNav((prevNav) =>
+        prevNav.map((navItem) =>
+          navItem.text === "Subordinates"
+            ? { ...navItem, Link: "/subordinates/players" } 
+            : navItem
+        )
+      );
+    }
+    }
+  useEffect(() => {
+    fetchUser();
+  }, []); 
+
+  
+
+  
+  
   return (
     <>
       {!toggle?<button onClick={()=>setToggle(!toggle)} className="absolute top-[1.55%] lg:hidden left-[4%]"><HamBurger /></button>:
@@ -79,10 +103,10 @@ const Sidebar = () => {
           </div>
           <div>
             <div className="text-white text-base font-semibold">
-              Gaurav Kumar
+              {user?.username}
             </div>
             <div className="text-white text-opacity-50 text-sm font-semibold">
-              3048
+              {user?.credits}
             </div>
           </div>
         </div>
