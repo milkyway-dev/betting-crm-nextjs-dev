@@ -31,8 +31,8 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="h-screen lg:h-[89%] relative rounded-3xl">
-      <div className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[40%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]">
+    <div className="pt-40 md:py-40 h-screen lg:h-full md:bg-[#0E0F0F] md:p-5 md:border-[1px] rounded-b-2xl rounded-l-2xl md:rounded-l-none rounded-r-2xl border-[#313131]">
+      <div className="px-5 md:px-12 py-14 border-[1px] border-[#464646] w-[100%] md:w-[70%] lg:w-[50%]  xl:w-[45%] rounded-[1.5rem] md:rounded-[2.5rem] mx-auto bg-[#0E0E0E]">
         <form onSubmit={handelSubmit}>
           <div>
             <div className="text-white text-opacity-40 text-base pl-2 pb-2">
