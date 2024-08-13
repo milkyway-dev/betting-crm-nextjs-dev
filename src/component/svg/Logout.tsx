@@ -1,7 +1,22 @@
+import { useRouter } from "next/navigation";
 import React from "react";
+import Cookies from "js-cookie";
 
 const Logout = () => {
+  const router = useRouter();
+  const deleteCookieHandler = () => {
+    try {
+      Cookies.remove("token");
+      router.push("/login");
+    } catch (error:any) {
+      console.log(error.message);
+      
+    }
+  };
+
+
   return (
+    <button onClick={deleteCookieHandler}>
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,6 +35,7 @@ const Logout = () => {
         <line x1="21" x2="9" y1="12" y2="12" />
       </svg>
     </div>
+    </button>
   );
 };
 
