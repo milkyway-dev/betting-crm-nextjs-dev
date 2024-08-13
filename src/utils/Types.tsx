@@ -20,7 +20,6 @@ export interface DecodeToken {
   role: any;
 }
 
-// Define an interface for the structure of each item in the TopCards array
 export interface TopCardItem {
   Text?: string;
   counts?: string;
