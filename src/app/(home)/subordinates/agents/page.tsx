@@ -4,7 +4,7 @@ import { config } from "@/utils/config";
 import { getCookie } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
-export const getAllAgents = async () => {  
+async function getAllAgents () {  
   const token = await getCookie();
   try {
     const response = await fetch(`${config.server}/agent/all`, {
@@ -34,7 +34,7 @@ export const getAllAgents = async () => {
   }
 }
 
-const Page = async () => {
+const page = async () => {
   const tabs = ["Agents", "Players", "Add"];
   const data = await getAllAgents();
   
@@ -126,4 +126,4 @@ const Tbody= [
   );
 };
 
-export default Page;
+export default page;

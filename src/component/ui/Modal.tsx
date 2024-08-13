@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
-  if (!isOpen) return null;
 
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
@@ -35,6 +34,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
     });
   };
   //Edit
+  if (!isOpen) return null;
 
   switch (Type) {
     case "Delete":

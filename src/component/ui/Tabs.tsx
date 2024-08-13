@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const Tabs: React.FC<TabProps> = ({ tabs}) => {
-  const initialTab = tabs[0];
+  const initialTab = tabs[0]; 
   const [activeTab, setActiveTab] = useState(initialTab);
     return (
       <div className="translate-y-[4px] space-x-4 flex  items-center ">
