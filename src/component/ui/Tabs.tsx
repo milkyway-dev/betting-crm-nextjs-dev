@@ -7,7 +7,7 @@ const Tabs: React.FC<TabProps> = ({ tabs}) => {
   const initialTab = tabs[0];
   const [activeTab, setActiveTab] = useState(initialTab);
     return (
-      <div className="translate-y-[4px] space-x-4 flex items-center ">
+      <div className="translate-y-[4px] space-x-4 flex  items-center ">
         {tabs?.map((tab, ind) => (
           <div key={ind} className="relative">
             {ind !== 0 && tab == activeTab  && (

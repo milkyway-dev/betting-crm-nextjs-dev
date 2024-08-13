@@ -12,14 +12,13 @@ export interface FormData {
   username: string;
   password: string;
   [key: string]: string | undefined;
-  captchaToken:string
-  captcha:string
+  captchaToken: string;
+  captcha: string;
 }
 
-export interface DecodeToken{
-  role:any;
+export interface DecodeToken {
+  role: any;
 }
-
 
 // Define an interface for the structure of each item in the TopCards array
 export interface TopCardItem {
@@ -58,16 +57,34 @@ interface TableDataType {
 export interface TableProps {
   fieldsHeadings: string[];
   fieldData: string[];
-  
-  data:string[]
+
+  data: string[];
 }
 
 export interface TabProps {
   tabs: string[];
   initialTab?: string;
-
 }
 
+export type AddFormData = {
+  UserName: string;
+  Password: string;
+  Role: string;
+};
+
+export type EditFormData = {
+  UpdatePassword: string;
+  UpdateStatus: string;
+  Recharge: string;
+  Redeem: string;
+};
+
+export interface ModalProps {
+  isOpen: boolean;
+  onClose?: () => void;
+  onConfirm?: () => void;
+  Type?: String;
+}
 export interface DeleteUserProps {
   deleteToken: () => void;
 }
