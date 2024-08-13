@@ -69,7 +69,23 @@ const Table: React.FC<TableProps> = ({  fieldsHeadings, fieldData, data}) => {
                     <td key={idx} className="pt-6">
                       {formattedDate}
                     </td>
-                  )  
+                  )
+                  
+                case "actions":
+                   return (
+                    <td className="flex pt-6 justify- cursor-pointer group relative">
+                  <ThreeDots />
+                  <div className="absolute px-3 py-1.5 group-hover:block hidden rounded-lg bg-dark_light_black space-y-1 top-0 text-sm">
+                    <button className="text-white text-opacity-60 font-extralight px-2 py-1 rounded-lg hover:bg-dark_black  w-full block">
+                      Edit
+                    </button>
+                    <button className="text-white text-opacity-60 font-extralight px-2 py-1 rounded-lg hover:bg-dark_black w-full block">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+                   )  
+                
                 default:
                   return (
                     <td  key={idx} className="pt-6">
