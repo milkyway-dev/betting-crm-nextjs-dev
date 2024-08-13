@@ -3,7 +3,7 @@ import Sidebar from "@/component/common/Sidebar";
 import { Providers } from "@/redux/Providers";
 import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
-
+import Notifications from "@/component/ui/Notifications";
 
 export const metadata:Metadata = {
   title: "CRM - Betting Paradise",
@@ -19,12 +19,10 @@ export default function RootLayout({
     <>
       <Toaster position="bottom-center" />
       <Providers>
-        <div className="grid grid-cols-12 h-screen bg-bg_dashboard">
+        <div className="grid grid-cols-12 overflow-y-scroll h-screen bg-bg_dashboard">
           <Sidebar />
-          <div className="col-span-12 lg:col-span-9 xl:col-span-10 pb-10">
-            <Header />
-            {children}
-          </div>
+          {children}
+          <Notifications />
         </div>
       </Providers>
     </>
