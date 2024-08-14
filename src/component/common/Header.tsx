@@ -5,36 +5,21 @@ import Setting from "../svg/Setting";
 import Notification from "../svg/Notification";
 import Logout from "../svg/Logout";
 import DarkMode from "../svg/DarkMode";
-import Cookies from 'js-cookie'
-import { deleteCookie } from "@/utils/utils";
-import { useRouter } from "next/navigation";
-
+import { useTheme } from 'next-themes';
 const Header = () => {
-  const [dark,setDark] = useState(false)
-  const router = useRouter();
-
-  const toggleTheme = () => {
-    setDark(!dark);
-    document.body.classList.toggle('dark');
-    Cookies.set("darkmode", String(!dark));
-  }
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const isDarkStr = Cookies.get("darkmode");
-    let isDark = false; 
-  
-    if (isDarkStr === 'true') {
-      isDark = true;
-    }
-  
-    document.body.classList.toggle('dark', isDark);
-    setDark(isDark);
+    setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+  const currentTheme = theme === 'system' ? systemTheme : theme;
   return (
-    <div className="text-white flex items-center sticky top-0 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] justify-end">
+    <div className="text-white flex items-center sticky top-0 dark:bg-white dark:text-black dark:text-opacity-75 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] dark:border-opacity-10 justify-end">
       <div className="flex items-center space-x-3 w-[90%] mx-auto justify-end">
-        <button onClick={toggleTheme}>{dark?<LightMode />:<DarkMode />}</button>
+        {currentTheme==="dark"?<button onClick={()=>setTheme("light")}><DarkMode /></button>:<button onClick={()=>setTheme("dark")}><LightMode/></button>}
         <Setting />
         <button><Notification /></button>
         <Logout />
