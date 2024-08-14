@@ -7,8 +7,7 @@ const Page = () => {
     <div
       className="col-span-12 xl:col-span-8 lg:col-span-9"
     >
-      <Header />
-      Transaction Page
+      Betting Page
     </div>
   );
 };

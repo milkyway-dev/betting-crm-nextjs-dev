@@ -22,7 +22,7 @@ const Sidebar = () => {
     },
     {
       text: "transactions",
-      Link: "/transactions",
+      Link: "/transactions/coin",
     },
   ]);
   const fetchUser = async () => {

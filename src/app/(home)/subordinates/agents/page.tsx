@@ -1,13 +1,13 @@
 import Header from "@/component/common/Header";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
-import { getCookie } from "@/utils/utils";
+import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
 async function getAllAgents () {  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/agent/all`, {
+    const response = await fetch(`${config.server}/api/agent/all`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -53,67 +53,13 @@ const page = async () => {
     "createdAt",
     "actions"
   ]
-
- 
-const Tbody= [
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      },
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      },
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      },
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      },
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      },
-      {
-        userName: 'Cheyenne',
-        Status: 'Active',
-        Credits: '278',
-        TotalBets: '78',
-        TotalRecharge: '7865',
-        TotalReddem: '675',
-        Action:''
-      }
-    ]
-  
-
-  
+  const user:any = await getCurrentUser()
+  if(user.role!=="admin"){
+    return(
+    <>
+    </>
+    )
+  }
   return (
     <>
       <div

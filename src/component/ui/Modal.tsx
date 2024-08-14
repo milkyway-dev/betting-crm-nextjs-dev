@@ -1,11 +1,12 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer,  rechargeUser, updateAgent, updatePlayer } from "@/utils/action";
+import { deleteAgent, deletePlayer,  transactions, updateAgent, updatePlayer } from "@/utils/action";
+import toast from "react-hot-toast";
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose=()=>{},  Type, data }) => {
 console.log(data,"d");
-
+const caseType = Type==="Recharge"?"Recharge":"Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
     id:data._id,
@@ -17,10 +18,9 @@ console.log(data,"d");
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); 
 
-    // Constructing an object from the form data
     const dataObject: EditFormData = {
       ...formData,
-      password: formData.password.trim(), // Trim whitespace
+      password: formData.password.trim(), 
       status: formData.status
     };
 
@@ -69,33 +69,26 @@ console.log(data,"d");
   }
   //Edit
   //Recharge
-  const [recharge, setRecharge] = useState("0");
-  //Recharge
+  const [transaction, setTransaction] = useState("0");
    const handleRecharge = async (event: React.FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
     // reciever: receiverId, amount, type
+    const type = Type?.toLowerCase();
     const dataObject = {
       reciever:data._id,
-      amount: recharge,
-      type: "recharge"
+      amount: transaction,
+      type: type
     };
-    const response = await rechargeUser(formData);
+    const response = await transactions(dataObject);
     if (response?.error) {
       return alert(response?.error || "Can't Recharge");
     }
     onClose();
-  
-   
-
+    toast.success("Recharge Successful!")
 
    }
-
-  //Redeem
-  const [redeem,setRedeem]=useState("0")
-  //Redeem
-  const handleRedeem = async (event: React.FormEvent<HTMLFormElement>)=>{
-
-  }
+  
+ 
   if (!isOpen) return null;
 
   switch (Type) {
@@ -107,7 +100,6 @@ console.log(data,"d");
         >
           <div
             className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            // Prevents the click from propagating to the outer div
           >
             <div
               onClick={(e) => e.stopPropagation()}
@@ -209,7 +201,7 @@ console.log(data,"d");
         </div>
       );
 
-    case "Recharge":
+    case caseType:
       return (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"
@@ -220,17 +212,17 @@ console.log(data,"d");
               onClick={(e) => e.stopPropagation()}
               className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
             >
-              <form onClick={handleRecharge}>
+              <form onSubmit={handleRecharge}>
                 <div>
                   <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                    Recharge
+                    {caseType}
                   </div>
                   <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                     <input
                       type="text"
                       placeholder="Enter amount"
-                      value={recharge}
-                      onChange={(e) => setRecharge(e.target.value)}
+                      value={transaction}
+                      onChange={(e) => setTransaction(e.target.value)}
                       className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                     />
                   </div>
@@ -254,51 +246,7 @@ console.log(data,"d");
           </div>
         </div>
       );
-      case "Redeem":
-        return (
-          <div
-            className="fixed inset-0 flex items-center justify-center z-50"
-            onClick={onClose}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
-              >
-                <form onClick={handleRedeem}>
-                  <div>
-                    <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                      Redeem
-                    </div>
-                    <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
-                      <input
-                        type="text"
-                        placeholder="Enter Redeem amount"
-                        value={redeem}
-                        onChange={(e) => setRedeem(e.target.value)}
-                        className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex space-x-4 justify-center pt-4">
-                    <button
-                      onClick={onClose}
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                    >
-                      CANCLE
-                    </button>
-                    <button
-                      type="submit"
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                    >
-                      SAVE
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        );
+      
     default:
       return null;
   }

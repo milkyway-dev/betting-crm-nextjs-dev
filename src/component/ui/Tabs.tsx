@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const Tabs: React.FC<TabProps> = ({ tabs}) => {
+const Tabs: React.FC<TabProps> = ({ tabs, initialTab}) => {
   const pathname = usePathname();
-  const initialTab:any = pathname.split('/').pop(); 
+  const initial:any = pathname.split('/').pop(); 
 
   const [activeTab, setActiveTab] = useState<any>(
-    tabs.includes(initialTab) ? initialTab : tabs[0]
+    tabs.includes(initial) ? initial: tabs[0]
   );
   
     return (
@@ -19,7 +19,7 @@ const Tabs: React.FC<TabProps> = ({ tabs}) => {
             {ind !== 0 && tab == activeTab  && (
               <span className="p-5 bg-[#0E0F0F] md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
             )}
-            <Link href={`/subordinates/${tab}`}
+            <Link href={`/${initialTab}/${tab}`}
             onClick={()=>setActiveTab(tab)}
             className={`${
                   tab === activeTab
