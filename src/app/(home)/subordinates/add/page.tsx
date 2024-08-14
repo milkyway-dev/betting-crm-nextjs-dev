@@ -18,7 +18,7 @@ const Page: React.FC = () => {
     role: "",
   });
   
-  const [selectRole, setSelectRole] = useState<string[]>(["select", "player"]);
+  const [selectRole, setSelectRole] = useState<string[]>([ "player"]);
 
   useEffect(() => {
     const fetchRole = async () => {
