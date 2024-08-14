@@ -6,7 +6,7 @@ import { TableThreeDotsProps } from "@/utils/Types";
 
 const TableThreeDots: React.FC<TableThreeDotsProps>  = ({data}) => {
   const [open, setOPen] = useState(false)
-  const [type,setType]=useState('s')
+  const [type,setType]=useState('')
   const handelOpen = (state:boolean,Type:string) => {
     setOPen(state)
     setType(Type)

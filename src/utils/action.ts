@@ -6,7 +6,7 @@ import { getCookie } from "./utils";
 
 export const loginUser = async (data:any) => {
     try {
-      const response = await fetch(`${config.server}/auth/login`, {
+      const response = await fetch(`${config.server}/api/auth/login`, {
         method: "POST",
         body: JSON.stringify(data),
         credentials: "include",
@@ -37,7 +37,7 @@ export const loginUser = async (data:any) => {
   
 export const GetCaptcha = async () => {
   try {
-    const response = await fetch(`${config.server}/auth/captcha`, {
+    const response = await fetch(`${config.server}/api/auth/captcha`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -61,7 +61,7 @@ export const GetCaptcha = async () => {
 export const getAllAgents = async () => {  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/agent/all`, {
+    const response = await fetch(`${config.server}/api/agent/all`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -94,7 +94,7 @@ export const updateAgent = async (data:any) =>{
   const token = await getCookie();
 
   try{
-    const response = await fetch(`${config.server}/agent`, {
+    const response = await fetch(`${config.server}/api/agent`, {
       method:'PUT',
       credentials:"include",
       headers: {
@@ -120,7 +120,7 @@ export const deleteAgent = async (id:any)=> {
   const token = await getCookie();
 
   try {
-    const response = await fetch( `${config.server}/agent/${id}`, {
+    const response = await fetch( `${config.server}/api/agent/${id}`, {
       method:'DELETE',
       credentials:"include",
       headers: {
@@ -147,7 +147,7 @@ export const deleteAgent = async (id:any)=> {
 export const createAgent = async (data:any)=>{
   const token = await getCookie();
   try{
-  const response = await fetch(`${config.server}/agent/`, {
+  const response = await fetch(`${config.server}/api/agent/`, {
     method:"POST",
     credentials:"include",
     headers:{
@@ -176,7 +176,7 @@ export const updatePlayer = async (data:any) =>{
   const token = await getCookie();
 
   try{
-    const response = await fetch(`${config.server}/player`, {
+    const response = await fetch(`${config.server}/api/player`, {
       method:'PUT',
       credentials:"include",
       headers: {
@@ -205,7 +205,7 @@ export const deletePlayer = async (id:any)=> {
   const token = await getCookie();
 
   try {
-    const response = await fetch( `${config.server}/player/${id}`, {
+    const response = await fetch( `${config.server}/api/player/${id}`, {
       method:'DELETE',
       credentials:"include",
       headers: {
@@ -233,7 +233,7 @@ export const createPlayer = async (data:any)=>{
   const token = await getCookie();
 
   try{
-  const response = await fetch(`${config.server}/player/`, {
+  const response = await fetch(`${config.server}/api/player/`, {
     method:"POST",
     credentials:"include",
     headers:{
@@ -258,10 +258,10 @@ export const createPlayer = async (data:any)=>{
 
 }
 
-export const rechargeUser = async (data:any)=>{
+export const transactions = async (data:any)=>{
   const token = await getCookie();
 try{
-  const response = await fetch(`${config.server}/transaction/`, {
+  const response = await fetch(`${config.server}/api/transaction/`, {
     method:"POST",
     credentials:"include",
     headers:{
