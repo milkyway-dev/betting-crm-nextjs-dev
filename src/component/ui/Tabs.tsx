@@ -1,19 +1,25 @@
 'use client'
 import { TabProps } from "@/utils/Types";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const Tabs: React.FC<TabProps> = ({ tabs }) => {
-  const initialTab = tabs[0];
-  const [activeTab, setActiveTab] = useState(initialTab);
-  return (
-    <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex  items-center`}>
+const Tabs: React.FC<TabProps> = ({ tabs, initialTab}) => {
+  const pathname = usePathname();
+  const initial:any = pathname.split('/').pop(); 
+
+  const [activeTab, setActiveTab] = useState<any>(
+    tabs.includes(initial) ? initial: tabs[0]
+  );
+  
+    return (
+      <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex  items-center`}>
         {tabs?.map((tab, ind) => (
           <div key={ind} className="relative">
             {ind !== 0 && tab == activeTab  && (
               <span className="p-5 bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
             )}
-            <Link href={`/subordinates/${tab}`}
+            <Link href={`/${initialTab}/${tab}`}
             onClick={()=>setActiveTab(tab)}
             className={`${
                   tab === activeTab

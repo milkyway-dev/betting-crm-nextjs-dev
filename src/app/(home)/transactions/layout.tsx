@@ -13,20 +13,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user: any = await getCurrentUser();
-  const userRole = user?.role;
 
-  let tabs = ["players", "add"];
-  if (userRole === "admin") {
-    tabs.unshift("agents");
-  }
+  let tabs = ["coin", "betting"];
+ 
 
   return (
     <>
       <div className="col-span-12 lg:col-span-9 xl:col-span-8">
         <Header />
         <div className="px-4 md:px-10 pt-5">
-          <Tabs tabs={tabs} initialTab="subordinates" />
+          <Tabs tabs={tabs} initialTab="transactions" />
           {children}
         </div>
       </div>

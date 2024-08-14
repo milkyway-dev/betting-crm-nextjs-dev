@@ -2,14 +2,17 @@
 import React, { useState } from "react";
 import ThreeDots from "../svg/ThreeDots";
 import Modal from "./Modal";
+import { TableThreeDotsProps } from "@/utils/Types";
 
-const TableThreeDots = () => {
-  const [open, setOPen] = useState(false);
-  const [type, setType] = useState("s");
-  const handelOpen = (state: boolean, Type: string) => {
-    setOPen(state);
-    setType(Type);
-  };
+const TableThreeDots: React.FC<TableThreeDotsProps>  = ({data}) => {
+  const [open, setOPen] = useState(false)
+  const [type,setType]=useState('')
+  const handelOpen = (state:boolean,Type:string) => {
+    setOPen(state)
+    setType(Type)
+  }
+  console.log(data);
+  
   const handelClose = () => {
     setOPen(false);
   };
@@ -17,7 +20,7 @@ const TableThreeDots = () => {
   const Buttons = ["Edit", "Delete", "Recharge", "Redeem"];
   return (
     <>
-      <td className="flex justify-start pl-6 pt-6 cursor-pointer group relative">
+      <td className="flex justify-center pl-6 pt-6 cursor-pointer group relative">
         <ThreeDots />
         <div className="absolute px-3 z-50 py-1.5 group-hover:block hidden rounded-lg dark:bg-onDark bg-dark_light_black space-y-1 top-0 text-sm">
           {Buttons?.map((item, ind) => (
@@ -31,7 +34,7 @@ const TableThreeDots = () => {
           ))}
         </div>
       </td>
-      <Modal isOpen={open} Type={type} onClose={handelClose} />
+      <Modal isOpen={open} Type={type} onClose={handelClose} data={data}/>
     </>
   );
 };

@@ -20,7 +20,6 @@ export interface DecodeToken {
   role: any;
 }
 
-// Define an interface for the structure of each item in the TopCards array
 export interface TopCardItem {
   Text?: string;
   counts?: string;
@@ -67,22 +66,28 @@ export interface TabProps {
 }
 
 export type AddFormData = {
-  UserName: string;
-  Password: string;
-  Role: string;
+  username: string;
+  password: string;
+  role: string;
 };
 
 export type EditFormData = {
-  UpdatePassword: string;
-  UpdateStatus: string;
+  id:any;
+  password: string;
+  status: string;
+ 
 };
 
 export interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
-  onConfirm?: () => void;
   Type?: String;
+  data:any
 }
 export interface DeleteUserProps {
   deleteToken: () => void;
+}
+
+export interface TableThreeDotsProps {
+  data: any; 
 }

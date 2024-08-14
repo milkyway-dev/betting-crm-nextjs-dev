@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
@@ -22,7 +22,7 @@ const Sidebar = () => {
     },
     {
       text: "transactions",
-      Link: "/transactions",
+      Link: "/transactions/coin",
     },
   ]);
   const fetchUser = async () => {
@@ -37,9 +37,10 @@ const Sidebar = () => {
         )
       );
     }
-    }
+  };
   useEffect(() => {
     fetchUser();
+    
   }, []); 
 
   
