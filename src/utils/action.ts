@@ -231,6 +231,7 @@ export const deletePlayer = async (id:any)=> {
 
 export const createPlayer = async (data:any)=>{
   const token = await getCookie();
+
   try{
   const response = await fetch(`${config.server}/player/`, {
     method:"POST",
@@ -255,4 +256,29 @@ export const createPlayer = async (data:any)=>{
   revalidatePath("/");
 }
 
+}
+
+export const rechargeUser = async (data:any)=>{
+  const token = await getCookie();
+try{
+  const response = await fetch(`${config.server}/transaction/`, {
+    method:"POST",
+    credentials:"include",
+    headers:{
+      "Content-Type": "application/json",
+      Cookie: `userToken=${token}`,
+    },
+    body:JSON.stringify(data) 
+  })
+  if (!response.ok) {
+    const error = await response.json();
+    return { error: error.message };
+  }
+  const responseData = await response.json();
+  return { responseData };
+} catch (error) {
+  console.log(error);
+} finally {
+  revalidatePath("/");
+}
 }
