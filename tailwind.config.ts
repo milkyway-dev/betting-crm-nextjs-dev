@@ -14,7 +14,8 @@ const config: Config = {
         dark_black: '#000',
         bg_dashboard: '#0A0C0C',
         light_black: '#232525',
-        dark_light_black:'#1A1A1A'
+        dark_light_black: '#1A1A1A',
+        onDark:'#F3F4F6'
       }
     },
   },

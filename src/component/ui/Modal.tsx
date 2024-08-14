@@ -1,50 +1,112 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
+import { deleteAgent, deletePlayer,  transactions, updateAgent, updatePlayer } from "@/utils/action";
+import toast from "react-hot-toast";
+import ReactDOM from 'react-dom'; // Import createPortal
+// Other imports remain unchanged
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose=()=>{},  Type, data }) => {
+console.log(data,"d");
+const caseType = Type==="Recharge"?"Recharge":"Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
-    UpdatePassword: "",
-    UpdateStatus: "",
+    id:data._id,
+    password: "",
+    status: data.status,
+   
   });
+   
+  const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); 
 
-  const handelSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent the default form submission behavior
-
-    // Constructing an object from the form data
     const dataObject: EditFormData = {
       ...formData,
-      UpdatePassword: formData.UpdatePassword.trim(), // Trim whitespace
+      password: formData.password.trim(), 
+      status: formData.status
     };
 
-    console.log(dataObject);
+    if(data.role==="agent"){
+
+    const response = await updateAgent(formData);
+    if (response?.error) {
+      return alert(response?.error || "Can't Update Agent");
+    }
+    onClose();
+  
+  }else{
+      const response = await updatePlayer(formData);
+      if (response?.error) {
+        return alert(response?.error || "Can't Update Player");
+      }
+      onClose();
+
+    }     
 
     // Reset form data after logging
     setFormData({
-      UpdatePassword: "",
-      UpdateStatus: "",
+      id:"",
+      password: "",
+      status: "",
     });
   };
+
+  const onConfirm = async()=>{
+    const id = data?._id
+   if(data.role==="agent"){
+    const response = await deleteAgent(id) 
+    if (response?.error) {
+      return alert(response?.error || "Can't Delete Agent");
+    }
+    onClose();
+
+   }else{
+      const response = await deletePlayer(id);
+      if (response?.error) {
+        return alert(response?.error || "Can't Delete Player");
+      }
+      onClose();
+
+     }
+  }
   //Edit
   //Recharge
-  const [recharge, setRecharge] = useState("");
-  //Recharge
-  //Redeem
-  const [redeem,setRedeem]=useState('')
-  //Redeem
-  if (!isOpen) return null;
+  const [transaction, setTransaction] = useState("0");
+   const handleRecharge = async (event: React.FormEvent<HTMLFormElement>)=>{
+    event.preventDefault();
+    // reciever: receiverId, amount, type
+    const type = Type?.toLowerCase();
+    const dataObject = {
+      reciever:data._id,
+      amount: transaction,
+      type: type
+    };
+    const response = await transactions(dataObject);
+    if (response?.error) {
+      return alert(response?.error || "Can't Recharge");
+    }
+    onClose();
+    toast.success("Recharge Successful!")
 
+   }
+  
+ 
+  if (!isOpen) return null;
+  const modalElement = document.getElementById("modal");
+
+  if (!modalElement) {
+    console.warn('Element with id "modal" not found');
+    return null; 
+  }
   switch (Type) {
     case "Delete":
-      return (
+      return ReactDOM.createPortal(
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-[100]"
           onClick={onClose}
         >
           <div
             className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            // Prevents the click from propagating to the outer div
           >
             <div
               onClick={(e) => e.stopPropagation()}
@@ -69,88 +131,87 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        modalElement
       );
     case "Edit":
-      return (
+      return ReactDOM.createPortal(
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-[100]"
           onClick={onClose}
         >
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
               onClick={(e) => e.stopPropagation()}
-              className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
+              className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] dark:bg-white bg-[#0E0E0E]"
             >
               <form onSubmit={handelSubmit}>
                 <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+                  <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                     Update Password
                   </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+                  <div className="bg-[#1A1A1A] flex pl-4 items-center dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                     <input
                       type="password"
-                      name="UpdatePassword"
+                      name="password"
                       placeholder="Enter new password"
-                      value={formData.UpdatePassword}
+                      value={formData.password}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          UpdatePassword: e.target.value,
-                        })
+                        setFormData({ ...formData, password: e.target.value })
                       }
-                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
+                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs dark:bg-onDark dark:placeholder:text-black  rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                     />
                   </div>
                 </div>
                 <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+                  <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                     Update Status
                   </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
+                  <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
                     <select
-                      name="UpdateStatus"
-                      value={formData.UpdateStatus}
+                      name="status"
+                      value={formData.status}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          UpdateStatus: e.target.value,
-                        })
+                        setFormData({ ...formData, status: e.target.value })
                       }
-                      className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base text-white text-opacity-40 py-2.5 appearance-none"
+                      className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base dark:bg-onDark dark:text-black text-white text-opacity-40 py-2.5 appearance-none"
                       style={{ paddingRight: "30px" }}
                     >
                       <option value="">Select</option>
                       <option value="active">Active</option>
-                      <option value="Inactive">InActive</option>
+                      <option value="inactive">InActive</option>
                     </select>
-                    <span className="pr-4 text-white text-opacity-40">
+                    <span className="pr-4 text-white dark:text-black text-opacity-40">
                       <ChevronDown />
                     </span>
                   </div>
                 </div>
 
+               
+
                 <div className="flex space-x-4 justify-center pt-4">
-                  <button
-                    onClick={onClose}
-                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                  >
-                    CANCLE
-                  </button>
+                 
                   <button
                     type="submit"
-                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
                   >
                     SAVE
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                  >
+                    CANCLE
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </div>,
+        modalElement
       );
 
-    case "Recharge":
+    case caseType:
       return (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"
@@ -161,17 +222,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
               onClick={(e) => e.stopPropagation()}
               className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
             >
-              <form>
+              <form onSubmit={handleRecharge}>
                 <div>
                   <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                    Recharge
+                    {caseType}
                   </div>
                   <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                     <input
                       type="text"
                       placeholder="Enter amount"
-                      value={recharge}
-                      onChange={(e) => setRecharge(e.target.value)}
+                      value={transaction}
+                      onChange={(e) => setTransaction(e.target.value)}
                       className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                     />
                   </div>
@@ -195,51 +256,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
           </div>
         </div>
       );
-      case "Redeem":
-        return (
-          <div
-            className="fixed inset-0 flex items-center justify-center z-50"
-            onClick={onClose}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
-              >
-                <form>
-                  <div>
-                    <div className="text-white text-opacity-40 text-base pl-2 pb-2">
-                      Redeem
-                    </div>
-                    <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
-                      <input
-                        type="text"
-                        placeholder="Enter Redeem amount"
-                        value={redeem}
-                        onChange={(e) => setRedeem(e.target.value)}
-                        className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex space-x-4 justify-center pt-4">
-                    <button
-                      onClick={onClose}
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                    >
-                      CANCLE
-                    </button>
-                    <button
-                      type="submit"
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                    >
-                      SAVE
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        );
+      
     default:
       return null;
   }

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 async function getAllPlayers(){  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/player/all`, {
+    const response = await fetch(`${config.server}/api/player/all`, {
       method:"GET",
       credentials:"include",
       headers:{

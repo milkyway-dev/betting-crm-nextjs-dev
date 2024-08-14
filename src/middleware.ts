@@ -1,22 +1,17 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
-    
-  const token = req.cookies.get('token')?.value;
-    
-
-  if (token) {
-    try {
-      return NextResponse.next(); 
-    } catch (error) {
-      return NextResponse.redirect(new URL('/login', req.url)); 
-    }
+export default function middleware(req:NextRequest) {
+  const loggedin = req.cookies.get("token");
+  const { pathname } = req.nextUrl;
+  if (!loggedin && pathname !== "/login") {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
-
-  return NextResponse.redirect(new URL('/login', req.url));
+  if (loggedin && pathname === "/login") {
+    return NextResponse.redirect(new URL(`/`, req.url));
+  }
+  
+  // For any other cases return
+  return NextResponse.next();
 }
 
-export const config = {
-  matcher: ['/', '/subordinates'],
-};
+export const config = { matcher: "/((?!api|static|.*\\..*|_next).*)" };
