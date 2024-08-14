@@ -1,7 +1,7 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer, updateAgent, updatePlayer } from "@/utils/action";
+import { deleteAgent, deletePlayer,  rechargeUser, updateAgent, updatePlayer } from "@/utils/action";
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose=()=>{},  Type, data }) => {
 console.log(data,"d");
@@ -69,11 +69,33 @@ console.log(data,"d");
   }
   //Edit
   //Recharge
-  const [recharge, setRecharge] = useState("");
+  const [recharge, setRecharge] = useState("0");
   //Recharge
+   const handleRecharge = async (event: React.FormEvent<HTMLFormElement>)=>{
+    event.preventDefault();
+    // reciever: receiverId, amount, type
+    const dataObject = {
+      reciever:data._id,
+      amount: recharge,
+      type: "recharge"
+    };
+    const response = await rechargeUser(formData);
+    if (response?.error) {
+      return alert(response?.error || "Can't Recharge");
+    }
+    onClose();
+  
+   
+
+
+   }
+
   //Redeem
-  const [redeem,setRedeem]=useState('')
+  const [redeem,setRedeem]=useState("0")
   //Redeem
+  const handleRedeem = async (event: React.FormEvent<HTMLFormElement>)=>{
+
+  }
   if (!isOpen) return null;
 
   switch (Type) {
@@ -198,7 +220,7 @@ console.log(data,"d");
               onClick={(e) => e.stopPropagation()}
               className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
             >
-              <form>
+              <form onClick={handleRecharge}>
                 <div>
                   <div className="text-white text-opacity-40 text-base pl-2 pb-2">
                     Recharge
@@ -243,7 +265,7 @@ console.log(data,"d");
                 onClick={(e) => e.stopPropagation()}
                 className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
               >
-                <form>
+                <form onClick={handleRedeem}>
                   <div>
                     <div className="text-white text-opacity-40 text-base pl-2 pb-2">
                       Redeem

@@ -1,11 +1,17 @@
 'use client'
 import { TabProps } from "@/utils/Types";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const Tabs: React.FC<TabProps> = ({ tabs}) => {
-  const initialTab = tabs[0]; 
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const pathname = usePathname();
+  const initialTab:any = pathname.split('/').pop(); 
+
+  const [activeTab, setActiveTab] = useState<any>(
+    tabs.includes(initialTab) ? initialTab : tabs[0]
+  );
+  
     return (
       <div className="md:translate-y-[4px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex  items-center ">
         {tabs?.map((tab, ind) => (
