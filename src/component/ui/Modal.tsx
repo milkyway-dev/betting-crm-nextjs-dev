@@ -1,6 +1,8 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
+import ReactDOM from 'react-dom'; // Import createPortal
+// Other imports remain unchanged
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
   //Edit
@@ -34,12 +36,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
   const [redeem,setRedeem]=useState('')
   //Redeem
   if (!isOpen) return null;
+  const modalElement = document.getElementById("modal");
 
+  if (!modalElement) {
+    console.warn('Element with id "modal" not found');
+    return null; 
+  }
   switch (Type) {
     case "Delete":
-      return (
+      return ReactDOM.createPortal(
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-[100]"
           onClick={onClose}
         >
           <div
@@ -69,25 +76,26 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        modalElement
       );
     case "Edit":
-      return (
+      return ReactDOM.createPortal(
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-[100]"
           onClick={onClose}
         >
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
               onClick={(e) => e.stopPropagation()}
-              className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
+              className="px-12 py-14 border-[1px] border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] dark:bg-white bg-[#0E0E0E]"
             >
               <form onSubmit={handelSubmit}>
                 <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+                  <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                     Update Password
                   </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+                  <div className="bg-[#1A1A1A] flex pl-4 items-center dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                     <input
                       type="password"
                       name="UpdatePassword"
@@ -99,15 +107,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
                           UpdatePassword: e.target.value,
                         })
                       }
-                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
+                      className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs dark:bg-onDark dark:placeholder:text-black  rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                     />
                   </div>
                 </div>
                 <div>
-                  <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+                  <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                     Update Status
                   </div>
-                  <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
+                  <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
                     <select
                       name="UpdateStatus"
                       value={formData.UpdateStatus}
@@ -117,37 +125,39 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, Type }) => {
                           UpdateStatus: e.target.value,
                         })
                       }
-                      className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base text-white text-opacity-40 py-2.5 appearance-none"
+                      className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base dark:bg-onDark dark:text-black text-white text-opacity-40 py-2.5 appearance-none"
                       style={{ paddingRight: "30px" }}
                     >
                       <option value="">Select</option>
                       <option value="active">Active</option>
                       <option value="Inactive">InActive</option>
                     </select>
-                    <span className="pr-4 text-white text-opacity-40">
+                    <span className="pr-4 text-white dark:text-black text-opacity-40">
                       <ChevronDown />
                     </span>
                   </div>
                 </div>
 
                 <div className="flex space-x-4 justify-center pt-4">
-                  <button
-                    onClick={onClose}
-                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
-                  >
-                    CANCLE
-                  </button>
+                 
                   <button
                     type="submit"
-                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
                   >
                     SAVE
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                  >
+                    CANCLE
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </div>,
+        modalElement
       );
 
     case "Recharge":

@@ -1,6 +1,4 @@
-import Header from "@/component/common/Header";
 import Sidebar from "@/component/common/Sidebar";
-import { Providers } from "@/redux/Providers";
 import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 import Notifications from "@/component/ui/Notifications";
@@ -18,13 +16,11 @@ export default function RootLayout({
   return (
     <>
       <Toaster position="bottom-center" />
-      <Providers>
-        <div className="grid grid-cols-12 overflow-y-scroll h-screen bg-bg_dashboard">
+        <div className="grid grid-cols-12 overflow-y-scroll h-screen dark:bg-white bg-bg_dashboard">
           <Sidebar />
           {children}
           <Notifications />
         </div>
-      </Providers>
     </>
   );
 }
