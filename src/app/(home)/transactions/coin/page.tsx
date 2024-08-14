@@ -57,6 +57,9 @@ async function getAllTransactionsForAgent(agentId:any){
 
     const data = await response.json();
     const transactions = data.transactions;
+
+    console.log("");
+    
     
     return transactions;
   } catch (error) {
