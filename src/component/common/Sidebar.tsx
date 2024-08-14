@@ -48,17 +48,25 @@ const Sidebar = () => {
   
   return (
     <>
-      {!toggle?<button onClick={()=>setToggle(!toggle)} className="absolute top-[1.55%] z-[51] lg:hidden left-[4%]"><HamBurger /></button>:
+      {!toggle?<button onClick={()=>setToggle(!toggle)} className="absolute top-[1.55%] z-[51]  lg:hidden left-[4%]"><HamBurger /></button>:
       <button onClick={()=>setToggle(!toggle)} className="absolute top-[1%] lg:hidden left-[3%] z-[56]"><Close /></button>}
-      <div className={`flex flex-col fixed ${!toggle?'-left-[200%]':'left-0'}  z-[55] transition-all top-0  h-screen   bg-dark_black lg:bg-transparent lg:static items-center justify-between px-4 py-10  col-span-3 border-r-[.5px] border-[#313131] xl:col-span-2`}>
+      <div className={`flex flex-col fixed ${!toggle?'-left-[200%]':'left-0'}  z-[55] transition-all top-0 w-[60%] md:w-[30%] lg:w-auto h-screen  dark:bg-white bg-dark_black lg:bg-transparent lg:static items-center justify-between px-4 py-10  col-span-3 border-r-[.5px] dark:border-opacity-10 border-[#313131] xl:col-span-2`}>
         <div>
           <div className="flex items-center justify-center">
             <Image
-              src="/assets/images/Light_Logo.png"
+              src="/assets/images/Dark_Logo.svg"
               alt="logo"
               width={200}
               height={100}
-              className="mx-auto"
+              className="mx-auto w-[120px] md:w-[160px] dark:hidden block"
+              quality={100}
+            />
+                <Image
+              src="/assets/images/Light_Logo.svg"
+              alt="logo"
+              width={200}
+              height={100}
+              className="mx-auto w-[120px] md:w-[160px] dark:block hidden"
               quality={100}
             />
           </div>
@@ -70,20 +78,20 @@ const Sidebar = () => {
                   <li
                     key={ind}
                     onClick={()=>setToggle(!toggle)} 
-                    className="flex flex-col items-center justify-center font-light text-white"
+                    className="flex flex-col items-center justify-center font-light dark:text-black text-white"
                   >
                     <Link
                       href={nav.Link}
-                      className={`rounded-full uppercase ${
+                      className={`rounded-xl uppercase ${
                         router === nav.Link
-                          ? "border-white border bg-light_black"
+                          ? "border-white border border-opacity-30 dark:border-gray-600 dark:border-[1.5px] dark:bg-onDark bg-light_black"
                           : ""
-                      }  px-10 py-2`}
+                      } py-2 w-full px-5 lg:px-0 text-center`}
                     >
                       {nav.text}
                     </Link>
                   </li>
-                  <span className="w-[80%] opacity-35 -translate-y-2 inline-block mt-1 h-[1px] mx-[15%] rounded-full bg-gradient-to-r via-[#979797] from-[#313131] to-[#313131] "></span>
+                  <span className="w-[80%] opacity-35 -translate-y-2 inline-block mt-1 h-[1px] mx-[15%] rounded-full bg-gradient-to-r dark:from-[#2e2e2e00] dark:to-[#2e2e2e00] dark:via-[#313131] via-[#979797] from-[#313131] to-[#313131] "></span>
                 </>
               ))}
             </ul>
@@ -98,11 +106,11 @@ const Sidebar = () => {
               alt="profile"
               height={400}
               width={400}
-              className="w-[45px] rounded-full"
+              className="w-[45px] dark:border-[3px]  dark:border-onDark rounded-full"
             />
           </div>
           <div>
-            <div className="text-white text-base font-semibold">
+            <div className="text-white dark:text-black dark:text-opacity-80  capitalize tracking-wide text-base font-semibold">
               {user?.username}
             </div>
             <div className="text-white text-opacity-50 text-sm font-semibold">
@@ -111,7 +119,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      {toggle&&<div className="fixed  transition-all top-0 left-0 w-full h-screen lg:hidden bg-black bg-opacity-35" onClick={() => setToggle(!toggle)}></div>}
+      {toggle&&<div className="fixed  transition-all top-0 left-0 w-full z-[53] h-screen lg:hidden bg-black bg-opacity-35" onClick={() => setToggle(!toggle)}></div>}
     </>
   );
 };

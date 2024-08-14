@@ -31,14 +31,14 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="pt-40 md:py-40 h-screen lg:h-full md:bg-[#0E0F0F] md:p-5 md:border-[1px] rounded-b-2xl rounded-l-2xl md:rounded-l-none rounded-r-2xl border-[#313131]">
-      <div className="px-5 md:px-12 py-14 border-[1px] border-[#464646] w-[100%] md:w-[70%] lg:w-[50%]  xl:w-[45%] rounded-[1.5rem] md:rounded-[2.5rem] mx-auto bg-[#0E0E0E]">
+    <div className="pt-40 md:py-40 h-screen lg:h-full md:bg-[#0E0F0F] dark:bg-white md:p-5 dark:border-opacity-30 md:border-[1px] rounded-b-2xl rounded-bl-2xl md:rounded-tl-none rounded-r-2xl border-[#313131]">
+      <div className="px-5 md:px-12 py-14 border-[1px] border-[#464646] w-[100%] dark:border-opacity-30 md:w-[70%] lg:w-[50%]  xl:w-[45%] rounded-[1.5rem] md:rounded-[2.5rem] mx-auto dark:bg-white bg-[#0E0E0E]">
         <form onSubmit={handelSubmit}>
           <div>
-            <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+            <div className="text-white dark:text-black  text-opacity-40 text-base pl-2 pb-2">
               User Name
             </div>
-            <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+            <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
               <input
                 type="text"
                 name="UserName"
@@ -47,15 +47,15 @@ const Page: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, UserName: e.target.value })
                 }
-                className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
+                className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] dark:placeholder:text-black dark:text-black placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
               />
             </div>
           </div>
           <div>
-            <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+            <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
               Password
             </div>
-            <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+            <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
               <input
                 type="password"
                 name="Password"
@@ -64,22 +64,22 @@ const Page: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, Password: e.target.value })
                 }
-                className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
+                className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] dark:placeholder:text-black dark:text-black placeholder:text-xs rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
               />
             </div>
           </div>
           <div>
-            <div className="text-white text-opacity-40 text-base pl-2 pb-2">
+            <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
               Role
             </div>
-            <div className="bg-[#1A1A1A] flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
+            <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
               <select
                 name="Role"
                 value={formData.Role}
                 onChange={(e) =>
                   setFormData({ ...formData, Role: e.target.value })
                 }
-                className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base text-white text-opacity-40 py-2.5 appearance-none"
+                className="outline-none w-full dark:bg-onDark bg-[#1A1A1A]  dark:text-black  text-white text-opacity-40 rounded-lg px-3 text-base  py-2.5"
                 style={{ paddingRight: "30px" }}
               >
                 <option value="">Select</option>
@@ -94,7 +94,7 @@ const Page: React.FC = () => {
           <div className="flex justify-center pt-4">
             <button
               type="submit"
-              className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] border-[#AAAAAA] text-xl text-center py-3 rounded-xl shadow-xl"
+              className="text-white w-full dark:text-black bg-[#69696933] border-opacity-40 uppercase border-[2px] border-[#AAAAAA] text-xl text-center py-2 rounded-xl"
             >
               Create
             </button>
