@@ -1,83 +1,88 @@
-import { EditFormData, ModalProps } from "@/utils/Types";
+import { EditFormData, ModalProps, ReportsData } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer,  transactions, updateAgent, updatePlayer } from "@/utils/action";
+import { deleteAgent, deletePlayer, transactions, updateAgent, updatePlayer } from "@/utils/action";
 import toast from "react-hot-toast";
 import ReactDOM from 'react-dom'; // Import createPortal
+import Tabs from "./Tabs";
+import Table from "./Table";
+import Card from "./Card";
+import { useSelector } from "react-redux";
 // Other imports remain unchanged
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose=()=>{},  Type, data }) => {
-console.log(data,"d");
-const caseType = Type==="Recharge"?"Recharge":"Redeem";
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data }) => {
+  const [activeTab, setActiveTab] = useState('Players')
+  const Isreport = useSelector((state: ReportsData) => state.globlestate.Agent)
+  const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
-    id:data._id,
+    id: data._id,
     password: "",
     status: data.status,
-   
+
   });
-   
+
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const dataObject: EditFormData = {
       ...formData,
-      password: formData.password.trim(), 
+      password: formData.password.trim(),
       status: formData.status
     };
 
-    if(data.role==="agent"){
+    if (data.role === "agent") {
 
-    const response = await updateAgent(formData);
-    if (response?.error) {
-      return alert(response?.error || "Can't Update Agent");
-    }
-    onClose();
-  
-  }else{
+      const response = await updateAgent(formData);
+      if (response?.error) {
+        return alert(response?.error || "Can't Update Agent");
+      }
+      onClose();
+
+    } else {
       const response = await updatePlayer(formData);
       if (response?.error) {
         return alert(response?.error || "Can't Update Player");
       }
       onClose();
 
-    }     
+    }
 
     // Reset form data after logging
     setFormData({
-      id:"",
+      id: "",
       password: "",
       status: "",
     });
   };
 
-  const onConfirm = async()=>{
+  const onConfirm = async () => {
     const id = data?._id
-   if(data.role==="agent"){
-    const response = await deleteAgent(id) 
-    if (response?.error) {
-      return alert(response?.error || "Can't Delete Agent");
-    }
-    onClose();
+    if (data.role === "agent") {
+      const response = await deleteAgent(id)
+      if (response?.error) {
+        return alert(response?.error || "Can't Delete Agent");
+      }
+      onClose();
 
-   }else{
+    } else {
       const response = await deletePlayer(id);
       if (response?.error) {
         return alert(response?.error || "Can't Delete Player");
       }
       onClose();
 
-     }
+    }
   }
   //Edit
   //Recharge
   const [transaction, setTransaction] = useState("0");
-   const handleRecharge = async (event: React.FormEvent<HTMLFormElement>)=>{
+  const handleRecharge = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // reciever: receiverId, amount, type
     const type = Type?.toLowerCase();
     const dataObject = {
-      reciever:data._id,
+      reciever: data._id,
       amount: transaction,
       type: type
     };
@@ -88,16 +93,59 @@ const caseType = Type==="Recharge"?"Recharge":"Redeem";
     onClose();
     toast.success(`${caseType} Successful!`)
 
-   }
-  
- 
+  }
+
+
   if (!isOpen) return null;
   const modalElement = document.getElementById("modal");
 
   if (!modalElement) {
     console.warn('Element with id "modal" not found');
-    return null; 
+    return null;
   }
+
+  //Report 
+  const tabs = ['Players', 'Coins']
+  const fieldsHeadings = [
+    "Username",
+    "Status",
+    "Credits",
+    "Created At",
+    "Actions",
+  ];
+
+  const fieldsData = [
+    "username",
+    "status",
+    "credits",
+    "createdAt",
+    "actions"
+  ]
+
+  const TopCards = [
+    {
+      Text: "Credits",
+      counts: "678",
+    },
+    {
+      Text: "Players",
+      counts: "679",
+    },
+    {
+      Text: "Bets",
+      counts: "896",
+    },
+    {
+      Text: "Recharge",
+      counts: "785",
+    },
+    {
+      Text: "Redeem",
+      counts: "785",
+    }
+  ];
+
+
   switch (Type) {
     case "Delete":
       return ReactDOM.createPortal(
@@ -187,10 +235,10 @@ const caseType = Type==="Recharge"?"Recharge":"Redeem";
                   </div>
                 </div>
 
-               
+
 
                 <div className="flex space-x-4 justify-center pt-4">
-                 
+
                   <button
                     type="submit"
                     className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
@@ -257,7 +305,48 @@ const caseType = Type==="Recharge"?"Recharge":"Redeem";
         </div>,
         modalElement
       );
-      
+
+    case "Report":
+      return ReactDOM.createPortal(
+        <div
+          className="fixed z-[100] inset-0 flex items-center justify-center"
+          onClick={onClose}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div onClick={(e) => e.stopPropagation()} className="w-[90%] lg:w-[80%] h-screen overflow-y-scroll py-[2%]">
+              <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex items-center`}>
+                {tabs?.map((tab, ind) => (
+                  <div key={ind} className="relative">
+                    {ind !== 0 && tab == activeTab && (
+                      <span className="p-5 bg-[#0E0F0F] rounded-bl-[200rem] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
+                    )}
+                    <div
+                      onClick={() => setActiveTab(tab)}
+                      className={`${tab === activeTab
+                        ? "bg-[#0E0F0F] dark:bg-white dark:text-black rounded-[1rem] md:rounded-none md:rounded-t-[2rem] text-white "
+                        : "bg-[#E3F5FF] rounded-[1rem] border-none text-black"
+                        }   uppercase text-xs cursor-pointer md:text-lg py-2 inline-block border-[1px] dark:border-opacity-30 md:border-b-0 md:border-l-[1px] border-[#313131]   md:border-t-[1px] px-4 md:px-8 border-r-[1px]`}>
+                      {tab}
+                    </div>
+
+                    {tab == activeTab && (
+                      <span className=" p-5 md:inline-block hidden bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 border-t-[1px] border-[#313131] absolute -bottom-4 rotate-[52deg] rounded-br-[200rem]  -right-[.6rem]"></span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div className='w-full bg-[#0E0F0F] border-white border-opacity-10 border-t-[1px] border-l-[1px] border-r-[1px] dark:bg-white px-5 rounded-2xl md:rounded-none lg:rounded-r-2xl pt-5 pb-8  grid grid-cols-12 items-center gap-4'>
+                  <Card TopCards={TopCards} />
+                </div>
+                <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={[]} />
+              </div>
+            </div>
+          </div>
+        </div>,
+        modalElement
+      );
+
     default:
       return null;
   }

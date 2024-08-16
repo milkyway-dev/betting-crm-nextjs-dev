@@ -150,14 +150,14 @@ const Page: React.FC = () => {
               <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                 Role
               </div>
-              <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+              <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
                 <select
                   name="Role"
                   value={formData.role}
                   onChange={(e) =>
                     setFormData({ ...formData, role: e.target.value })
                   }
-                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A]  dark:text-black  text-white text-opacity-40 rounded-lg px-3 text-base  py-2.5"
+                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A]  dark:text-black  text-white text-opacity-40 rounded-lg  pr-3 text-base  py-2.5"
                   style={{ paddingRight: "30px" }}
                 >
                   {selectRole?.map((role, idx) => (
@@ -166,9 +166,6 @@ const Page: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                <span className="pr-4 text-white text-opacity-40">
-                  <ChevronDown />
-                </span>
               </div>
               {errors.role && (
                 <p className="text-red-500 text-xs pl-2">{errors.role}</p>
