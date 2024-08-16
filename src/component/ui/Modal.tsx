@@ -10,7 +10,7 @@ import Card from "./Card";
 import { useSelector } from "react-redux";
 // Other imports remain unchanged
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,Tabs }) => {
   const [activeTab, setActiveTab] = useState('Players')
   const Isreport = useSelector((state: ReportsData) => state.globlestate.Agent)
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
@@ -105,7 +105,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data }
   }
 
   //Report 
-  const tabs = ['Players', 'Coins']
   const fieldsHeadings = [
     "Username",
     "Status",
@@ -315,7 +314,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data }
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div onClick={(e) => e.stopPropagation()} className="w-[90%] lg:w-[80%] h-screen overflow-y-scroll py-[2%]">
               <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex items-center`}>
-                {tabs?.map((tab, ind) => (
+                {Tabs?.map((tab, ind) => (
                   <div key={ind} className="relative">
                     {ind !== 0 && tab == activeTab && (
                       <span className="p-5 bg-[#0E0F0F] rounded-bl-[200rem] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
