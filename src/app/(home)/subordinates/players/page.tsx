@@ -1,6 +1,7 @@
+import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
-import { getCookie } from "@/utils/utils";
+import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
 async function getAllPlayers(){  
@@ -34,8 +35,44 @@ async function getAllPlayers(){
   }
 }
 
+async function getAllPlayersForAgents(agentId:any){  
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/agent/players/${agentId}`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const players = data.players;
+    console.log(players);
+    
+    return players;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}
+
 const page = async () => {
-  const data = await getAllPlayers();
+  const user:any = await getCurrentUser();
+  let data=[];
+  if(user.role==="admin")
+    data = await getAllPlayers();
+  else   
+   data = await getAllPlayersForAgents(user?.userId)
   
   const fieldsHeadings = [
     "Username",
@@ -56,10 +93,12 @@ const page = async () => {
   return (
     <>
       <div
-        className="col-span-12 lg:col-span-9 xl:col-span-8"
+        className="col-span-12 lg:col-span-9 relative xl:col-span-8"
       >
-        <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
-
+         <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
+          <SearchBar />
+        </div>
+        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'player'} />
       </div>
     </>
   );

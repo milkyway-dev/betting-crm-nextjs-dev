@@ -56,7 +56,7 @@ interface TableDataType {
 export interface TableProps {
   fieldsHeadings: string[];
   fieldData: string[];
-
+  Page?: string; 
   data: string[];
 }
 
@@ -82,7 +82,9 @@ export interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
   Type?: String;
-  data:any
+  data?: any;
+  Page?:string;
+  Tabs?: string[];
 }
 export interface DeleteUserProps {
   deleteToken: () => void;
@@ -90,4 +92,24 @@ export interface DeleteUserProps {
 
 export interface TableThreeDotsProps {
   data: any; 
+}
+
+export interface TableUserNameProps {
+  username: string;
+  index: number;
+  Id: Number;
+  Page?: string;
+}
+
+export interface ReportsData {
+  globlestate: {
+    Agent: {
+      username: string;
+      Id: Number;  
+    }  
+  }
+}
+
+export interface ReportModal {
+  openModal: boolean;
 }
