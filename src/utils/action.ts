@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { config } from "./config";
 import Cookies from "js-cookie";
 import { getCookie } from "./utils";
+import { error } from "console";
 
 export const loginUser = async (data:any) => {
     try {
@@ -274,11 +275,181 @@ try{
     const error = await response.json();
     return { error: error.message };
   }
-  const responseData = await response.json();
-  return { responseData };
+  const responseData:any = await response.json();
+  const respMessage = responseData.message
+  
+  return respMessage;
 } catch (error) {
   console.log(error);
 } finally {
   revalidatePath("/");
 }
+}
+
+
+export async function getAllBets () {  
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/bets/`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const bets = data?.Bets;
+    console.log(bets, "bets");
+    
+    return bets;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}
+
+export async function getAllBetsForAgent(agentId:any){
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/bets/${agentId}`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const bets = data.Bets;
+
+    console.log("");
+    
+    
+    return bets;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}
+
+export const getBetsForPlayer = async (userId:any)=>{
+   const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/bets/player/${userId}`,
+      {
+        method:"GET",
+        credentials:"include",
+        headers:{
+          "Content-Type":"application/json",
+          Cookie: `userToken=${token}`,
+        }
+      })
+       
+      if(!response.ok){
+        const error = await response.json();
+        console.log(error);
+        
+        return {error:error.message};
+      }
+  
+      const data = await response.json();
+      const bets = data.Bets;
+  
+      console.log("");
+      
+      
+      return bets;
+    
+  } catch (error) {
+    
+  }finally{
+    revalidatePath("/")
+  }
+}
+
+export const getTransactionsForPlayer = async (playerId:any)=>{
+  const token = await getCookie();
+ try {
+   const response = await fetch(`${config.server}/api/bets/player/${playerId}`,
+     {
+       method:"GET",
+       credentials:"include",
+       headers:{
+         "Content-Type":"application/json",
+         Cookie: `userToken=${token}`,
+       }
+     })
+      
+     if(!response.ok){
+       const error = await response.json();
+       console.log(error);
+       
+       return {error:error.message};
+     }
+ 
+     const data = await response.json();
+     const transaction = data.transactions;
+ 
+     console.log("");
+     
+     
+     return transactions;
+   
+ } catch (error) {
+   
+ }finally{
+   revalidatePath("/")
+ }
+}
+
+export async function getAllTransactionsForAgent(agentId:any){
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const transactions = data.transactions;
+
+    console.log("");
+    
+    
+    return transactions;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
 }
