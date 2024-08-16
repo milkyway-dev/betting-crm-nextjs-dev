@@ -11,14 +11,15 @@ const TableUserName: React.FC<TableUserNameProps> = ({ username, index, Id, Page
     const dispatch = useDispatch()
     const Agent = { username, Id }
     const handelUserName = () => {
-        if (Page === "agent") {
-            dispatch(UpdateName(Agent))
-            setState(true)
-        }
+        dispatch(UpdateName(Agent))
+        setState(true)
     }
     const onClose = () => {
         setState(false)
     }
+  const tabsAgent = ['Players', 'Coins']
+  const tabsPlayer = ['Coins','Betting']
+
 
     return (
         <>
@@ -38,7 +39,7 @@ const TableUserName: React.FC<TableUserNameProps> = ({ username, index, Id, Page
                 </div>
                 <span>{username}</span>
             </td>
-            <Modal isOpen={state} Type={'Report'} onClose={onClose} data={''} />
+            <Modal isOpen={state} Tabs={Page==="agent"?tabsAgent:tabsPlayer} Type={'Report'} onClose={onClose} data={''} />
         </>
     )
 }

@@ -82,7 +82,8 @@ export interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
   Type?: String;
-  data:any
+  data: any,
+  Tabs: string[];
 }
 export interface DeleteUserProps {
   deleteToken: () => void;
