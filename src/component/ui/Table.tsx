@@ -51,18 +51,18 @@ const Table: React.FC<TableProps> = ({
                         case active:
                           return (
                             <td key={idx} className="pt-6 pb-3">
-                              {["active", "recharge"].includes(data[field]) ? (
+                              {["active", "recharge", "Success"].includes(data[field]) ? (
                                 <span className="bg-green-700 bg-opacity-30 text-green-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
-                              ) : ["redeem", "inactive"].includes(
+                              ) : ["redeem", "inactive", "fail"].includes(
                                   data[field]
                                 ) ? (
                                 <span className="bg-red-700 bg-opacity-30 text-red-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
                               ) : (
-                                <span className="bg-gray-700 bg-opacity-30 text-gray-500 px-4 py-2 rounded-xl">
+                                <span className="bg-yellow-700 bg-opacity-30 text-yellow-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
                               )}
@@ -83,10 +83,40 @@ const Table: React.FC<TableProps> = ({
                               {data[field] ? data[field].username : "N/A"}
                             </td>
                           );
+                        
+                          case "odds":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data.bet_on === "home_team"
+                                  ? data.home_team.odds
+                                  : data.away_team.odds}
+                              </td>
+                            );
 
-                        case "actions":
-                          return <TableThreeDots data={data} />;
+                          case "match_info":
+                          return (
+                            <td key={idx} className="pt-6">
+                              {`${data.home_team.name} vs ${data.away_team.name}`}
+                            </td>
+                          );  
 
+                          case "pick":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data.bet_on === "home_team"
+                                  ? data.home_team.name
+                                  : data.away_team.name}
+                              </td>
+                            );     
+                       
+                          case "player":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data[field] ? data[field].username : "N/A"}
+                              </td>
+                            );
+                            case "actions":
+                              return <TableThreeDots data={data} />;
                         default:
                           return (
                             <td key={idx} className="pt-6">

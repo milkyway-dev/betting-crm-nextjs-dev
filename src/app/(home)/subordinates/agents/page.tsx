@@ -3,6 +3,7 @@ import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
 import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 async function getAllAgents () {  
   const token = await getCookie();
@@ -35,8 +36,12 @@ async function getAllAgents () {
 }
 
 const page = async () => {
-  const tabs = ["Agents", "Players", "Add"];
-  const data = await getAllAgents();
+  const user:any = await getCurrentUser()
+  if (user?.role === "agent") {
+    redirect('/'); 
+  }
+
+  const data = await getAllAgents() || [];
   
   const fieldsHeadings = [
     "Username",
@@ -53,13 +58,7 @@ const page = async () => {
     "createdAt",
     "actions",
   ]
-  const user:any = await getCurrentUser()
-  if(user.role!=="admin"){
-    return(
-    <>
-    </>
-    )
-  }
+ 
   return (
     <>
       <div
