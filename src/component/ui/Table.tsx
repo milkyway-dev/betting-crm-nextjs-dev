@@ -5,11 +5,14 @@ import { TableProps } from "@/utils/Types";
 import SearchBar from "./SearchBar";
 import { formatDate } from "@/utils/utils";
 import TableThreeDots from "./TableThreeDots";
+import TableUserName from "./TableUserName";
+import Report from "./Report";
 
 const Table: React.FC<TableProps> = ({
   fieldsHeadings,
   fieldData,
   data = [],
+  Page
 }) => {
   return (
     <>
@@ -18,9 +21,10 @@ const Table: React.FC<TableProps> = ({
           {/* <SearchBar /> */}
         </div>
         <div
-          className={`bg-[#0E0F0F] dark:bg-white h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none w-[700px] md:w-auto rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
+          className={`bg-[#0E0F0F] dark:bg-white  overflow-y-scroll h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none w-[700px] md:w-auto rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
         >
-          <table className="w-full ">
+          {Page === 'player' && <Report />}
+          <table className="w-full">
             <thead className="text-white border-b dark:text-black border-[#858585] font-semibold">
               <tr className="text-center">
                 {fieldsHeadings.map((item: string, ind: number) => (
@@ -43,23 +47,7 @@ const Table: React.FC<TableProps> = ({
                       const active = field === "type" ? "type" : "status";
                       switch (field) {
                         case "username":
-                          return (
-                            <td
-                              key={idx}
-                              className="flex  items-center pb-3 justify-start space-x-2 pt-6"
-                            >
-                              <div>
-                                <Image
-                                  alt="profile"
-                                  src={"/assets/images/profile.png"}
-                                  width={200}
-                                  height={200}
-                                  className="w-[30px] border-[2px] border-[#858585] rounded-full"
-                                />
-                              </div>
-                              <span>{data[field]}</span>
-                            </td>
-                          );
+                          return (<TableUserName username={data[field]} Id={data?._id} index={idx} />);
                         case active:
                           return (
                             <td key={idx} className="pt-6 pb-3">

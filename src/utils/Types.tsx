@@ -56,7 +56,7 @@ interface TableDataType {
 export interface TableProps {
   fieldsHeadings: string[];
   fieldData: string[];
-
+  Page?: string; 
   data: string[];
 }
 
@@ -90,4 +90,19 @@ export interface DeleteUserProps {
 
 export interface TableThreeDotsProps {
   data: any; 
+}
+
+export interface TableUserNameProps {
+  username: string;
+  index: number;
+  Id: Number;
+}
+
+export interface ReportsData {
+  globlestate: {
+    Agent: {
+      username: string;
+      Id: Number;  
+    }  
+  }
 }

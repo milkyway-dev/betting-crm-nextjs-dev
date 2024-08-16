@@ -51,7 +51,7 @@ const page = async () => {
     "status",
     "credits",
     "createdAt",
-    "actions"
+    "actions",
   ]
   const user:any = await getCurrentUser()
   if(user.role!=="admin"){
