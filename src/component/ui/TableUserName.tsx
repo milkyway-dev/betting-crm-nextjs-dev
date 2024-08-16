@@ -5,22 +5,21 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Modal from './Modal'
+import page from '@/app/(home)/subordinates/agents/page'
 
 const TableUserName: React.FC<TableUserNameProps> = ({ username, index, Id, Page }) => {
     const [state, setState] = useState(false)
     const dispatch = useDispatch()
     const Agent = { username, Id }
     const handelUserName = () => {
-        dispatch(UpdateName(Agent))
-        setState(true)
+            dispatch(UpdateName(Agent))
+            setState(true)
     }
     const onClose = () => {
         setState(false)
     }
-  const tabsAgent = ['Players', 'Coins']
-  const tabsPlayer = ['Coins','Betting']
-
-
+    const tabsAgent = ['Players', 'Coins']
+    const tabsPlayer = ['Coins','Betting']
     return (
         <>
             <td
@@ -39,7 +38,7 @@ const TableUserName: React.FC<TableUserNameProps> = ({ username, index, Id, Page
                 </div>
                 <span>{username}</span>
             </td>
-            <Modal isOpen={state} Tabs={Page==="agent"?tabsAgent:tabsPlayer} Type={'Report'} onClose={onClose} data={''} />
+            <Modal isOpen={state} Tabs={Page==="agent"?tabsAgent:tabsPlayer} Type={'Report'} onClose={onClose} Page={Page} />
         </>
     )
 }
