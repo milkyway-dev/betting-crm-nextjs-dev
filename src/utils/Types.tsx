@@ -96,6 +96,7 @@ export interface TableUserNameProps {
   username: string;
   index: number;
   Id: Number;
+  Page?: string;
 }
 
 export interface ReportsData {
@@ -105,4 +106,8 @@ export interface ReportsData {
       Id: Number;  
     }  
   }
+}
+
+export interface ReportModal {
+  openModal: boolean;
 }

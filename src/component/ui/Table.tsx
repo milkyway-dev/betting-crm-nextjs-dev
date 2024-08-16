@@ -1,12 +1,8 @@
 import React from "react";
-import Image from "next/image";
-import Tabs from "./Tabs";
 import { TableProps } from "@/utils/Types";
-import SearchBar from "./SearchBar";
 import { formatDate } from "@/utils/utils";
 import TableThreeDots from "./TableThreeDots";
 import TableUserName from "./TableUserName";
-import Report from "./Report";
 
 const Table: React.FC<TableProps> = ({
   fieldsHeadings,
@@ -17,13 +13,9 @@ const Table: React.FC<TableProps> = ({
   return (
     <>
       <div className="overflow-x-scroll uppercase">
-        <div className="flex items-center justify-between">
-          {/* <SearchBar /> */}
-        </div>
         <div
           className={`bg-[#0E0F0F] dark:bg-white  overflow-y-scroll h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none w-[700px] md:w-auto rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
         >
-          {Page === 'player' && <Report />}
           <table className="w-full">
             <thead className="text-white border-b dark:text-black border-[#858585] font-semibold">
               <tr className="text-center">
@@ -47,7 +39,7 @@ const Table: React.FC<TableProps> = ({
                       const active = field === "type" ? "type" : "status";
                       switch (field) {
                         case "username":
-                          return (<TableUserName username={data[field]} Id={data?._id} index={idx} />);
+                          return (<TableUserName Page={Page} username={data[field]} Id={data?._id} index={idx} />);
                         case active:
                           return (
                             <td key={idx} className="pt-6 pb-3">
