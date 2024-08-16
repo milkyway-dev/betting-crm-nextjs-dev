@@ -1,26 +1,98 @@
 import { EditFormData, ModalProps, ReportsData } from "@/utils/Types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer, transactions, updateAgent, updatePlayer } from "@/utils/action";
+import { deleteAgent, deletePlayer, getAllPlayersForAgents, transactions, updateAgent, updatePlayer } from "@/utils/action";
 import toast from "react-hot-toast";
 import ReactDOM from 'react-dom'; // Import createPortal
 import Tabs from "./Tabs";
 import Table from "./Table";
 import Card from "./Card";
 import { useSelector } from "react-redux";
+import { getCurrentUser } from "@/utils/utils";
 // Other imports remain unchanged
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,Tabs }) => {
-  const [activeTab, setActiveTab] = useState('Players')
-  const Isreport = useSelector((state: ReportsData) => state.globlestate.Agent)
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,Tabs=[], Page }) => {
+  
+  const [activeTab, setActiveTab] = useState<any>(
+   Tabs[0]
+  );  const Isreport = useSelector((state: ReportsData) => state.globlestate.Agent)
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
-    id: data._id,
+    id: data?._id,
     password: "",
-    status: data.status,
+    status: data?.status,
 
   });
+
+  const [fieldsHeadings, setFieldsHeadings] = useState<string[]>([]);
+  const [fieldsData, setFieldsData] = useState<string[]>([]);
+  const [tableData, setTableData] = useState<any[]>([]); // Assuming data is an array
+  const [agntdata,setData]=useState([])
+
+//  const HandleAgentPlayers = async()=>{
+//   try {
+//     const response=await getAllPlayersForAgents(Isreport?.Id)
+//     setData(response)
+//   } catch (error) {
+    
+//   }
+//  }
+
+  useEffect(() => {
+    if (Page === 'agent') {
+      if (activeTab === 'Players') {
+        setFieldsHeadings(["Username", "Status", "Credits", "Created At", "Actions"]);
+        setFieldsData(["username", "status", "credits", "createdAt", "actions"]);
+        setTableData(agntdata|| []); 
+      } else if (activeTab === 'Coins') {
+        setFieldsHeadings([ "Amount",
+          "Type",
+          "Sender",
+          "Receiver",
+          "Date"]);
+        setFieldsData(["amount",
+    "type",
+    "sender",
+    "receiver",
+    "date"]);
+        // setTableData(data.coins || []); 
+      }
+    } else if (Page === 'player') {
+      if (activeTab === 'Coins') {
+        setFieldsHeadings([
+          "Amount",
+          "Type",
+          "Sender",
+          "Receiver",
+          "Date"]);
+        setFieldsData([
+          "amount",
+          "type",
+          "sender",
+          "receiver",
+          "date"]);
+          // setTableData(data.someOtherData || []); 
+      }else if(activeTab==="Betting"){
+        setFieldsHeadings([
+          "Username",
+          "Status",
+          "Odds",
+          "Amount",
+          "Match Info",
+          "Pick"        
+        ]);
+        setFieldsData([ "player",
+          "status",
+          "odds",
+          "amount",
+          "match_info",
+          "pick"]);
+          // setTableData(data.someOtherData || []); 
+      }
+    }
+  }, [activeTab, Type, data]);
+  
 
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -104,23 +176,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
     return null;
   }
 
-  //Report 
-  const fieldsHeadings = [
-    "Username",
-    "Status",
-    "Credits",
-    "Created At",
-    "Actions",
-  ];
-
-  const fieldsData = [
-    "username",
-    "status",
-    "credits",
-    "createdAt",
-    "actions"
-  ]
-
+  
   const TopCards = [
     {
       Text: "Credits",

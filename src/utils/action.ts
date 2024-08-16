@@ -453,3 +453,34 @@ export async function getAllTransactionsForAgent(agentId:any){
     revalidatePath("/");
   }
 }
+
+export async function getAllPlayersForAgents(agentId:any){  
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/agent/players/${agentId}`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+     
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    const players = data.players;
+    console.log(players);
+    
+    return players;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}
