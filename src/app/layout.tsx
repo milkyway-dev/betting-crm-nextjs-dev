@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
+import StoreProvider from "@/redux/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en-US">
       <body className={inter.className}><Toaster position="bottom-center" />
-      <div id="modal"></div>
-      <ThemeProvider enableSystem={true} attribute="class">
-          {children}
-      </ThemeProvider>  
+        <div id="modal"></div>
+        <ThemeProvider enableSystem={true} attribute="class">
+          <StoreProvider>
+            {children}
+          </StoreProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

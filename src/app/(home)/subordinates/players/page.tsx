@@ -58,7 +58,7 @@ const page = async () => {
       <div
         className="col-span-12 lg:col-span-9 xl:col-span-8"
       >
-        <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
+        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'player'} />
 
       </div>
     </>
