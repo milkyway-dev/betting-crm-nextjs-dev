@@ -60,6 +60,13 @@ export interface TableProps {
   data: string[];
 }
 
+export interface TransactionProps{
+  data:any
+}
+export interface RecentBetsProps{
+  data:any
+}
+
 export interface TabProps {
   tabs: string[];
   initialTab?: string;
