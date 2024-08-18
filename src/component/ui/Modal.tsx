@@ -1,21 +1,13 @@
-import { EditFormData, ModalProps, ReportsData } from "@/utils/Types";
-import React, { useEffect, useState } from "react";
+import { EditFormData, ModalProps} from "@/utils/Types";
+import React, {useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer, getAllPlayersForAgents, transactions, updateAgent, updatePlayer } from "@/utils/action";
+import { deleteAgent, deletePlayer,transactions, updateAgent, updatePlayer } from "@/utils/action";
 import toast from "react-hot-toast";
 import ReactDOM from 'react-dom'; // Import createPortal
-import Tabs from "./Tabs";
-import Table from "./Table";
-import Card from "./Card";
-import { useSelector } from "react-redux";
-import { getCurrentUser } from "@/utils/utils";
 // Other imports remain unchanged
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,Tabs=[], Page }) => {
   
-  const [activeTab, setActiveTab] = useState<any>(
-   Tabs[0]
-  );  const Isreport = useSelector((state: ReportsData) => state.globlestate.Agent)
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
@@ -24,75 +16,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
     status: data?.status,
 
   });
-
-  const [fieldsHeadings, setFieldsHeadings] = useState<string[]>([]);
-  const [fieldsData, setFieldsData] = useState<string[]>([]);
-  const [tableData, setTableData] = useState<any[]>([]); // Assuming data is an array
-  const [agntdata,setData]=useState([])
-
-//  const HandleAgentPlayers = async()=>{
-//   try {
-//     const response=await getAllPlayersForAgents(Isreport?.Id)
-//     setData(response)
-//   } catch (error) {
-    
-//   }
-//  }
-
-  useEffect(() => {
-    if (Page === 'agent') {
-      if (activeTab === 'Players') {
-        setFieldsHeadings(["Username", "Status", "Credits", "Created At", "Actions"]);
-        setFieldsData(["username", "status", "credits", "createdAt", "actions"]);
-        setTableData(agntdata|| []); 
-      } else if (activeTab === 'Coins') {
-        setFieldsHeadings([ "Amount",
-          "Type",
-          "Sender",
-          "Receiver",
-          "Date"]);
-        setFieldsData(["amount",
-    "type",
-    "sender",
-    "receiver",
-    "date"]);
-        // setTableData(data.coins || []); 
-      }
-    } else if (Page === 'player') {
-      if (activeTab === 'Coins') {
-        setFieldsHeadings([
-          "Amount",
-          "Type",
-          "Sender",
-          "Receiver",
-          "Date"]);
-        setFieldsData([
-          "amount",
-          "type",
-          "sender",
-          "receiver",
-          "date"]);
-          // setTableData(data.someOtherData || []); 
-      }else if(activeTab==="Betting"){
-        setFieldsHeadings([
-          "Username",
-          "Status",
-          "Odds",
-          "Amount",
-          "Match Info",
-          "Pick"        
-        ]);
-        setFieldsData([ "player",
-          "status",
-          "odds",
-          "amount",
-          "match_info",
-          "pick"]);
-          // setTableData(data.someOtherData || []); 
-      }
-    }
-  }, [activeTab, Type, data]);
-  
 
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -175,31 +98,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
     console.warn('Element with id "modal" not found');
     return null;
   }
-
-  
-  const TopCards = [
-    {
-      Text: "Credits",
-      counts: "678",
-    },
-    {
-      Text: "Players",
-      counts: "679",
-    },
-    {
-      Text: "Bets",
-      counts: "896",
-    },
-    {
-      Text: "Recharge",
-      counts: "785",
-    },
-    {
-      Text: "Redeem",
-      counts: "785",
-    }
-  ];
-
 
   switch (Type) {
     case "Delete":
@@ -360,48 +258,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
         </div>,
         modalElement
       );
-
-    case "Report":
-      return ReactDOM.createPortal(
-        <div
-          className="fixed z-[100] inset-0 flex items-center justify-center"
-          onClick={onClose}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div onClick={(e) => e.stopPropagation()} className="w-[90%] lg:w-[80%] h-screen overflow-y-scroll py-[2%]">
-              <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex items-center`}>
-                {Tabs?.map((tab, ind) => (
-                  <div key={ind} className="relative">
-                    {ind !== 0 && tab == activeTab && (
-                      <span className="p-5 bg-[#0E0F0F] rounded-bl-[200rem] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
-                    )}
-                    <div
-                      onClick={() => setActiveTab(tab)}
-                      className={`${tab === activeTab
-                        ? "bg-[#0E0F0F] dark:bg-white dark:text-black rounded-[1rem] md:rounded-none md:rounded-t-[2rem] text-white "
-                        : "bg-[#E3F5FF] rounded-[1rem] border-none text-black"
-                        }   uppercase text-xs cursor-pointer md:text-lg py-2 inline-block border-[1px] dark:border-opacity-30 md:border-b-0 md:border-l-[1px] border-[#313131]   md:border-t-[1px] px-4 md:px-8 border-r-[1px]`}>
-                      {tab}
-                    </div>
-
-                    {tab == activeTab && (
-                      <span className=" p-5 md:inline-block hidden bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 border-t-[1px] border-[#313131] absolute -bottom-4 rotate-[52deg] rounded-br-[200rem]  -right-[.6rem]"></span>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div className='w-full bg-[#0E0F0F] border-white border-opacity-10 border-t-[1px] border-l-[1px] border-r-[1px] dark:bg-white px-5 rounded-2xl md:rounded-none lg:rounded-r-2xl pt-5 pb-8  grid grid-cols-12 items-center gap-4'>
-                  <Card TopCards={TopCards} />
-                </div>
-                <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={[]} />
-              </div>
-            </div>
-          </div>
-        </div>,
-        modalElement
-      );
-
     default:
       return null;
   }
