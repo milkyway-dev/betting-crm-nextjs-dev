@@ -4,7 +4,7 @@ import Recharge from "../svg/Recharge";
 import { TransactionProps } from "@/utils/Types";
 import { formatDate } from "@/utils/utils";
 
-const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
+const RecentTransaction: React.FC<TransactionProps> = ({ data }) => {
   // const transaction = [
   //   {
   //     status: <Redeem />,
@@ -70,11 +70,11 @@ const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
       </div>
       {/* Transaction Table */}
       <div className="lg:h-[44vh] xl:h-[62vh] dark:bg-white relative rounded-3xl lg:overflow-y-scroll">
-      {data?.map((item:any, index:any) => (
+        {data?.map((item: any, index: any) => (
           <div key={index}>
             <div className="flex justify-between pt-8 px-5 md:px-8">
               <div className="flex space-x-2 w-[60%] md:space-x-4">
-                {item.type==="redeem"?(<Redeem/>):(<Recharge/>)}
+                {item?.type === "redeem" ? <Redeem /> : <Recharge />}
                 <div>
                   <div className="text-base text-white dark:text-black tracking-widest capitalize">
                     {item?.type}
@@ -85,7 +85,7 @@ const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
                         Sender
                       </span>
                       <span className="text-white dark:text-black  text-opacity-70 text-[.9rem]">
-                        {item.sender.username}
+                        {item?.sender?.username}
                       </span>
                     </div>
                     <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
@@ -93,7 +93,7 @@ const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
                         Receiver
                       </span>
                       <span className="text-white dark:text-black  text-opacity-70 text-[.9rem]">
-                        {item.receiver.username}
+                        {item?.receiver?.username}
                       </span>
                     </div>
                   </div>
@@ -102,7 +102,10 @@ const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
                   </div>
                 </div>
               </div>
-              <div className="text-sm dark:text-black dark:text-opacity-60 text-[#A0AEC0]"><span>{item.type==="redeem"?("-"):("+")}</span>{item.amount}</div>
+              <div className="text-sm dark:text-black dark:text-opacity-60 text-[#A0AEC0]">
+                <span>{item?.type === "redeem" ? "-" : "+"}</span>
+                {item?.amount}
+              </div>
             </div>
             <span className="inline-block w-[92%] mx-[4%] h-[1.5px] bg-[#282828]"></span>
           </div>
@@ -114,4 +117,3 @@ const RecentTransaction:React.FC<TransactionProps> = ({data}) => {
 };
 
 export default RecentTransaction;
-
