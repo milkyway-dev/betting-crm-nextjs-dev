@@ -1,26 +1,22 @@
 import React from "react";
-import Image from "next/image";
-import Tabs from "./Tabs";
 import { TableProps } from "@/utils/Types";
-import SearchBar from "./SearchBar";
 import { formatDate } from "@/utils/utils";
 import TableThreeDots from "./TableThreeDots";
+import TableUserName from "./TableUserName";
 
 const Table: React.FC<TableProps> = ({
   fieldsHeadings,
   fieldData,
   data = [],
+  Page
 }) => {
   return (
     <>
       <div className="overflow-x-scroll uppercase">
-        <div className="flex items-center justify-between">
-          {/* <SearchBar /> */}
-        </div>
         <div
-          className={`bg-[#0E0F0F] dark:bg-white h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none w-[700px] md:w-auto rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
+          className={`bg-[#0E0F0F] dark:bg-white  overflow-y-scroll h-[85vh]  p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none w-[700px] md:w-auto rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
         >
-          <table className="w-full ">
+          <table className="w-full">
             <thead className="text-white border-b dark:text-black border-[#858585] font-semibold">
               <tr className="text-center">
                 {fieldsHeadings.map((item: string, ind: number) => (
@@ -43,38 +39,22 @@ const Table: React.FC<TableProps> = ({
                       const active = field === "type" ? "type" : "status";
                       switch (field) {
                         case "username":
-                          return (
-                            <td
-                              key={idx}
-                              className="flex  items-center pb-3 justify-start space-x-2 pt-6"
-                            >
-                              <div>
-                                <Image
-                                  alt="profile"
-                                  src={"/assets/images/profile.png"}
-                                  width={200}
-                                  height={200}
-                                  className="w-[30px] border-[2px] border-[#858585] rounded-full"
-                                />
-                              </div>
-                              <span>{data[field]}</span>
-                            </td>
-                          );
+                          return (<TableUserName Page={Page} username={data[field]} Id={data?._id} index={idx} />);
                         case active:
                           return (
                             <td key={idx} className="pt-6 pb-3">
-                              {["active", "recharge"].includes(data[field]) ? (
+                              {["active", "recharge", "Success"].includes(data[field]) ? (
                                 <span className="bg-green-700 bg-opacity-30 text-green-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
-                              ) : ["redeem", "inactive"].includes(
+                              ) : ["redeem", "inactive", "fail"].includes(
                                   data[field]
                                 ) ? (
                                 <span className="bg-red-700 bg-opacity-30 text-red-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
                               ) : (
-                                <span className="bg-gray-700 bg-opacity-30 text-gray-500 px-4 py-2 rounded-xl">
+                                <span className="bg-yellow-700 bg-opacity-30 text-yellow-500 px-4 py-2 rounded-xl">
                                   {data[field]}
                                 </span>
                               )}
@@ -95,10 +75,40 @@ const Table: React.FC<TableProps> = ({
                               {data[field] ? data[field].username : "N/A"}
                             </td>
                           );
+                        
+                          case "odds":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data.bet_on === "home_team"
+                                  ? data.home_team.odds
+                                  : data.away_team.odds}
+                              </td>
+                            );
 
-                        case "actions":
-                          return <TableThreeDots data={data} />;
+                          case "match_info":
+                          return (
+                            <td key={idx} className="pt-6">
+                              {`${data.home_team.name} vs ${data.away_team.name}`}
+                            </td>
+                          );  
 
+                          case "pick":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data.bet_on === "home_team"
+                                  ? data.home_team.name
+                                  : data.away_team.name}
+                              </td>
+                            );     
+                       
+                          case "player":
+                            return (
+                              <td key={idx} className="pt-6">
+                                {data[field] ? data[field].username : "N/A"}
+                              </td>
+                            );
+                            case "actions":
+                              return <TableThreeDots data={data} />;
                         default:
                           return (
                             <td key={idx} className="pt-6">

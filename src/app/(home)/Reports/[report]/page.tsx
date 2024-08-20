@@ -3,11 +3,12 @@ import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
 import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
+import ReportTabs from "../ReportTabs";
 
-async function getAllPlayers(){  
+async function getAllPlayersForAgents(username:string){  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/player/all`, {
+    const response = await fetch(`${config.server}/api/agent/players/by-username/${username}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -35,10 +36,10 @@ async function getAllPlayers(){
   }
 }
 
-async function getAllPlayersForAgents(agentId:any){  
+async function getAllTransactionsForAgent(agentId:any){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/players/${agentId}`, {
+    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -55,10 +56,12 @@ async function getAllPlayersForAgents(agentId:any){
     }
 
     const data = await response.json();
-    const players = data.players;
-    console.log(players);
+    const transactions = data.transactions;
+
+    console.log("");
     
-    return players;
+    
+    return transactions;
   } catch (error) {
     console.log("error:", error);  
   }finally{
@@ -66,14 +69,10 @@ async function getAllPlayersForAgents(agentId:any){
   }
 }
 
-const page = async () => {
-  const user:any = await getCurrentUser();
-  let data=[];
-  if(user.role==="admin")
-    data = await getAllPlayers();
-  else   
-   data = await getAllPlayersForAgents(user?.userId)
-  
+const page = async({params}:any) => {
+
+  const data = await getAllPlayersForAgents(params?.report)
+
   const fieldsHeadings = [
     "Username",
     "Status",
@@ -89,16 +88,21 @@ const page = async () => {
     "createdAt",
     "actions"
   ]
- 
+  const tabs = [
+    { name: 'Players', route: `/Reports/${params?.report}` },
+    { name: 'Coins', route: `/Reports/coins/${params?.report}` },
+  ];
   return (
     <>
       <div
-        className="col-span-12 lg:col-span-9 relative xl:col-span-8"
+        className="col-span-12 p-5 lg:col-span-9 h-screen overflow-y-scroll xl:col-span-8"
       >
-         <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
-          <SearchBar />
+        <div className="pb-5 flex items-center space-x-2">
+          <div className="text-white font-semibold tracking-wide text-opacity-30">Report Of :</div>
+          <div className="text-white font-semibold tracking-wide capitalize">{params?.report}</div>
         </div>
-        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'player'} />
+        <ReportTabs params={params?.report} tabs={tabs}/>
+        <Table Page="Player" fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data}/>
       </div>
     </>
   );

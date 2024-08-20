@@ -3,8 +3,14 @@ import React from "react";
 import Redeem from "../svg/Redeem";
 import Recharge from "../svg/Recharge";
 import { usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import Close from "../svg/Close";
+import { UpdateNotification } from "@/redux/ReduxSlice";
 const Notifications = () => {
+  const dispatch=useDispatch()
   const pathname = usePathname()
+  const isOpen = useSelector((state: { globlestate: { openNotification: Boolean } }) => state?.globlestate.openNotification)
+
   const data = [
     {
       icon: <Redeem />,
@@ -32,9 +38,9 @@ const Notifications = () => {
   if (pathname === '/') {
     return;
   }
-
   return (
-    <div className="fixed xl:static lg:block hidden h-screen dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 col-span-2 px-5 py-5 border-[#282828] ">
+    <div className={` ${isOpen?'right-[0%] top-0 fixed ':'-right-[100%] fixed top-0'} lg:static  transition-all w-[60%] md:w-[35%] z-50 h-screen dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 col-span-2 px-5 py-5 border-[#282828]`}>
+      <button className="absolute top-2 cursor-pointer lg:hidden  right-2" onClick={()=>dispatch(UpdateNotification(false))}><Close/></button>
       <div className="text-white bg-[#232525] dark:bg-onDark dark:text-black px-8 py-1.5  text-lg rounded-3xl tracking-wide inline-block">
         Notification
       </div>

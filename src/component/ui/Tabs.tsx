@@ -13,11 +13,11 @@ const Tabs: React.FC<TabProps> = ({ tabs, initialTab}) => {
   );
   
     return (
-      <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex  items-center`}>
+      <div className={`md:translate-y-[2px] space-x-2 pb-2 md:pb-0 md:space-x-4 flex items-center`}>
         {tabs?.map((tab, ind) => (
           <div key={ind} className="relative">
             {ind !== 0 && tab == activeTab  && (
-              <span className="p-5 bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
+              <span className="p-5 bg-[#0E0F0F] rounded-bl-[200rem] dark:bg-white dark:border-opacity-30 md:inline-block hidden border-t-[1px] border-[#313131] absolute -bottom-4 -rotate-[52deg] -left-[.6rem]"></span>
             )}
             <Link href={`/${initialTab}/${tab}`}
             onClick={()=>setActiveTab(tab)}
@@ -30,7 +30,7 @@ const Tabs: React.FC<TabProps> = ({ tabs, initialTab}) => {
             </Link>
   
             {tab == activeTab && (
-              <span className=" p-5 md:inline-block hidden bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 border-t-[1px] border-[#313131] absolute -bottom-4 rotate-[52deg] -right-[.6rem]"></span>
+              <span className=" p-5 md:inline-block hidden bg-[#0E0F0F] dark:bg-white dark:border-opacity-30 border-t-[1px] border-[#313131] absolute -bottom-4 rotate-[52deg] rounded-br-[200rem]  -right-[.6rem]"></span>
             )}
           </div>
         ))}
