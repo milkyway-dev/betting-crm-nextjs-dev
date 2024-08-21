@@ -25,17 +25,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
       password: formData.password.trim(),
       status: formData.status
     };
-
+let response;
     if (data.role === "agent") {
 
-      const response = await updateAgent(formData);
+       response = await updateAgent(formData);
       if (response?.error) {
         return alert(response?.error || "Can't Update Agent");
       }
       onClose();
 
     } else {
-      const response = await updatePlayer(formData);
+       response = await updatePlayer(formData);
       if (response?.error) {
         return alert(response?.error || "Can't Update Player");
       }
@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data,T
 
     // Reset form data after logging
     setFormData({
-      id: "",
+      id: data._id,
       password: "",
       status: "",
     });

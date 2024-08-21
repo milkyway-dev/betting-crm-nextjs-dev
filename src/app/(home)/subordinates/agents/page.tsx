@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 async function getAllAgents () {  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/all`, {
+    const response = await fetch(`${config.server}/api/agents/`, {
       method:"GET",
       credentials:"include",
       headers:{

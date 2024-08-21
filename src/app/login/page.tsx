@@ -88,10 +88,14 @@ const Page: React.FC = () => {
         } else {
           const token = response?.token;
           console.log(response, "response");
-          Cookies.set("token", token);
           const decodedToken = jwtDecode(token) as DecodeToken;
           if (decodedToken && (decodedToken.role === "agent" || decodedToken.role === "admin")) {
+            Cookies.set("token", token);
             router.push("/");
+          }else if(decodedToken &&(decodedToken.role==="user")){
+             toast.error("You Are Not Authorised")
+          }else{
+            toast.error("Invalid Credentials!")
           }
         }
       } catch (error) {

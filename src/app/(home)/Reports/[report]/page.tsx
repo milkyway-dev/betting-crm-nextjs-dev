@@ -8,7 +8,8 @@ import ReportTabs from "../ReportTabs";
 async function getAllPlayersForAgents(username:string){  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/players/by-username/${username}`, {
+
+    const response = await fetch(`${config.server}/api/agents/${username}/players?type=username`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -39,7 +40,7 @@ async function getAllPlayersForAgents(username:string){
 async function getAllTransactionsForAgent(agentId:any){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
+    const response = await fetch(`${config.server}/api/transactions/all/${agentId}`, {
       method:"GET",
       credentials:"include",
       headers:{
