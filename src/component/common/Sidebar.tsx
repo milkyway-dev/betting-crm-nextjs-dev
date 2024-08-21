@@ -2,10 +2,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
-import { getCurrentUser } from "@/utils/utils";
+import { currentUser } from "@/utils/action";
 
 const Sidebar = () => {
   const [toggle,setToggle]=useState(false)
@@ -26,9 +26,11 @@ const Sidebar = () => {
     },
   ]);
   const fetchUser = async () => {
-    const currentUser:any = await getCurrentUser(); 
-    setUser(currentUser); 
-    if (currentUser?.role === "agent") {
+    const user:any = await currentUser(); 
+    console.log(user, "s");
+    
+    setUser(user); 
+    if (user?.role === "agent") {
       setNav((prevNav) =>
         prevNav.map((navItem) =>
           navItem.text === "Subordinates"
@@ -123,6 +125,7 @@ const Sidebar = () => {
       {toggle&&<div className="fixed  transition-all top-0 left-0 w-full z-[53] h-screen lg:hidden bg-black bg-opacity-35" onClick={() => setToggle(!toggle)}></div>}
     </>
   );
+  
 };
 
 export default Sidebar;
