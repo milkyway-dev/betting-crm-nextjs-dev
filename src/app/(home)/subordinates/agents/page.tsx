@@ -1,4 +1,3 @@
-import Header from "@/component/common/Header";
 import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
@@ -6,7 +5,8 @@ import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-async function getAllAgents () {  
+async function getAllAgents() {  
+
   const token = await getCookie();
   try {
     const response = await fetch(`${config.server}/api/agent/all`, {
@@ -63,9 +63,9 @@ const page = async () => {
   return (
     <>
       <div
-        className="col-span-12 lg:col-span-9 md:relative xl:col-span-8"
+        className="flex-1  md:relative"
       >
-        <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
+        <div className="md:absolute md:right-[2%] md:-top-[22%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />
         </div>
         <Table Page="agent"  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />

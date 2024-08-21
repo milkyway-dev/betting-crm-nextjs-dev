@@ -4,59 +4,10 @@ import Image from "next/image";
 import React from "react";
 
 const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
-  // const Bets = [
-  //   {
-  //     game: "Badminton",
-  //     league: "Olympic 2024",
-  //     DateTime: "23 July 2024, at 12:30 PM",
-  //     player1: "Gaurav",
-  //     player2: "Rana",
-  //     market: "1X2",
-  //     Beton: "India",
-  //     amount: "500",
-  //     Odss: "-500",
-  //     status: "Win",
-  //   },
-  //   {
-  //     game: "Badminton",
-  //     league: "Olympic 2024",
-  //     DateTime: "23 July 2024, at 12:30 PM",
-  //     player1: "Gaurav",
-  //     player2: "Rana",
-  //     market: "1X2",
-  //     Beton: "India",
-  //     amount: "500",
-  //     Odss: "-500",
-  //     status: "Win",
-  //   },
-  //   {
-  //     game: "Badminton",
-  //     league: "Olympic 2024",
-  //     DateTime: "23 July 2024, at 12:30 PM",
-  //     player1: "Gaurav",
-  //     player2: "Rana",
-  //     market: "1X2",
-  //     Beton: "India",
-  //     amount: "500",
-  //     Odss: "-500",
-  //     status: "Win",
-  //   },
-  //   {
-  //     game: "Badminton",
-  //     league: "Olympic 2024",
-  //     DateTime: "23 July 2024, at 12:30 PM",
-  //     player1: "Gaurav",
-  //     player2: "Rana",
-  //     market: "1X2",
-  //     Beton: "India",
-  //     amount: "500",
-  //     Odss: "-500",
-  //     status: "Win",
-  //   },
-  // ];
+
   return (
-    <div className="border-[1px] border-[#282828] dark:border-opacity-40 mt-4 md:mt-0 text-white  rounded-3xl">
-      <div className="text-white px-6 tracking-wide py-2 m-3 bg-light_black dark:text-black dark:bg-[#F4F4F4] rounded-3xl inline-block">
+    <div className="border-[1px] flex-1 border-[#282828] dark:border-opacity-40 mt-4 md:mt-0 text-white  rounded-3xl">
+      <div className="text-white px-6 tracking-wide py-2 m-3 text-[.9rem] md:text-base bg-light_black dark:text-black dark:bg-[#F4F4F4] rounded-3xl inline-block">
         Recent Bets
       </div>
       <div className="lg:h-[44vh] xl:h-[62vh] lg:overflow-y-scroll">
@@ -76,34 +27,12 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
                 {formatDate(item?.updatedAt)}
               </div>
               <div className="space-x-8 pt-5 flex justify-center items-center">
-                <div className="flex flex-col items-center">
-                  <div className="bg-[#343434] dark:bg-[#E0E0E0] group-hover:bg-[#E0E0E0] inline-block p-2.5 shadow-lg rounded-full">
-                    <Image
-                      src="assets/images/badminton.svg"
-                      alt="badminton_logo"
-                      quality={100}
-                      width={200}
-                      height={200}
-                      className="w-[25px]"
-                    />
-                  </div>
-                  <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black text-sm pt-1.5">
+                <div className="flex space-x-5 items-center">
+                  <span className={`text-white ${item?.status === 'win'?'text-green-600':'dark:text-black'}  dark:group-hover:text-white group-hover:text-black text-sm pt-1.5`}>
                     {item?.home_team.name}
                   </span>
-                </div>
-                <span className="text-2xl text-white">-</span>
-                <div className="flex flex-col items-center">
-                  <div className="bg-[#343434] group-hover:bg-[#E0E0E0] dark:bg-[#E0E0E0] border-[3px] border-[#01B574] inline-block p-2.5 shadow-lg rounded-full">
-                    <Image
-                      src="assets/images/badminton.svg"
-                      alt="badminton_logo"
-                      quality={100}
-                      width={200}
-                      height={200}
-                      className="w-[25px]"
-                    />
-                  </div>
-                  <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black  text-sm pt-1.5">
+                  <span className="text-2xl text-white">-</span>
+                  <span className={`text-white dark:text-black dark:group-hover:text-white group-hover:text-black  ${item?.status !== 'win'?'text-green-600':'dark:text-black'} text-sm pt-1.5`}>
                     {item?.away_team.name}
                   </span>
                 </div>
@@ -117,7 +46,7 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
                     Bet on
                   </div>
                   <div className="text-white group-hover:text-[#3A3A3A] dark:text-black dark:group-hover:text-white dark:group-hover:text-opacity-35 text-sm  text-opacity-70">
-                    {item?.bet_on==="home_team"?(item?.home_team?.name):(item?.away_team?.name)}
+                    {item?.bet_on === "home_team" ? (item?.home_team?.name) : (item?.away_team?.name)}
                   </div>
                 </div>
                 <div className="bg-dark_light_black dark:bg-[#E7E7E7] dark:group-hover:bg-dark_light_black group-hover:bg-[#E7E7E7] text-center rounded-lg tracking-wider p-2">
@@ -143,24 +72,24 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
 
                   <div
                     className={`px-5 py-1.5 text-sm rounded-lg inline-block tracking-wide ${item?.status === 'win'
-                        ? 'bg-[#101213]'
-                        : 'text-opacity-50'
+                      ? 'bg-[#101213]'
+                      : 'text-opacity-50'
                       }`}
                   >
                     Won
                   </div>
                   <div
                     className={`px-5 py-1.5 text-sm rounded-lg inline-block tracking-wide ${item?.status === 'lose'
-                        ? 'bg-[#101213]'
-                        : 'text-opacity-50'
+                      ? 'bg-[#101213]'
+                      : 'text-opacity-50'
                       }`}
                   >
                     Lose
                   </div>
                   <div
                     className={`px-5 py-1.5 text-sm rounded-lg inline-block tracking-wide ${item?.status.includes('pending') || item?.status.includes('locked') || item?.status.includes('retry')
-                        ? 'bg-[#101213]'
-                        : 'text-opacity-50'
+                      ? 'bg-[#101213]'
+                      : 'text-opacity-50'
                       }`}
                   >
                     Pending

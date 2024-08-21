@@ -11,9 +11,11 @@ import User from "@/component/svg/User";
 import Password from "@/component/svg/Password";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import Loader from "@/component/ui/Loader";
 
 
 const Page: React.FC = () => {
+  const [load,setLoad]=useState(false)
   const router = useRouter();
   const [captchaSrc, setCaptchaSrc] = useState("");
 
@@ -81,22 +83,23 @@ const Page: React.FC = () => {
       toast.error("Enter password!");
     } else {
       try {
+        setLoad(true)
         const response = await loginUser(formData);
         if (response?.error) {
           toast.error(response.error);
           fetchCaptcha(); 
         } else {
           const token = response?.token;
-          console.log(response, "response");
           Cookies.set("token", token);
           const decodedToken = jwtDecode(token) as DecodeToken;
           if (decodedToken && (decodedToken.role === "agent" || decodedToken.role === "admin")) {
             router.push("/");
           }
         }
+        setLoad(false)
       } catch (error) {
+        setLoad(false)
         toast.error("An unknown error occurred");
-        console.log(error);
         fetchCaptcha();
       }
     }
@@ -104,6 +107,7 @@ const Page: React.FC = () => {
   
 
   return (
+    <>
     <div className="relative bg-gradient-to-r from-[#202020] to-[#0A0C0C] h-screen w-screen">
       <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-xl py-12 bg-[#0B0B0B] w-[95%] rounded-3xl px-5 md:px-10 md:w-[60%] lg:w-[40%] xl:w-[30%]">
         <div className="flex items-center justify-center">
@@ -166,7 +170,9 @@ const Page: React.FC = () => {
           </div>
         </form>
       </div>
-    </div>
+      </div>
+      <Loader show={load}/>
+    </>
   );
 };
 

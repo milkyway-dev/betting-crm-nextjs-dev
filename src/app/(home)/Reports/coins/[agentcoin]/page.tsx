@@ -1,9 +1,9 @@
-import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
-import { getCookie, getCurrentUser } from "@/utils/utils";
+import { getCookie} from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 import ReportTabs from "../../ReportTabs";
+import Header from "@/component/common/Header";
 
 
 async function getAllTransactionsForAgent(username:any){
@@ -39,7 +39,6 @@ async function getAllTransactionsForAgent(username:any){
   }
 }
 
-
 const page = async ({params}:any) => {
  console.log(params,"agents")
   const data = await getAllTransactionsForAgent(params?.agentcoin)
@@ -67,12 +66,9 @@ const page = async ({params}:any) => {
   return (
     <>
          <div
-        className="col-span-12 p-5 lg:col-span-9 h-screen overflow-y-scroll xl:col-span-8"
+        className="flex-1 p-5 h-screen overflow-y-scroll"
       >
-        <div className="pb-5 flex items-center space-x-2">
-          <div className="text-white font-semibold tracking-wide text-opacity-30">Report Of :</div>
-          <div className="text-white font-semibold tracking-wide capitalize">{params?.report}</div>
-        </div>
+        <Header/>
         <ReportTabs params={params?.report} tabs={tabs}/>
         <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data}/>
       </div>

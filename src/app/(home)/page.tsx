@@ -69,13 +69,13 @@ export default async function Home() {
     },
   ];
   return (
-    <div className="col-span-12 lg:col-span-9 xl:col-span-10">
+    <div className="flex-1">
       <Header />
       <div className="p-4">
         <div className="grid grid-cols-12 gap-2 xl:w-[92%] md:gap-y-5 xl:gap-y-0  md:gap-x-5 2xl:gap-x-20">
           <Card TopCards={TopCards} />
         </div>
-        <div className="grid gap-x-5 items-start xl:w-[92%] grid-cols-1 lg:grid-cols-2 pt-10">
+        <div className="items-start space-y-5 xl:space-y-0 xl:space-x-5  xl:flex  md:w-full pt-10">
           <RecentTransaction data={summary?.lastTransactions}/>
           <RecentBets data={summary?.lastBets} />
         </div>

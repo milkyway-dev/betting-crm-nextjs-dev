@@ -95,10 +95,10 @@ const page = async () => {
       <div
         className="col-span-12 lg:col-span-9 relative xl:col-span-8"
       >
-         <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
+         <div className="md:absolute md:right-[2%] md:-top-[4.4%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />
         </div>
-        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'player'} />
+        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'Player'} />
       </div>
     </>
   );
