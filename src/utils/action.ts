@@ -62,7 +62,7 @@ export const GetCaptcha = async () => {
 export const getAllAgents = async () => {  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/all`, {
+    const response = await fetch(`${config.server}/api/agents/all`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -95,7 +95,7 @@ export const updateAgent = async (data:any) =>{
   const token = await getCookie();
 
   try{
-    const response = await fetch(`${config.server}/api/agent`, {
+    const response = await fetch(`${config.server}/api/agents/${data?.id }`, {
       method:'PUT',
       credentials:"include",
       headers: {
@@ -121,7 +121,7 @@ export const deleteAgent = async (id:any)=> {
   const token = await getCookie();
 
   try {
-    const response = await fetch( `${config.server}/api/agent/${id}`, {
+    const response = await fetch( `${config.server}/api/agents/${id}`, {
       method:'DELETE',
       credentials:"include",
       headers: {
@@ -148,7 +148,7 @@ export const deleteAgent = async (id:any)=> {
 export const createAgent = async (data:any)=>{
   const token = await getCookie();
   try{
-  const response = await fetch(`${config.server}/api/agent/`, {
+  const response = await fetch(`${config.server}/api/agents/`, {
     method:"POST",
     credentials:"include",
     headers:{
@@ -174,10 +174,12 @@ export const createAgent = async (data:any)=>{
 
 
 export const updatePlayer = async (data:any) =>{
+  console.log(data.id, "ss");
+  
   const token = await getCookie();
 
   try{
-    const response = await fetch(`${config.server}/api/player`, {
+    const response = await fetch(`${config.server}/api/players/${data?.id}`, {
       method:'PUT',
       credentials:"include",
       headers: {
@@ -206,7 +208,7 @@ export const deletePlayer = async (id:any)=> {
   const token = await getCookie();
 
   try {
-    const response = await fetch( `${config.server}/api/player/${id}`, {
+    const response = await fetch( `${config.server}/api/players/${id}`, {
       method:'DELETE',
       credentials:"include",
       headers: {
@@ -234,7 +236,7 @@ export const createPlayer = async (data:any)=>{
   const token = await getCookie();
 
   try{
-  const response = await fetch(`${config.server}/api/player/`, {
+  const response = await fetch(`${config.server}/api/players/`, {
     method:"POST",
     credentials:"include",
     headers:{
@@ -262,7 +264,7 @@ export const createPlayer = async (data:any)=>{
 export const transactions = async (data:any)=>{
   const token = await getCookie();
 try{
-  const response = await fetch(`${config.server}/api/transaction/`, {
+  const response = await fetch(`${config.server}/api/transactions/`, {
     method:"POST",
     credentials:"include",
     headers:{
@@ -389,7 +391,7 @@ export const getBetsForPlayer = async (userId:any)=>{
 export const getTransactionsForPlayer = async (playerId:any)=>{
   const token = await getCookie();
  try {
-   const response = await fetch(`${config.server}/api/bets/player/${playerId}`,
+   const response = await fetch(`${config.server}/api/transactions/player/${playerId}`,
      {
        method:"GET",
        credentials:"include",
@@ -424,7 +426,7 @@ export const getTransactionsForPlayer = async (playerId:any)=>{
 export async function getAllTransactionsForAgent(agentId:any){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
+    const response = await fetch(`${config.server}/api/transactions/${agentId}/players?type=id`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -457,7 +459,7 @@ export async function getAllTransactionsForAgent(agentId:any){
 export async function getAllPlayersForAgents(agentId:any){  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/players/${agentId}`, {
+    const response = await fetch(`${config.server}/api/agents/${agentId}/players?type=id`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -478,6 +480,36 @@ export async function getAllPlayersForAgents(agentId:any){
     console.log(players);
     
     return players;
+  } catch (error) {
+    console.log("error:", error);  
+  }finally{
+    revalidatePath("/");
+  }
+}
+export async function currentUser() {
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/auth/`,{
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
+        Cookie: `userToken=${token}`,
+      }
+    })
+    if(!response.ok){
+      const error = await response.json();
+      console.log(error);
+      
+      return {error:error.message};
+    }
+
+    const data = await response.json();
+    
+    const user = data.user;
+    console.log(user);
+    
+    return user;
   } catch (error) {
     console.log("error:", error);  
   }finally{

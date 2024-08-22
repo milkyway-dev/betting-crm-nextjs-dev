@@ -2,12 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
 import { getCurrentUser } from "@/utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
+import { currentUser } from "@/utils/action";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: { globlestate: { openHeader: Boolean } }) => state?.globlestate.openHeader)
@@ -29,9 +30,11 @@ const Sidebar = () => {
     },
   ]);
   const fetchUser = async () => {
-    const currentUser: any = await getCurrentUser();
-    setUser(currentUser);
-    if (currentUser?.role === "agent") {
+    const user:any = await currentUser(); 
+    console.log(user, "s");
+    
+    setUser(user); 
+    if (user?.role === "agent") {
       setNav((prevNav) =>
         prevNav.map((navItem) =>
           navItem.text === "Subordinates"
@@ -45,9 +48,6 @@ const Sidebar = () => {
     fetchUser();
 
   }, []);
-
-
-
 
 
   return (
@@ -125,6 +125,7 @@ const Sidebar = () => {
       {isOpen && <div className="fixed  transition-all top-0 left-0 w-full z-[53] h-screen lg:hidden bg-black bg-opacity-35" onClick={() => dispatch(UpdateHeader(false))} ></div>}
     </>
   );
+  
 };
 
 export default Sidebar;

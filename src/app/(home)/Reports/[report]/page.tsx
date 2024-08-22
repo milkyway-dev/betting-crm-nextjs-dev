@@ -9,11 +9,11 @@ import Header from "@/component/common/Header";
 async function getAllPlayersForAgents(username: string) {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/players/by-username/${username}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(`${config.server}/api/agents/${username}/players?type=username`, {
+      method:"GET",
+      credentials:"include",
+      headers:{
+        "Content-Type":"application/json",
         Cookie: `userToken=${token}`,
       }
     })
@@ -28,11 +28,10 @@ async function getAllPlayersForAgents(username: string) {
     const data = await response.json();
     const players = data.players;
     console.log(players);
-
     return players;
   } catch (error) {
-    console.log("error:", error);
-  } finally {
+    console.log("error:", error);  
+  }finally{
     revalidatePath("/");
   }
 }

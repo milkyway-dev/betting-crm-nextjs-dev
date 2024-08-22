@@ -9,7 +9,7 @@ import Header from "@/component/common/Header";
 async function getAllTransactionsForAgent(username:any){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all/${username}`, {
+    const response = await fetch(`${config.server}/api/transactions/${username}/players?type=username`, {
       method:"GET",
       credentials:"include",
       headers:{

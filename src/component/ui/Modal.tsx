@@ -29,6 +29,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
         setLoad(false)
       } catch (error) {
         setLoad(false)
+
       }
     } else {
       try {

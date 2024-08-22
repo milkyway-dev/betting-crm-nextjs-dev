@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 async function getAllTransactions () {  
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all`, {
+    const response = await fetch(`${config.server}/api/transactions/`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -40,7 +40,7 @@ async function getAllTransactions () {
 async function getAllTransactionsForAgent(agentId:any){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
+    const response = await fetch(`${config.server}/api/transactions/${agentId}/players?type=id`, {
       method:"GET",
       credentials:"include",
       headers:{
