@@ -15,8 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Toaster position="bottom-center" />
-        <div className="grid grid-cols-12 overflow-y-scroll h-screen dark:bg-white bg-bg_dashboard">
+        <div className="md:flex  dark:bg-white bg-bg_dashboard">
           <Sidebar />
           {children}
           <Notifications />

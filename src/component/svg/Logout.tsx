@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const Logout = () => {
   const router = useRouter();
@@ -8,6 +9,7 @@ const Logout = () => {
     try {
       Cookies.remove("token");
       router.push("/login");
+      toast.success('Logout successfully !')
     } catch (error:any) {
       console.log(error.message);
       

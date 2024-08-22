@@ -100,7 +100,7 @@ const page = async () => {
   return (
     <>
       <div
-        className="col-span-12 md:relative lg:col-span-9 xl:col-span-8"
+        className="md:relative"
       >
         <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />

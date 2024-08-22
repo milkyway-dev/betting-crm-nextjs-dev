@@ -5,8 +5,10 @@ import ChevronDown from "@/component/svg/ChevronDown";
 import { createAgent, createPlayer } from "@/utils/action";
 import toast from "react-hot-toast";
 import { getCurrentUser } from "@/utils/utils";
+import Loader from "@/component/ui/Loader";
 
 const Page: React.FC = () => {
+  const [load,setLoad]=useState(false)
   const [formData, setFormData] = useState<AddFormData>({
     username: "",
     password: "",
@@ -85,25 +87,32 @@ const Page: React.FC = () => {
       password: formData.password.trim(),
     };
 
-    let response;
-    if (formData.role === "agent") {
-      response = await createAgent(dataObject);
-    } else {
-      response = await createPlayer(dataObject);
+    try {
+      setLoad(true)
+      let response;
+      if (formData.role === "agent") {
+        response = await createAgent(dataObject);
+      } else {
+        response = await createPlayer(dataObject);
+      }
+  
+      if (response?.error) {
+        alert(response?.error || `Can't create ${formData.role}`);
+      } else {
+        toast.success(`${formData.role} Created Successfully!`);
+        setFormData({ username: "", password: "", role: "" });
+        setErrors({ username: "", password: "", role: "" });
+      }
+      setLoad(false)
+    } catch (error) {
+      setLoad(false)
     }
-
-    if (response?.error) {
-      alert(response?.error || `Can't create ${formData.role}`);
-    } else {
-      toast.success(`${formData.role} Created Successfully!`);
-      setFormData({ username: "", password: "", role: "" });
-      setErrors({ username: "", password: "", role: "" });
-    }
+  
   };
 
   return (
     <>
-      <div className="pt-40 md:py-40 h-screen lg:h-full md:bg-[#0E0F0F] dark:bg-white md:p-5 dark:border-opacity-30 md:border-[1px] rounded-b-2xl rounded-bl-2xl md:rounded-tl-none rounded-r-2xl border-[#313131]">
+      <div className="pt-3 h-screen xl:h-auto lg:min-h-[85vh] md:bg-[#0E0F0F] dark:bg-white md:p-5 dark:border-opacity-30 lg:border-[1px] rounded-b-2xl rounded-bl-2xl md:rounded-tl-none rounded-r-2xl border-[#313131]">
         <div className="px-5 md:px-12 py-14 border-[1px] border-[#464646] w-[100%] dark:border-opacity-30 md:w-[70%] lg:w-[50%]  xl:w-[45%] rounded-[1.5rem] md:rounded-[2.5rem] mx-auto dark:bg-white bg-[#0E0E0E]">
           <form onSubmit={handleSubmit}>
             <div>
@@ -157,12 +166,12 @@ const Page: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, role: e.target.value })
                   }
-                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A]  dark:text-black  text-white text-opacity-40 rounded-lg  pr-3 text-base  py-2.5"
+                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] px-5 dark:text-black  text-white text-opacity-40 rounded-lg  pr-3 text-base  py-2.5"
                   style={{ paddingRight: "30px" }}
                 >
                   {selectRole?.map((role, idx) => (
                     <option key={idx} className="uppercase" value={role}>
-                      <span className="uppercase">{role}</span>
+                      {role}
                     </option>
                   ))}
                 </select>
@@ -182,6 +191,7 @@ const Page: React.FC = () => {
           </form>
         </div>
       </div>
+      <Loader show={load}/>
     </>
   );
 };

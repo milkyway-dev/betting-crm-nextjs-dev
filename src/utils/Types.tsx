@@ -120,3 +120,8 @@ export interface ReportsData {
 export interface ReportModal {
   openModal: boolean;
 }
+
+export interface loader{
+  show:Boolean
+ }
+ 
