@@ -12,9 +12,9 @@ const Table: React.FC<TableProps> = ({
 }) => {
   return (
     <>
-      <div className="capitalize pb-5">
+      <div className="bg-[#0E0F0F] h-screen overflow-y-scroll md:h-auto  capitalize pb-5">
         <div
-          className={`bg-[#0E0F0F] dark:bg-white    p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none  rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
+          className={` dark:bg-white    p-5 border-[1px]  rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none  rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
         >
           <table className="w-full">
             <thead className="text-white border-b dark:text-black border-[#858585] font-semibold">

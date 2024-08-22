@@ -15,7 +15,6 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Toaster position="bottom-center" />
         <div className="md:flex  dark:bg-white bg-bg_dashboard">
           <Sidebar />
           {children}
