@@ -26,7 +26,7 @@ async function getAllBets () {
     }
 
     const data = await response.json();
-    const bets = data?.Bets;
+    const bets = data;
     console.log(bets, "bets");
     
     return bets;
@@ -37,50 +37,8 @@ async function getAllBets () {
   }
 }
 
-async function getAllBetsForAgent(agentId:any){
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/bets/${agentId}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-     
-    if(!response.ok){
-      const error = await response.json();
-      console.log(error);
-      
-      return {error:error.message};
-    }
-
-    const data = await response.json();
-    const bets = data.Bets;
-
-    console.log("");
-    
-    
-    return bets;
-  } catch (error) {
-    console.log("error:", error);  
-  }finally{
-    revalidatePath("/");
-  }
-}
-
-
 const page = async () => {
-  const user:any = await getCurrentUser();
-  console.log(user);
-  let data;
-  if(user.role==="admin")
-    data = await getAllBets();
-  else   
-   data = await getAllBetsForAgent(user?.userId)
-  
-  
+   const data = await getAllBets();
   const fieldsHeadings = [
     "Username",
     "Status",
@@ -102,7 +60,6 @@ const page = async () => {
   return (
     <>
       <div
-        className="col-span-12 lg:col-span-9 xl:col-span-8"
       >
         <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
       </div>

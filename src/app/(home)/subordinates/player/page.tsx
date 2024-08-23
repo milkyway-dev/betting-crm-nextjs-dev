@@ -1,16 +1,15 @@
-import Header from "@/component/common/Header";
 import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
-import { getCookie, getCurrentUser } from "@/utils/utils";
+import { getCookie, getCurrentUser} from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
-
-
-async function getAllTransactions(user: any) {
+async function getAllPlayers(){  
   const token = await getCookie();
+  const user: any = await getCurrentUser();
+
   try {
-    const response = await fetch(`${config.server}${user?.role=='admin'?`/api/transactions/`:`/api/transactions/${user?.username}/subordinate?type=username`}`, {
+    const response = await fetch(`${config.server}${user?.role==='admin'?'/api/subordinates?type=player':`/api/subordinates/${user?.username}/subordinates?type=username`}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -18,6 +17,8 @@ async function getAllTransactions(user: any) {
         Cookie: `userToken=${token}`,
       }
     })
+
+    
      
     if(!response.ok){
       const error = await response.json();
@@ -27,8 +28,9 @@ async function getAllTransactions(user: any) {
     }
 
     const data = await response.json();
-    const transactions = data;
-    return transactions;
+    const all = data ;
+    console.log(data,"player data")
+    return all;
   } catch (error) {
     console.log("error:", error);  
   }finally{
@@ -37,35 +39,35 @@ async function getAllTransactions(user: any) {
 }
 
 
-
 const page = async () => {
-  const user = await getCurrentUser()
-  const data = await getAllTransactions(user);
+   const data = await getAllPlayers();
   const fieldsHeadings = [
-    "Amount",
-    "Type",
-    "Sender",
-    "Receiver",
-    "Date",
+    "Username",
+    "Status",
+    "Credits",
+    "Role",
+    "Created At",
+    "Actions",
   ];  
 
   const fieldsData = [
-    "amount",
-    "type",
-    "sender",
-    "receiver",
-    "date"
+    "username",
+    "status",
+    "credits",
+    "role",
+    "createdAt",
+    "actions"
   ]
-
+ 
   return (
     <>
       <div
-        className="md:relative"
+        className="col-span-12 lg:col-span-9 relative xl:col-span-8"
       >
-        {/* <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
+         {/* <div className="md:absolute md:right-[2%] md:-top-[4.4%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />
         </div> */}
-        <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
+        <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'Player'} />
       </div>
     </>
   );

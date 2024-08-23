@@ -41,4 +41,17 @@ export const formatDate = (dateString: string) => {
     return formattedDate;
   };
   
-  
+export const rolesHierarchy = (role:string): string[] => {
+  switch (role) {
+    case 'admin':
+      return ["all","distributor", "subdistributor", "agent", "player"];
+    case 'distributor':
+      return ["subdistributor"];
+    case 'subdistributor':
+      return ["agent"];
+    case 'agent':
+      return ["player"];
+    default:
+      throw new Error(`Unknown role: ${role}`);
+  }
+};
