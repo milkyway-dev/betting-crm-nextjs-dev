@@ -1,19 +1,18 @@
 import { RecentBetsProps } from "@/utils/Types";
 import { formatDate } from "@/utils/utils";
-import Image from "next/image";
 import React from "react";
 
 const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
 
   return (
-    <div className="border-[1px] flex-1 border-[#282828] dark:border-opacity-40 mt-4 md:mt-0 text-white  rounded-3xl">
+    <div className="border-[1px] flex-.7 border-[#282828] dark:border-opacity-40 mt-4 md:mt-0 text-white  rounded-3xl">
       <div className="text-white px-6 tracking-wide py-2 m-3 text-[.9rem] md:text-base bg-light_black dark:text-black dark:bg-[#F4F4F4] rounded-3xl inline-block">
         Recent Bets
       </div>
       <div className="lg:h-[44vh] xl:h-[62vh] lg:overflow-y-scroll">
-        <div className="grid grid-cols-12 relative gap-5 pt-4 p-4">
+        <div className="grid grid-cols-12 relative gap-5 h-full pt-4 p-4">
           {data?.map((item: any, ind: any) => (
-            <div key={ind} className="bg-[#141414] group dark:bg-[#F6F6F6] dark:hover:bg-[#141414] hover:bg-[#F6F6F6] transition-all p-5 rounded-2xl col-span-12 md:col-span-6 lg:col-span-12 xl:col-span-6">
+            <div key={ind} className="bg-[#141414] group dark:bg-[#F6F6F6] dark:hover:bg-[#141414] hover:bg-[#F6F6F6] transition-all p-5 rounded-2xl col-span-12 md:col-span-6 lg:col-span-12">
               <div className="flex items-center space-x-2">
                 <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black  text-lg tracking-wider">
                   {item?.sport_title}

@@ -88,11 +88,8 @@ const Page: React.FC = () => {
         if (response?.token) {
           const token = response?.token;
           Cookies.set("token", token);
-          const decodedToken = jwtDecode(token) as DecodeToken;
-          if (decodedToken && (decodedToken.role === "agent" || decodedToken.role === "admin")) {
             router.push("/");
             toast.success(response?.message)
-          }
         } else {
           toast.error(response.error);
           fetchCaptcha();

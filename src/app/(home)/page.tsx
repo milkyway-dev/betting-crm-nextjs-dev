@@ -28,7 +28,7 @@ async function getSummary(){
     }
 
     const data = await response.json();
-    const summary = data.summary;
+    const summary = data;
     console.log(summary, "Summary");
     
     return summary;

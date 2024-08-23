@@ -1,7 +1,7 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import { deleteAgent, deletePlayer, transactions, updateAgent, updatePlayer } from "@/utils/action";
+import {deletePlayer, deleteSubordinates, transactions,updatePlayer, updateSubordinates } from "@/utils/action";
 import toast from "react-hot-toast";
 import ReactDOM from 'react-dom'; // Import createPortal
 import Loader from "./Loader";
@@ -12,19 +12,19 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
-    id: data?._id,
     password: "",
     status: data?.status,
   });
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (data?.role === "agent") {
+    if (data?.role !== "player") {
       try {
         setLoad(true)
-        const response = await updateAgent(formData);
+        const response = await updateSubordinates(formData,data?._id);
         if (response?.error) {
           return toast.error(response?.error || "Can't Update Agent");
         }
+        toast.success(response?.message)
         onClose();
         setLoad(false)
       } catch (error) {
@@ -33,10 +33,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
     } else {
       try {
         setLoad(true)
-        const response = await updatePlayer(formData);
+        const response = await updatePlayer(formData,data?._id);
         if (response?.error) {
           return toast.error(response?.error || "Can't Update Player");
         }
+        toast.success(response?.responseData?.message)
         onClose();
         setLoad(false)
       } catch (error) {
@@ -47,10 +48,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
 
   const onConfirm = async () => {
     const id = data?._id
-    if (data.role === "agent") {
+    if (data?.role !== "player") {
       try {
         setLoad(true)
-        const response = await deleteAgent(id)
+        const response = await deleteSubordinates(id)
         if (response?.error) {
           return toast.error(response?.error || "Can't Delete Agent");
         }
@@ -78,7 +79,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
   const [transaction, setTransaction] = useState("0");
   const handleRecharge = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // reciever: receiverId, amount, type
     const type = Type?.toLowerCase();
     const dataObject = {
       reciever: data._id,
@@ -89,12 +89,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
       setLoad(true)
       const response = await transactions(dataObject);
       if (response?.error) {
-        return toast.error(response?.error || "Can't Recharge");
+        toast.error(response?.error || "Can't Recharge");
+        onClose();
+        setLoad(false)
+        return;
       }
       onClose();
       toast.success(`${caseType} Successful!`)
       setLoad(false)
     } catch (error) {
+      
       setLoad(false)
     }
   }

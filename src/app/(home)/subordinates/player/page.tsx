@@ -1,13 +1,15 @@
 import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
-import { getCookie, getCurrentUser } from "@/utils/utils";
+import { getCookie, getCurrentUser} from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
 async function getAllPlayers(){  
   const token = await getCookie();
+  const user: any = await getCurrentUser();
+
   try {
-    const response = await fetch(`${config.server}/api/player/all`, {
+    const response = await fetch(`${config.server}${user?.role==='admin'?'/api/subordinates?type=player':`/api/subordinates/${user?.username}/subordinates?type=username`}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -15,6 +17,8 @@ async function getAllPlayers(){
         Cookie: `userToken=${token}`,
       }
     })
+
+    
      
     if(!response.ok){
       const error = await response.json();
@@ -24,10 +28,9 @@ async function getAllPlayers(){
     }
 
     const data = await response.json();
-    const players = data.players;
-    console.log(players);
-    
-    return players;
+    const all = data ;
+    console.log(data,"player data")
+    return all;
   } catch (error) {
     console.log("error:", error);  
   }finally{
@@ -35,49 +38,14 @@ async function getAllPlayers(){
   }
 }
 
-async function getAllPlayersForAgents(agentId:any){  
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/agent/players/${agentId}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-     
-    if(!response.ok){
-      const error = await response.json();
-      console.log(error);
-      
-      return {error:error.message};
-    }
-
-    const data = await response.json();
-    const players = data.players;
-    console.log(players);
-    
-    return players;
-  } catch (error) {
-    console.log("error:", error);  
-  }finally{
-    revalidatePath("/");
-  }
-}
 
 const page = async () => {
-  const user:any = await getCurrentUser();
-  let data=[];
-  if(user.role==="admin")
-    data = await getAllPlayers();
-  else   
-   data = await getAllPlayersForAgents(user?.userId)
-  
+   const data = await getAllPlayers();
   const fieldsHeadings = [
     "Username",
     "Status",
     "Credits",
+    "Role",
     "Created At",
     "Actions",
   ];  
@@ -86,6 +54,7 @@ const page = async () => {
     "username",
     "status",
     "credits",
+    "role",
     "createdAt",
     "actions"
   ]
@@ -95,9 +64,9 @@ const page = async () => {
       <div
         className="col-span-12 lg:col-span-9 relative xl:col-span-8"
       >
-         <div className="md:absolute md:right-[2%] md:-top-[4.4%] pb-3 md:pb-0 md:inline-block">
+         {/* <div className="md:absolute md:right-[2%] md:-top-[4.4%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />
-        </div>
+        </div> */}
         <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'Player'} />
       </div>
     </>

@@ -35,7 +35,7 @@ const Notifications = () => {
 
 
   return (
-    <div className={` ${isOpen?'right-[0%] top-0 fixed xl:static transition-all ':'-right-[100%] top-0 fixed xl:static transition-all '}   ${isOpen?'flex-.2 transition-all  px-5 py-5':'w-[0%]'} z-50 h-screen dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}>
+    <div className={` ${isOpen?'right-[0%] top-0 fixed xl:static transition-all ':'-right-[100%] top-0 fixed xl:static transition-all '}   ${isOpen?'flex-.2 transition-all':'w-[0%] hidden'} z-50 h-screen  px-5 py-5 dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}>
       <button className={`absolute top-2 cursor-pointer ${isOpen?'block':'hidden'} right-2`} onClick={()=>dispatch(UpdateNotification(false))}><Close/></button>
       <div className="text-white bg-[#232525] dark:bg-onDark dark:text-black px-6 md:px-8 py-1.5  text-[.9rem] md:text-lg rounded-3xl tracking-wide inline-block">
         Notification

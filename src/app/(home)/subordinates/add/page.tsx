@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { AddFormData } from "@/utils/Types";
 import ChevronDown from "@/component/svg/ChevronDown";
-import { createAgent, createPlayer } from "@/utils/action";
 import toast from "react-hot-toast";
-import { getCurrentUser } from "@/utils/utils";
+import { getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import Loader from "@/component/ui/Loader";
+import { createPlayer, createSubordinates } from "@/utils/action";
 
 const Page: React.FC = () => {
-  const [load,setLoad]=useState(false)
+  const [load, setLoad] = useState(false)
   const [formData, setFormData] = useState<AddFormData>({
     username: "",
     password: "",
@@ -20,18 +20,16 @@ const Page: React.FC = () => {
     role: "",
   });
 
-  const [selectRole, setSelectRole] = useState<string[]>(["player"]);
+  const [selectRole, setSelectRole] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchRole = async () => {
       try {
         const user: any = await getCurrentUser();
         const role = user?.role;
-
-        if (role === "admin") {
-          setSelectRole(["select", "agent", "player"]);
-        } else {
-          setSelectRole(["select", "player"]);
+        if (role) {
+          const response = await rolesHierarchy(role)
+          setSelectRole(response)
         }
       } catch (error) {
         console.error("Failed to fetch user role:", error);
@@ -90,14 +88,13 @@ const Page: React.FC = () => {
     try {
       setLoad(true)
       let response;
-      if (formData.role === "agent") {
-        response = await createAgent(dataObject);
+      if (formData?.role==='player') {
+        response = await createPlayer(dataObject);  
       } else {
-        response = await createPlayer(dataObject);
+        response = await createSubordinates(dataObject);
       }
-  
       if (response?.error) {
-        alert(response?.error || `Can't create ${formData.role}`);
+        toast.error(response?.error || `Can't create ${formData.role}`);
       } else {
         toast.success(`${formData.role} Created Successfully!`);
         setFormData({ username: "", password: "", role: "" });
@@ -107,7 +104,7 @@ const Page: React.FC = () => {
     } catch (error) {
       setLoad(false)
     }
-  
+
   };
 
   return (
@@ -169,7 +166,8 @@ const Page: React.FC = () => {
                   className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] px-5 dark:text-black  text-white text-opacity-40 rounded-lg  pr-3 text-base  py-2.5"
                   style={{ paddingRight: "30px" }}
                 >
-                  {selectRole?.map((role, idx) => (
+                  <option value={''}>select</option>
+                  {selectRole.filter(role => role !== "all").map((role, idx) => (
                     <option key={idx} className="uppercase" value={role}>
                       {role}
                     </option>
@@ -191,7 +189,7 @@ const Page: React.FC = () => {
           </form>
         </div>
       </div>
-      <Loader show={load}/>
+      <Loader show={load} />
     </>
   );
 };

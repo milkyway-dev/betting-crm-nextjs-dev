@@ -67,8 +67,11 @@ export interface RecentBetsProps{
   data:any
 }
 
+
+
+
 export interface TabProps {
-  tabs: string[];
+  tabs:string[];
   initialTab?: string;
 }
 
@@ -79,7 +82,6 @@ export type AddFormData = {
 };
 
 export type EditFormData = {
-  id:any;
   password: string;
   status: string;
  
@@ -105,7 +107,7 @@ export interface TableUserNameProps {
   username: string;
   index: number;
   Id: Number;
-  Page?: string;
+  role?: string;
 }
 
 export interface ReportsData {

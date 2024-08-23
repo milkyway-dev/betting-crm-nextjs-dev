@@ -3,11 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import HamBurger from "../svg/HamBurger";
 import Close from "../svg/Close";
 import { getCurrentUser } from "@/utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
+import Profile from "../svg/Profile";
+import Infinite from "../svg/Infinite";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: { globlestate: { openHeader: Boolean } }) => state?.globlestate.openHeader)
@@ -21,7 +22,7 @@ const Sidebar = () => {
     },
     {
       text: "Subordinates",
-      Link: "/subordinates/agents",
+      Link: "/subordinates/all",
     },
     {
       text: "transactions",
@@ -31,14 +32,37 @@ const Sidebar = () => {
   const fetchUser = async () => {
     const currentUser: any = await getCurrentUser();
     setUser(currentUser);
-    if (currentUser?.role === "agent") {
-      setNav((prevNav) =>
-        prevNav.map((navItem) =>
-          navItem.text === "Subordinates"
-            ? { ...navItem, Link: "/subordinates/players" }
-            : navItem
-        )
-      );
+  
+    switch (currentUser?.role) {
+      case 'distributor':
+        setNav((prevNav) =>
+          prevNav.map((navItem) =>
+            navItem.text === "Subordinates"
+              ? { ...navItem, Link: "/subordinates/subdistributor" }
+              : navItem
+          )
+        );
+        break;
+      case 'subdistributor':
+        setNav((prevNav) =>
+          prevNav.map((navItem) =>
+            navItem.text === "Subordinates"
+              ? { ...navItem, Link: "/subordinates/agent" }
+              : navItem
+          )
+        );
+        break;
+      case 'agent':
+        setNav((prevNav) =>
+          prevNav.map((navItem) =>
+            navItem.text === "Subordinates"
+              ? { ...navItem, Link: "/subordinates/player" }
+              : navItem
+          )
+        );
+        break;
+      default:
+        break;
     }
   };
   useEffect(() => {
@@ -52,7 +76,6 @@ const Sidebar = () => {
 
   return (
     <>
-
       <div className={`flex flex-col fixed ${!isOpen ? '-left-[200%]' : 'left-0'} z-[55] transition-all xl:sticky xl:top-0 flex-.2 h-screen dark:bg-white bg-dark_black lg:bg-transparent items-center justify-between px-4 py-10 border-r-[.5px] dark:border-opacity-10 border-[#313131]`}>
         <button onClick={() => dispatch(UpdateHeader(false))} className="lg:hidden absolute top-2 left-2"><Close /></button>
         <div>
@@ -102,22 +125,13 @@ const Sidebar = () => {
         </div>
         {/* Profile */}
         <div className="flex items-center space-x-4">
-          <div>
-            <Image
-              src={"/assets/images/profile.png"}
-              quality={100}
-              alt="profile"
-              height={400}
-              width={400}
-              className="w-[45px] dark:border-[3px]  dark:border-onDark rounded-full"
-            />
-          </div>
+          <Profile />
           <div>
             <div className="text-white dark:text-black dark:text-opacity-80  capitalize tracking-wide text-base font-semibold">
               {user?.username}
             </div>
             <div className="text-white text-opacity-50 text-sm font-semibold">
-              {user?.credits}
+              {user?.role}
             </div>
           </div>
         </div>

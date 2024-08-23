@@ -21,8 +21,8 @@ const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data }) => {
   const Buttons = ["Edit", "Delete", "Recharge", "Redeem"];
   return (
     <>
-      <td className="  pl-6 pt-6 cursor-pointer relative">
-        <div className="flex justify-center">
+      <td className="  pl-6 cursor-pointer relative">
+        <div className="flex justify-center items-center">
           <button onClick={() => setToggle(!toggle)}><ThreeDots /></button>
           <div className={`absolute px-3 ${toggle ? 'scale-100' : 'scale-0'} transition-all z-50 py-1.5 rounded-lg dark:bg-onDark bg-dark_light_black space-y-1 top-0 text-sm`}>
             {Buttons?.map((item, ind) => (

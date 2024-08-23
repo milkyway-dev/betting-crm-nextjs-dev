@@ -15,14 +15,14 @@ export default async function RootLayout({
 }>) {
 
   let tabs = ["coin", "betting"];
- 
+  const user:any = await getCurrentUser()
 
   return (
     <>
       <div className="flex-1">
         <Header />
         <div className="px-4 md:px-10 pt-5">
-          <Tabs tabs={tabs} initialTab="transactions" />
+          <Tabs tabs={user?.role=='admin'?tabs:[]} initialTab="transactions" />
           {children}
         </div>
       </div>

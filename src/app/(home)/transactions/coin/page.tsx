@@ -7,10 +7,10 @@ import { revalidatePath } from "next/cache";
 
 
 
-async function getAllTransactions () {  
+async function getAllTransactions(user: any) {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transaction/all`, {
+    const response = await fetch(`${config.server}${user?.role=='admin'?`/api/transactions/`:`/api/transactions/${user?.username}/subordinate?type=username`}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -27,8 +27,7 @@ async function getAllTransactions () {
     }
 
     const data = await response.json();
-    const transactions = data.transactions;
-    
+    const transactions = data;
     return transactions;
   } catch (error) {
     console.log("error:", error);  
@@ -37,50 +36,11 @@ async function getAllTransactions () {
   }
 }
 
-async function getAllTransactionsForAgent(agentId:any){
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-     
-    if(!response.ok){
-      const error = await response.json();
-      console.log(error);
-      
-      return {error:error.message};
-    }
-
-    const data = await response.json();
-    const transactions = data.transactions;
-
-    console.log("");
-    
-    
-    return transactions;
-  } catch (error) {
-    console.log("error:", error);  
-  }finally{
-    revalidatePath("/");
-  }
-}
 
 
 const page = async () => {
-  const user:any = await getCurrentUser();
-  console.log(user);
-  let data;
-  if(user.role==="admin")
-    data = await getAllTransactions();
-  else   
-   data = await getAllTransactionsForAgent(user?.userId)
-  
-  
+  const user = await getCurrentUser()
+  const data = await getAllTransactions(user);
   const fieldsHeadings = [
     "Amount",
     "Type",
@@ -102,9 +62,9 @@ const page = async () => {
       <div
         className="md:relative"
       >
-        <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
+        {/* <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
           <SearchBar />
-        </div>
+        </div> */}
         <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
       </div>
     </>
