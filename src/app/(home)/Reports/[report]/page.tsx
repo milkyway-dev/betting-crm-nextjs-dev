@@ -1,108 +1,84 @@
 import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
-import { config } from "@/utils/config";
-import { getCookie, getCurrentUser } from "@/utils/utils";
+import { getCookie } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 import ReportTabs from "../ReportTabs";
+import Header from "@/component/common/Header";
+import { config } from "@/utils/config";
+import SubordinatesReport from "@/component/ui/SubordinatesReport";
+import Back from "@/component/svg/Back";
+import { getSubordinatesReport } from "@/utils/action";
 
-async function getAllPlayersForAgents(username:string){  
+async function getAllSubordinates(username:string) {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/agent/players/by-username/${username}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-     
-    if(!response.ok){
-      const error = await response.json();
-      console.log(error);
-      
-      return {error:error.message};
-    }
+      const response = await fetch(`${config.server}/api/subordinates/${username}/subordinates?type=username`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              Cookie: `userToken=${token}`,
+          }
+      })
 
-    const data = await response.json();
-    const players = data.players;
-    console.log(players);
-    
-    return players;
+      if (!response.ok) {
+          const error = await response.json();
+          console.log(error);
+
+          return { error: error.message };
+      }
+
+      const data = await response.json();
+      const all = data;
+      return all;
   } catch (error) {
-    console.log("error:", error);  
-  }finally{
-    revalidatePath("/");
+      console.log("error:", error);
+  } finally {
+      revalidatePath("/");
   }
 }
 
-async function getAllTransactionsForAgent(agentId:any){
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-     
-    if(!response.ok){
-      const error = await response.json();
-      console.log(error);
-      
-      return {error:error.message};
-    }
-
-    const data = await response.json();
-    const transactions = data.transactions;
-
-    console.log("");
-    
-    
-    return transactions;
-  } catch (error) {
-    console.log("error:", error);  
-  }finally{
-    revalidatePath("/");
-  }
-}
-
-const page = async({params}:any) => {
-
-  const data = await getAllPlayersForAgents(params?.report)
-
+const page = async ({params}:any) => {
+  const data = await getAllSubordinates(params?.report);
+  const reportData = await getSubordinatesReport(params?.report)
   const fieldsHeadings = [
-    "Username",
-    "Status",
-    "Credits",
-    "Created At",
-    "Actions",
-  ];  
+      "Username",
+      "Status",
+      "Credits",
+      "Role",
+      "Created At",
+      "Actions",
+  ];
 
   const fieldsData = [
-    "username",
-    "status",
-    "credits",
-    "createdAt",
-    "actions"
+      "username",
+      "status",
+      "credits",
+      "role",
+      "createdAt",
+      "actions"
   ]
+
   const tabs = [
-    { name: 'Players', route: `/Reports/${params?.report}` },
+    { name: 'Subordinates', route: `/Reports/${params?.report}` },
     { name: 'Coins', route: `/Reports/coins/${params?.report}` },
   ];
   return (
     <>
       <div
-        className="col-span-12 p-5 lg:col-span-9 h-screen overflow-y-scroll xl:col-span-8"
+        className="flex-1 h-screen overflow-y-scroll "
       >
-        <div className="pb-5 flex items-center space-x-2">
-          <div className="text-white font-semibold tracking-wide text-opacity-30">Report Of :</div>
-          <div className="text-white font-semibold tracking-wide capitalize">{params?.report}</div>
+        <Header Back={<Back />} />
+        <div className="px-10 py-5">
+          <SubordinatesReport reportData={reportData} />
+          <div className="flex items-center justify-between">
+            <ReportTabs params={params?.report} tabs={tabs} />
+            <div className="md:w-[40%] w-[50%] lg:w-[35%] xl:w-[25%] pb-2">
+              <SearchBar />
+            </div>
+          </div>
+          <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} />
         </div>
-        <ReportTabs params={params?.report} tabs={tabs}/>
-        <Table Page="Player" fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data}/>
       </div>
     </>
   );
