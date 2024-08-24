@@ -14,10 +14,10 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
           {data?.map((item: any, ind: any) => (
             <div key={ind} className="bg-[#141414] group dark:bg-[#F6F6F6] dark:hover:bg-[#141414] hover:bg-[#F6F6F6] transition-all p-5 rounded-2xl col-span-12 md:col-span-6 lg:col-span-12">
               <div className="flex items-center space-x-2">
-                <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black  text-lg tracking-wider">
+                <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black  text-sm tracking-wider">
                   {item?.sport_title}
                 </span>
-                <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black text-xl">/</span>
+                <span className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black text-sm">/</span>
                 <span className="text-white group-hover:text-black dark:text-black dark:group-hover:text-white group-hover:text-opacity-50 text-opacity-60 text-sm">
                   {item?.player?.username}
                 </span>
@@ -39,7 +39,7 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
               <div className="text-white  dark:text-black dark:group-hover:text-white group-hover:text-black group-hover:text-opacity-50 text-center pt-2 text-xl text-opacity-40 font-extralight">
                 {item.market}
               </div>
-              <div className="grid items-center  grid-cols-3 gap-x-2 md:gap-x-6 pt-2">
+              <div className="grid   grid-cols-3 gap-x-2 md:gap-x-2 pt-2">
                 <div className="bg-dark_light_black dark:bg-[#E7E7E7] dark:group-hover:bg-dark_light_black group-hover:bg-[#E7E7E7] text-center rounded-lg tracking-wider p-2">
                   <div className="text-white dark:text-black dark:group-hover:text-white group-hover:text-black group-hover:text-opacity-50 text-opacity-30 font-extralight text-base">
                     Bet on
@@ -99,7 +99,6 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
             </div>
           ))}
         </div>
-        <div className="sticky w-full md:block hidden h-[10%] rounded-3xl bg-gradient-to-t to-transparent dark:from-[#E4E5E5] from-black bottom-0 left-0"></div>
       </div>
     </div>
   );

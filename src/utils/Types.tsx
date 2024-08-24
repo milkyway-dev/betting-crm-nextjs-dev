@@ -101,6 +101,7 @@ export interface DeleteUserProps {
 
 export interface TableThreeDotsProps {
   data: any; 
+  isDisable:boolean
 }
 
 export interface TableUserNameProps {

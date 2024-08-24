@@ -22,17 +22,13 @@ async function getAllSubordinates(username:string) {
       })
 
       if (!response.ok) {
-          const error = await response.json();
-          console.log(error);
-
+          const error = await response.json();           
           return { error: error.message };
       }
-
       const data = await response.json();
       const all = data;
       return all;
   } catch (error) {
-      console.log("error:", error);
   } finally {
       revalidatePath("/");
   }
@@ -69,7 +65,7 @@ const page = async ({params}:any) => {
         className="flex-1 h-screen overflow-y-scroll "
       >
         <Header Back={<Back />} />
-        <div className="px-10 py-5">
+        <div className="px-4 md:px-10 py-5">
           <SubordinatesReport reportData={reportData} />
           <div className="flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
