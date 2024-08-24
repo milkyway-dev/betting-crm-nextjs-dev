@@ -8,7 +8,6 @@ import { getCurrentUser } from "@/utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
 import Profile from "../svg/Profile";
-import Infinite from "../svg/Infinite";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: { globlestate: { openHeader: Boolean } }) => state?.globlestate.openHeader)

@@ -12,31 +12,31 @@ const RecentTransaction: React.FC<TransactionProps> = ({ data }) => {
         Recent Transactions
       </div>
       {/* Transaction Table */}
-      <div className="lg:h-[44vh] xl:h-[62vh]  lg:overflow-y-scroll">
+      <div className="lg:h-[44vh] xl:h-[62vh] lg:overflow-y-scroll">
         <div className="h-full dark:bg-white relative  rounded-3xl">
           {data?.map((item: any, index: any) => (
             <div key={index}>
-              <div className="flex  justify-between pt-8 px-3 md:px-8">
-                <div className="flex space-x-2 w-[40%]  md:space-x-4">
+              <div className="flex  justify-between pt-8 px-1 md:px-8">
+                <div className="flex space-x-2  w-[50%] md:space-x-4">
                   {item?.type === "redeem" ? <Redeem /> : <Recharge />}
                   <div>
-                    <div className="text-[.8rem] md:text-base text-white dark:text-black tracking-widest capitalize">
+                    <div className="text-[.8rem]  text-white dark:text-black tracking-widest capitalize">
                       {item?.type}
                     </div>
                     <div className="flex items-center pt-3 space-x-2">
                       <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                        <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem] md:text-base">
+                        <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem] ">
                           Sender
                         </span>
-                        <span className="text-white dark:text-black  text-opacity-70 text-[.7rem] md:text-base">
+                        <span className="text-white dark:text-black  text-opacity-70 text-[.7rem] ">
                           {item?.sender?.username}
                         </span>
                       </div>
                       <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                        <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem] md:text-base">
+                        <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem]">
                           Receiver
                         </span>
-                        <span className="text-white dark:text-black  text-opacity-70 text-[.7rem] md:text-base">
+                        <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
                           {item?.receiver?.username}
                         </span>
                       </div>
@@ -55,7 +55,6 @@ const RecentTransaction: React.FC<TransactionProps> = ({ data }) => {
             </div>
           ))}
         </div>
-        <div className="sticky w-full md:block hidden h-[10%] rounded-3xl bg-gradient-to-t to-transparent dark:from-[#E4E5E5] from-black bottom-0 left-0"></div>
       </div>
 
     </div>

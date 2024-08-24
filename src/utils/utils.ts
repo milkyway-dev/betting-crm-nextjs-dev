@@ -55,3 +55,4 @@ export const rolesHierarchy = (role:string): string[] => {
       throw new Error(`Unknown role: ${role}`);
   }
 };
+
