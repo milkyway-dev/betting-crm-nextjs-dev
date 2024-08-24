@@ -2,18 +2,18 @@ import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
 import { getCookie} from "@/utils/utils";
 import { revalidatePath } from "next/cache";
-import ReportTabs from "../../ReportTabs";
 import Header from "@/component/common/Header";
 import SearchBar from "@/component/ui/SearchBar";
 import SubordinatesReport from "@/component/ui/SubordinatesReport";
 import Back from "@/component/svg/Back";
 import { getSubordinatesReport } from "@/utils/action";
+import ReportTabs from "../../../ReportTabs";
 
 
-async function getAllTransactions(username:string){
+async function getPlayerBettings(username:string){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transactions/${username}/subordinate?type=username`, {
+    const response = await fetch(`${config.server}/api/bets/${username}/bets?type=username`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -30,9 +30,8 @@ async function getAllTransactions(username:string){
     }
 
     const data = await response.json();
-    const transactions = data;
-    console.log(transactions,'All Transaction')
-    return transactions;
+    const bets = data;
+    return bets;
   } catch (error) {
     console.log("error:", error);  
   }finally{
@@ -41,28 +40,30 @@ async function getAllTransactions(username:string){
 }
 
 const page = async ({params}:any) => {
-  const data = await getAllTransactions(params?.transaction)
-  const reportData = await getSubordinatesReport(params?.transaction)
+  const data = await getPlayerBettings(params?.betting)
+  const reportData = await getSubordinatesReport(params?.betting)
  
   const fieldsHeadings = [
+    "Username",
+    "Status",
+    "Odds",
     "Amount",
-    "Type",
-    "Sender",
-    "Receiver",
-    "Date",
+    "Match Info",
+    "Pick"
   ];  
 
   const fieldsData = [
+    "player",
+    "status",
+    "odds",
     "amount",
-    "type",
-    "sender",
-    "receiver", 
-    "date"
+    "match_info",
+    "pick"
   ]
 
   const tabs = [
-    { name: 'Subordinates', route: `/Reports/${params?.transaction}` },
-    { name: 'Coins', route: `/Reports/coins/${params?.transaction}` },
+    { name: 'Coins', route: `/Reports/player/coins/${params?.betting}` },
+    { name: 'Betting', route: `/Reports/player/betting/${params?.betting}` },
   ];
   return (
     <>
@@ -70,7 +71,7 @@ const page = async ({params}:any) => {
         className="flex-1 h-screen overflow-y-scroll "
       >
         <Header Back={<Back />} />
-        <div className="px-2 md:px-10 py-5">
+        <div className="px-4 md:px-10 py-5">
         <SubordinatesReport reportData={reportData} />
           <div className="flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />

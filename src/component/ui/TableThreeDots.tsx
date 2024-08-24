@@ -5,7 +5,7 @@ import Modal from "./Modal";
 import { TableThreeDotsProps } from "@/utils/Types";
 import Close from "../svg/Close";
 
-const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data }) => {
+const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data,isDisable }) => {
   const [open, setOPen] = useState(false)
   const [toggle, setToggle] = useState(false)
   const [type, setType] = useState('')
@@ -21,10 +21,10 @@ const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data }) => {
   const Buttons = ["Edit", "Delete", "Recharge", "Redeem"];
   return (
     <>
-      <td className="  pl-6 cursor-pointer relative">
+      <td className=" pl-6 cursor-pointer relative">
         <div className="flex justify-center items-center">
           <button onClick={() => setToggle(!toggle)}><ThreeDots /></button>
-          <div className={`absolute px-3 ${toggle ? 'scale-100' : 'scale-0'} transition-all z-50 py-1.5 rounded-lg dark:bg-onDark bg-dark_light_black space-y-1 top-0 text-sm`}>
+          {isDisable&&<div className={`absolute z-50 px-3 ${toggle ? 'scale-100' : 'scale-0'} transition-all  py-1.5 rounded-lg dark:bg-onDark bg-dark_light_black space-y-1 top-0 right-0 text-sm`}>
             {Buttons?.map((item, ind) => (
               <button
                 key={ind}
@@ -34,8 +34,8 @@ const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data }) => {
                 {item}
               </button>
             ))}
-           <button onClick={() => setToggle(!toggle)} className="text-sm absolute -top-1 text-opacity-50 text-white right-0 scale-[.6]"><Close /></button>
-          </div>
+            <button onClick={() => setToggle(!toggle)} className="text-sm absolute -top-1 text-opacity-50 text-white right-0 scale-[.6]"><Close /></button>
+          </div>}
         </div>
 
       </td>

@@ -7,7 +7,7 @@ const SubordinatesReport = ({ reportData }: any) => {
   const TopCards = [
     {
       Text: "Credits",
-      counts: reportData?.credits,
+      counts: formatNumber(reportData?.credits),
       arrow: <ArrowUp />,
     },
     {
@@ -21,14 +21,24 @@ const SubordinatesReport = ({ reportData }: any) => {
       arrow: <ArrowUp />,
     }
   ];
+
+  function formatNumber(num: number) {
+    if (num) {
+      if (num >= 1000000) return `${(num / 1000000).toFixed(2)}M`;
+      if (num >= 100000) return `${(num / 100000).toFixed(2)}L`;
+      if (num >= 1000) return `${(num / 1000).toFixed(2)}K`;
+      return num.toString();
+    }
+   
+  }
   return (
     <div>
       <div className='flex items-center py-6 justify-between'>
         <div className='flex items-center space-x-2'>
           <Profile />
           <div>
-            <div className='text-[.9rem] text-white md:text-xl capitalize tracking-wide'>{reportData?.username}</div>
-            <div className='text-white text-[.7rem] text-opacity-40 pt-.5 tracking-wide'>{new Date(reportData?.createdAt).toLocaleDateString('en-Us', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            <div className='text-[.9rem] text-white dark:text-black md:text-xl capitalize tracking-wide'>{reportData?.username} <span className='text-[1rem] font-light dark:text-black text-opacity-50 text-white'>({reportData?.role})</span></div>
+            <div className='text-white dark:text-black text-[.7rem] text-opacity-40 pt-.5 tracking-wide'>{new Date(reportData?.createdAt).toLocaleDateString('en-Us', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
           </div>
 
         </div>
