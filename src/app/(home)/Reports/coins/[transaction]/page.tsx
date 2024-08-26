@@ -24,17 +24,13 @@ async function getAllTransactions(username:string){
      
     if(!response.ok){
       const error = await response.json();
-      console.log(error);
-      
       return {error:error.message};
     }
 
     const data = await response.json();
     const transactions = data;
-    console.log(transactions,'All Transaction')
     return transactions;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }

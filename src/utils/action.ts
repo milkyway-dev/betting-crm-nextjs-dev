@@ -19,11 +19,7 @@ export const loginUser = async (data: any) => {
       return { error: error.message };
     }
     const responseData = await response.json();
-    console.log(responseData);
-
     const token = responseData?.token;
-    console.log(token);
-
     if (token) {
       Cookies.set("token", token);
     }
@@ -71,7 +67,6 @@ export const updateSubordinates = async (data: any, Id: any) => {
       body: JSON.stringify(data)
     })
     const resdata = await response.json();
-    console.log(resdata);
     return resdata;
 
   } catch (error) {
@@ -101,8 +96,6 @@ export const deleteSubordinates = async (id: any) => {
     }
     const responseData = await response.json();
     return { responseData };
-
-
   } catch (error) {
     console.log(error);
   } finally {
@@ -273,8 +266,6 @@ export async function getAllBets() {
 
     const data = await response.json();
     const bets = data?.Bets;
-    console.log(bets, "bets");
-
     return bets;
   } catch (error) {
     console.log("error:", error);
@@ -297,17 +288,12 @@ export async function getAllBetsForAgent(agentId: any) {
 
     if (!response.ok) {
       const error = await response.json();
-      console.log(error);
 
       return { error: error.message };
     }
 
     const data = await response.json();
     const bets = data.Bets;
-
-    console.log("");
-
-
     return bets;
   } catch (error) {
     console.log("error:", error);
@@ -331,16 +317,11 @@ export const getBetsForPlayer = async (userId: any) => {
 
     if (!response.ok) {
       const error = await response.json();
-      console.log(error);
-
       return { error: error.message };
     }
 
     const data = await response.json();
     const bets = data.Bets;
-
-    console.log("");
-
 
     return bets;
 
@@ -351,73 +332,6 @@ export const getBetsForPlayer = async (userId: any) => {
   }
 }
 
-export const getTransactionsForPlayer = async (playerId: any) => {
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/bets/player/${playerId}`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `userToken=${token}`,
-        }
-      })
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.log(error);
-
-      return { error: error.message };
-    }
-
-    const data = await response.json();
-    const transaction = data.transactions;
-
-    console.log("");
-
-
-    return transactions;
-
-  } catch (error) {
-
-  } finally {
-    revalidatePath("/")
-  }
-}
-
-export async function getAllTransactionsForAgent(agentId: any) {
-  const token = await getCookie();
-  try {
-    const response = await fetch(`${config.server}/api/transaction/all/${agentId}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `userToken=${token}`,
-      }
-    })
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.log(error);
-
-      return { error: error.message };
-    }
-
-    const data = await response.json();
-    const transactions = data.transactions;
-
-    console.log("");
-
-
-    return transactions;
-  } catch (error) {
-    console.log("error:", error);
-  } finally {
-    revalidatePath("/");
-  }
-}
 
 export const getCredits = async () => {
   const token = await getCookie();
@@ -434,7 +348,6 @@ export const getCredits = async () => {
 
     if (!response.ok) {
       const error = await response.json();
-      console.log(error);
 
       return { error: error.message };
     }
@@ -464,8 +377,6 @@ export const getSubordinatesReport = async (username:string) => {
 
     if (!response.ok) {
       const error = await response.json();
-      console.log(error);
-
       return { error: error.message };
     }
 
@@ -476,3 +387,5 @@ export const getSubordinatesReport = async (username:string) => {
 
   }
 }
+
+

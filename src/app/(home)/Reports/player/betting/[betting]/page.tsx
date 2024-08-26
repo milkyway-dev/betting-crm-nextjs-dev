@@ -24,8 +24,6 @@ async function getPlayerBettings(username:string){
      
     if(!response.ok){
       const error = await response.json();
-      console.log(error);
-      
       return {error:error.message};
     }
 
@@ -33,7 +31,6 @@ async function getPlayerBettings(username:string){
     const bets = data;
     return bets;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }

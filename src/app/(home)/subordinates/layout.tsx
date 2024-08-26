@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Header from "@/component/common/Header";
 import Tabs from "@/component/ui/Tabs";
-import {getCurrentUser, rolesHierarchy} from "@/utils/utils";
+import { getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import Link from "next/link";
+import SearchBar from "@/component/ui/SearchBar";
 
 export const metadata: Metadata = {
   title: "CRM - Betting Paradise",
@@ -15,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user: any = await getCurrentUser();
-  const userRole:string  = user?.role;
+  const userRole: string = user?.role;
 
   let tabs = await rolesHierarchy(userRole)
   return (
@@ -23,12 +24,15 @@ export default async function RootLayout({
       <div className="flex-1">
         <Header />
         <div className="px-4 md:px-10 pt-5">
-          <div className="flex items-center justify-between">
-            <Tabs tabs={tabs} initialTab="subordinates" />
+          <div className="flex pb-5 items-center justify-between">
+            <div className="w-[70%] xl:w-[50%]">
+              <SearchBar  />
+            </div>
             <Link href={'/subordinates/add'}>
-               <button className="text-white bg-light_black px-6 rounded-lg mb-2.5 py-1.5">Add+</button>
+              <button className="text-white bg-light_black px-6 rounded-lg py-1.5">Add+</button>
             </Link>
           </div>
+          <Tabs tabs={tabs} initialTab="subordinates" />
           {children}
         </div>
       </div>
