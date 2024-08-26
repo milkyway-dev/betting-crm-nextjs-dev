@@ -31,10 +31,8 @@ async function getPlayerTransactions(username:string){
 
     const data = await response.json();
     const transactions = data;
-    console.log(transactions,'All Transaction')
     return transactions;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }

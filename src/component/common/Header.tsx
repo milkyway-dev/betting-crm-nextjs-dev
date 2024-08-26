@@ -34,7 +34,7 @@ const Header = ({Back}:any) => {
   return (
     <div className="text-white pl-5 flex items-center sticky top-0 dark:bg-white dark:text-black dark:text-opacity-75 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] dark:border-opacity-10 justify-end">
       <button className="lg:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>
-      {Back&&<button onClick={() => router.back()} className="xl:block hidden">{Back}</button>}
+      {Back&&<button onClick={() => router.push('/subordinates/all')} className="xl:block hidden">{Back}</button>}
       <div className="flex items-center space-x-3 w-[90%] mx-auto justify-end">
         {user?<div className="bg-gradient-to-tr from-[#F1A535] to-[#FCD361] p-[1px] rounded-xl">
           <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">

@@ -49,110 +49,110 @@ export default async function Home({searchParams}:any) {
     admin: [
       {
         Text: "Bets",
-        counts: formatNumber(summary?.betTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.betTotals?.totalLastPeriod)||'0',
         arrow: <ArrowUp />,
       },
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod)||'0',
         percentage: "-2.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "players",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       },],
     distributor: [
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod)||'0',
         percentage: "-2.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     subdistributor: [
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod)||'0',
         percentage: "-2.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     agent: [
       {
         Text: "Bets",
-        counts: formatNumber(summary?.betTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.betTotals?.totalLastPeriod)||'0',
         arrow: <ArrowUp />,
       },
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod)||'0',
         percentage: "-2.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "players",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersLastPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       },]
@@ -167,6 +167,7 @@ export default async function Home({searchParams}:any) {
     }
 
   }
+  
   return (
     <div className="flex-1">
       <Header />

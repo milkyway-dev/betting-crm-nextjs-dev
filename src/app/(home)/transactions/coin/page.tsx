@@ -21,8 +21,6 @@ async function getAllTransactions(user: any) {
      
     if(!response.ok){
       const error = await response.json();
-      console.log(error);
-      
       return {error:error.message};
     }
 
@@ -30,7 +28,6 @@ async function getAllTransactions(user: any) {
     const transactions = data;
     return transactions;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }
