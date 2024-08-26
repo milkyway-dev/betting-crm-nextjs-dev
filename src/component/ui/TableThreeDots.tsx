@@ -12,6 +12,7 @@ const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data,isDisable }) => {
   const handelOpen = (state: boolean, Type: string) => {
     setOPen(state)
     setType(Type)
+    setToggle(!toggle)
   }
 
   const handelClose = () => {
@@ -24,7 +25,7 @@ const TableThreeDots: React.FC<TableThreeDotsProps> = ({ data,isDisable }) => {
       <td className=" pl-6 cursor-pointer relative">
         <div className="flex justify-center items-center">
           <button onClick={() => setToggle(!toggle)}><ThreeDots /></button>
-          {isDisable&&<div className={`absolute z-50 px-3 ${toggle ? 'scale-100' : 'scale-0'} transition-all  py-1.5 rounded-lg dark:bg-onDark bg-dark_light_black space-y-1 top-0 right-0 text-sm`}>
+          {isDisable&&<div className={`absolute z-50 px-3 ${toggle ? 'scale-100' : 'scale-0'} transition-all z-[78]  py-1.5 rounded-lg dark:bg-onDark bg-dark_light_black space-y-1  right-0 text-sm`}>
             {Buttons?.map((item, ind) => (
               <button
                 key={ind}

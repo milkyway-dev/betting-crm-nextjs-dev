@@ -7,17 +7,17 @@ const SubordinatesReport = ({ reportData }: any) => {
   const TopCards = [
     {
       Text: "Credits",
-      counts: formatNumber(reportData?.credits),
+      counts: formatNumber(reportData?.credits)||'0',
       arrow: <ArrowUp />,
     },
     {
       Text: "Recharge",
-      counts: "679",
+      counts: formatNumber(reportData?.totalRecharge)||'0',
       arrow: <ArrowUp />,
     },
     {
       Text: "Redeem",
-      counts: "896",
+      counts: formatNumber(reportData?.totalRedeem)||'0',
       arrow: <ArrowUp />,
     }
   ];

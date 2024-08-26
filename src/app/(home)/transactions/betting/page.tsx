@@ -27,8 +27,6 @@ async function getAllBets () {
 
     const data = await response.json();
     const bets = data;
-    console.log(bets, "bets");
-    
     return bets;
   } catch (error) {
     console.log("error:", error);  

@@ -9,10 +9,15 @@ import SubordinatesReport from "@/component/ui/SubordinatesReport";
 import Back from "@/component/svg/Back";
 import { getSubordinatesReport } from "@/utils/action";
 
-async function getAllSubordinates(username:string) {
+async function getAllSubordinates(username:string,searchString:string) {
   const token = await getCookie();
+
+  let subordinatesurl: string = `${config.server}/api/subordinates/${username}/subordinates?type=username`;
+  if (searchString?.length>0) {
+    subordinatesurl += `&search=${encodeURIComponent(String(searchString))}`;
+  }
   try {
-      const response = await fetch(`${config.server}/api/subordinates/${username}/subordinates?type=username`, {
+      const response = await fetch(subordinatesurl, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -25,7 +30,7 @@ async function getAllSubordinates(username:string) {
           const error = await response.json();           
           return { error: error.message };
       }
-      const data = await response.json();
+    const data = await response.json();
       const all = data;
       return all;
   } catch (error) {
@@ -34,9 +39,11 @@ async function getAllSubordinates(username:string) {
   }
 }
 
-const page = async ({params}:any) => {
-  const data = await getAllSubordinates(params?.report);
+const page = async ({params,searchParams}:any) => {
+  const data = await getAllSubordinates(params?.report,searchParams?.search);
   const reportData = await getSubordinatesReport(params?.report)
+  console.log(reportData,"data hjjklhlgh")
+
   const fieldsHeadings = [
       "Username",
       "Status",
@@ -67,9 +74,9 @@ const page = async ({params}:any) => {
         <Header Back={<Back />} />
         <div className="px-4 md:px-10 py-5">
           <SubordinatesReport reportData={reportData} />
-          <div className="flex items-center justify-between">
+          <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
-            <div className="md:w-[40%] w-[50%] lg:w-[35%] xl:w-[25%] pb-2">
+            <div className="w-[100%] md:w-[40%] lg:w-[35%] xl:w-[25%] pb-2">
               <SearchBar />
             </div>
           </div>

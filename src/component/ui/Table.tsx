@@ -8,16 +8,15 @@ const Table: React.FC<TableProps> = async({
   fieldsHeadings,
   fieldData,
   data = [],
-  Page
 }) => {
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
   let tabs = await rolesHierarchy(userRole)
   return (
     <>
-      <div className="bg-[#0E0F0F]  overflow-x-visible capitalize dark:bg-white pb-5">
+      <div className="bg-[#0E0F0F]  overflow-x-scroll capitalize dark:bg-white pb-5">
         <div
-          className={` dark:bg-white  p-5 border-[1px]  min-w-[410px] md:w-full rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none  rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
+          className={` dark:bg-white  p-5 border-[1px]  min-w-[460px] md:w-full rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none  rounded-r-2xl dark:border-opacity-30 border-[#313131]`}
         >
           <table className="w-full ">
             <thead className="text-white border-b dark:text-black border-[#858585] font-semibold">
@@ -83,15 +82,15 @@ const Table: React.FC<TableProps> = async({
                             return (
                               <td key={idx} className="pt-4">
                                 {data.bet_on === "home_team"
-                                  ? data.home_team.odds
-                                  : data.away_team.odds}
+                                  ? data.home_team?.odds
+                                  : data.away_team?.odds}
                               </td>
                             );
 
                           case "match_info":
                           return (
                             <td key={idx} className="pt-4 xl:inline-block hidden">
-                              {`${data.home_team.name} vs ${data.away_team.name}`}
+                              {`${data.home_team?.name} vs ${data.away_team?.name}`}
                             </td>
                           );  
 
@@ -99,8 +98,8 @@ const Table: React.FC<TableProps> = async({
                             return (
                               <td key={idx} className="pt-4">
                                 {data.bet_on === "home_team"
-                                  ? data.home_team.name
-                                  : data.away_team.name}
+                                  ? data.home_team?.name
+                                  : data.away_team?.name}
                               </td>
                             );     
                        
@@ -115,7 +114,7 @@ const Table: React.FC<TableProps> = async({
                         default:
                           return (
                             <td key={idx} className="pt-4">
-                              {data[field]}
+                              {typeof data[field] === 'number' ? Math.round(data[field]) : data[field]}
                             </td>
                           );
                       }

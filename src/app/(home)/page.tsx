@@ -9,10 +9,10 @@ import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
 async function getSummary(days:string) {
-  
+  const user: any = await getCurrentUser()
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/auth/summary?lastDays=${days}`, {
+    const response = await fetch(`${config.server}/api/auth/summary/${user?.userId}?period=${days}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -30,8 +30,7 @@ async function getSummary(days:string) {
 
     const data = await response.json();
     const summary = data;
-    
-
+  console.log(summary,"asdhasdjkhh")
     return summary;
   } catch (error) {
     
@@ -43,130 +42,143 @@ async function getSummary(days:string) {
 
 export default async function Home({searchParams}:any) {
   const summary = await getSummary(searchParams?.report);
+
   const user: any = await getCurrentUser()
   const userRole: string = user?.role;
   const TopCards = {
     admin: [
       {
         Text: "Bets",
-        counts: formatNumber(summary?.betTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.betTotals?.totalPeriod) || '0',
         arrow: <ArrowUp />,
       },
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
-        percentage: "-2.8",
-        arrow: <ArrowUp />,
+        counts: formatNumber(summary?.transactionTotals?.totalPeriod)||'0',
+        percentage: formatNumber(summary?.transactionTotals?.countPeriod||'0'),
+        arrow: summary?.transactionTotals?.countPeriod&&<ArrowUp />,
       },
       {
         Text: "players",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
-        percentage: "+9.8",
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       },],
     distributor: [
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
-        percentage: "-2.8",
-        arrow: <ArrowUp />,
+        counts: formatNumber(summary?.transactionTotals?.totalPeriod)||'0',
+        percentage: formatNumber(summary?.transactionTotals?.countPeriod||'0'),
+        arrow: summary?.transactionTotals?.countPeriod&&<ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     subdistributor: [
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
-        percentage: "-2.8",
-        arrow: <ArrowUp />,
+        counts: formatNumber(summary?.transactionTotals?.totalPeriod)||'0',
+        percentage: formatNumber(summary?.transactionTotals?.countPeriod||'0'),
+        arrow: summary?.transactionTotals?.countPeriod&&<ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     agent: [
       {
         Text: "Bets",
-        counts: formatNumber(summary?.betTotals?.totalLastPeriod),
+        counts: formatNumber(summary?.betTotals?.totalPeriod)||'0',
         arrow: <ArrowUp />,
       },
       {
         Text: "Transactions",
-        counts: formatNumber(summary?.transactionTotals?.totalLastPeriod),
-        percentage: "-2.8",
-        arrow: <ArrowUp />,
+        counts: formatNumber(summary?.transactionTotals?.totalPeriod)||'0',
+        percentage: formatNumber(summary?.transactionTotals?.countPeriod||'0'),
+        arrow: summary?.transactionTotals?.countPeriod&&<ArrowUp />,
       },
       {
         Text: "Recharged",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "players",
-        counts: formatNumber(summary?.playerCounts?.playersLastPeriod),
+        counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
-        counts: formatNumber(summary?.agentCounts?.agentsLastPeriod),
+        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
         percentage: "+7.1",
         arrow: <ArrowUp />,
       },]
   };
 
-  function formatNumber(num: number) {
-    if (num) {
-      if (num >= 1000000) return `${(num / 1000000).toFixed(2)}M`;
-      if (num >= 100000) return `${(num / 100000).toFixed(2)}L`;
-      if (num >= 1000) return `${(num / 1000).toFixed(2)}K`;
-      return num.toString();
+  function formatNumber(num: number): string {
+    if (num === 0 || isNaN(num)) {
+      return '0';
     }
-
+  
+    const absNum = Math.abs(num);
+  
+    if (absNum >= 1e12) { // Trillion or Lakh Crore
+      return `${Math.round((absNum / 1e12) * 100) / 100}T`;
+    } else if (absNum >= 1e9) { // Billion or Crore
+      return `${Math.round((absNum / 1e9) * 100) / 100}B`;
+    } else if (absNum >= 1e7) { // Million or Ten Lakh (Crore in Indian system)
+      return `${Math.round((absNum / 1e7) * 100) / 100}Cr`;
+    } else if (absNum >= 1e5) { // Lakh
+      return `${Math.round((absNum / 1e5) * 100) / 100}L`;
+    } else if (absNum >= 1e3) { // Thousand
+      return `${Math.round((absNum / 1e3) * 100) / 100}K`;
+    } else { // Below Thousand
+      return String(num);
+    }
   }
+  
   return (
     <div className="flex-1">
       <Header />

@@ -1,11 +1,36 @@
-import React from 'react'
+'use client'
+import React, {useState } from 'react'
 import Search from '../svg/Search'
+import { useRouter,usePathname } from 'next/navigation'
 
 const SearchBar = () => {
+  const router = useRouter()
+  const pathname=usePathname()
+  const [search, setSearch] = useState('')
+
+  const handleClick = () => {
+    router.replace(`${pathname}/?search=${search}`)
+  }
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault() 
+      handleClick()
+    }
+  }
+
   return (
-    <div className='bg-light_black dark:bg-onDark rounded-3xl flex w-full items-center space-x-1 px-2'>
-        <Search/>
-        <input type="search" className='bg-transparent w-full px-3 py-1.5 outline-none dark:text-black text-white' placeholder='search'/>
+    <div className='bg-light_black dark:bg-onDark rounded-3xl flex w-full items-center space-x-1 p-[1px] pl-2'>
+      <Search/>
+      <input 
+        value={search} 
+        onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyPress}
+        type="search" 
+        className='bg-transparent w-full px-3 py-1.5 outline-none dark:text-black text-white' 
+        placeholder='search'
+      />
+      <button onClick={handleClick} className='text-white text-opacity-75 bg-black dark:bg-gray-300 dark:text-opacity-75 dark:text-black py-1.5 rounded-r-3xl  px-3'>Search</button>
     </div>
   )
 }

@@ -1,5 +1,3 @@
-import Header from "@/component/common/Header";
-import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
 import { getCookie, getCurrentUser } from "@/utils/utils";
@@ -7,10 +5,18 @@ import { revalidatePath } from "next/cache";
 
 
 
-async function getAllTransactions(user: any) {
+async function getAllTransactions(user: any, searchString: string) {
+  let transaction: string = `/api/transactions`;
+  if (searchString?.length>0) {
+    transaction += `&search=${encodeURIComponent(String(searchString))}`;
+  }
+  let transaction_subordinates: string = `/api/transactions/${user?.username}/subordinate?type=username`;
+  if (searchString?.length>0) {
+    transaction_subordinates += `&search=${encodeURIComponent(String(searchString))}`;
+  }
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}${user?.role=='admin'?`/api/transactions/`:`/api/transactions/${user?.username}/subordinate?type=username`}`, {
+    const response = await fetch(`${config.server}${user?.role=='admin'?transaction:transaction_subordinates}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -21,8 +27,6 @@ async function getAllTransactions(user: any) {
      
     if(!response.ok){
       const error = await response.json();
-      console.log(error);
-      
       return {error:error.message};
     }
 
@@ -30,7 +34,6 @@ async function getAllTransactions(user: any) {
     const transactions = data;
     return transactions;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }
@@ -38,9 +41,9 @@ async function getAllTransactions(user: any) {
 
 
 
-const page = async () => {
+const page = async ({ searchParams }: any) => {
   const user = await getCurrentUser()
-  const data = await getAllTransactions(user);
+  const data = await getAllTransactions(user,searchParams?.search);
   const fieldsHeadings = [
     "Amount",
     "Type",
@@ -58,16 +61,7 @@ const page = async () => {
   ]
 
   return (
-    <>
-      <div
-        className="md:relative"
-      >
-        {/* <div className="md:absolute md:right-[2%] md:-top-[7%] pb-3 md:pb-0 md:inline-block">
-          <SearchBar />
-        </div> */}
-        <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
-      </div>
-    </>
+    <Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
   );
 };
 

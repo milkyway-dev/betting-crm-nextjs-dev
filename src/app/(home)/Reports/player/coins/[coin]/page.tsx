@@ -10,10 +10,14 @@ import { getSubordinatesReport } from "@/utils/action";
 import ReportTabs from "../../../ReportTabs";
 
 
-async function getPlayerTransactions(username:string){
+async function getPlayerTransactions(username: string,searchString:string) {
+  let transaction_subordinates: string = `/api/transactions/${username}/players?type=username`;
+  if (searchString?.length>0) {
+    transaction_subordinates += `&search=${encodeURIComponent(String(searchString))}`;
+  }
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transactions/${username}/players?type=username`, {
+    const response = await fetch(`${config.server}${transaction_subordinates}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -31,17 +35,15 @@ async function getPlayerTransactions(username:string){
 
     const data = await response.json();
     const transactions = data;
-    console.log(transactions,'All Transaction')
     return transactions;
   } catch (error) {
-    console.log("error:", error);  
   }finally{
     revalidatePath("/");
   }
 }
 
-const page = async ({params}:any) => {
-  const data = await getPlayerTransactions(params?.coin)
+const page = async ({params,searchParams}:any) => {
+  const data = await getPlayerTransactions(params?.coin,searchParams?.search)
   const reportData = await getSubordinatesReport(params?.coin)
  
   const fieldsHeadings = [
@@ -72,9 +74,9 @@ const page = async ({params}:any) => {
         <Header Back={<Back />} />
         <div className="px-4 md:px-10 py-5">
         <SubordinatesReport reportData={reportData} />
-          <div className="flex items-center justify-between">
+          <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
-            <div className="md:w-[40%] w-[50%] lg:w-[35%] xl:w-[25%] pb-2">
+            <div className="md:w-[40%] w-[100%] lg:w-[35%] xl:w-[25%] pb-2">
               <SearchBar />
             </div>
           </div>
