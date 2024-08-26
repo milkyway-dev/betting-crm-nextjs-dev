@@ -10,10 +10,15 @@ import Back from "@/component/svg/Back";
 import { getSubordinatesReport } from "@/utils/action";
 
 
-async function getAllTransactions(username:string){
+async function getAllTransactions(username: string,searchString:string) {
+  let transaction_subordinates: string = `/api/transactions/${username}/subordinate?type=username`;
+  if (searchString?.length>0) {
+    transaction_subordinates += `&search=${encodeURIComponent(String(searchString))}`;
+  }
   const token = await getCookie();
+  
   try {
-    const response = await fetch(`${config.server}/api/transactions/${username}/subordinate?type=username`, {
+    const response = await fetch(`${config.server}${transaction_subordinates}`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -36,8 +41,8 @@ async function getAllTransactions(username:string){
   }
 }
 
-const page = async ({params}:any) => {
-  const data = await getAllTransactions(params?.transaction)
+const page = async ({params,searchParams}:any) => {
+  const data = await getAllTransactions(params?.transaction,searchParams?.search)
   const reportData = await getSubordinatesReport(params?.transaction)
  
   const fieldsHeadings = [
@@ -68,9 +73,9 @@ const page = async ({params}:any) => {
         <Header Back={<Back />} />
         <div className="px-2 md:px-10 py-5">
         <SubordinatesReport reportData={reportData} />
-          <div className="flex items-center justify-between">
+          <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
-            <div className="md:w-[40%] w-[50%] lg:w-[35%] xl:w-[25%] pb-2">
+            <div className="md:w-[40%] w-[100%] lg:w-[35%] xl:w-[25%] pb-2">
               <SearchBar />
             </div>
           </div>

@@ -28,11 +28,11 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
               <div className="space-x-8 pt-5 flex justify-center items-center">
                 <div className="flex space-x-5 items-center">
                   <span className={`text-white ${item?.status === 'win'?'text-green-600':'dark:text-black'}  dark:group-hover:text-white group-hover:text-black text-sm pt-1.5`}>
-                    {item?.home_team.name}
+                    {item?.home_team?.name}
                   </span>
                   <span className="text-2xl text-white">-</span>
                   <span className={`text-white dark:text-black dark:group-hover:text-white group-hover:text-black  ${item?.status !== 'win'?'text-green-600':'dark:text-black'} text-sm pt-1.5`}>
-                    {item?.away_team.name}
+                    {item?.away_team?.name}
                   </span>
                 </div>
               </div>

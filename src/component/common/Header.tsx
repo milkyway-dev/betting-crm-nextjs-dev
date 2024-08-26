@@ -6,19 +6,19 @@ import Notification from "../svg/Notification";
 import Logout from "../svg/Logout";
 import DarkMode from "../svg/DarkMode";
 import { useTheme } from 'next-themes';
-import { useDispatch} from "react-redux";
-import { UpdateHeader, UpdateNotification } from "@/redux/ReduxSlice";
+import { useDispatch, useSelector} from "react-redux";
+import { UpdateCredit, UpdateHeader, UpdateNotification } from "@/redux/ReduxSlice";
 import HamBurger from "../svg/HamBurger";
 import { useRouter } from "next/navigation";
 import Infinite from "../svg/Infinite";
 import { getCredits } from "@/utils/action";
+import { UpdateCreditInterface } from "@/utils/Types";
 const Header = ({Back}:any) => {
   const dispatch=useDispatch()
   const router=useRouter()
   const { systemTheme, theme, setTheme } = useTheme();
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -27,10 +27,13 @@ const Header = ({Back}:any) => {
   const fetchUser = async () => {
     const currentUser = await getCredits();
     setUser(currentUser);
+     dispatch(UpdateCredit(false))
   }
+  const creditUpdate = useSelector((state: UpdateCreditInterface) => state?.globlestate?.updateCredit)
   useEffect(() => {
-    fetchUser()
-  }, [])
+      fetchUser();
+  }, [creditUpdate, mounted]);
+
   return (
     <div className="text-white pl-5 flex items-center sticky top-0 dark:bg-white dark:text-black dark:text-opacity-75 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] dark:border-opacity-10 justify-end">
       <button className="lg:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>

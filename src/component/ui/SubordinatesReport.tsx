@@ -12,12 +12,12 @@ const SubordinatesReport = ({ reportData }: any) => {
     },
     {
       Text: "Recharge",
-      counts: "679",
+      counts: formatNumber(reportData?.totalRecharge)||'0',
       arrow: <ArrowUp />,
     },
     {
       Text: "Redeem",
-      counts: "896",
+      counts: formatNumber(reportData?.totalRedeem)||'0',
       arrow: <ArrowUp />,
     }
   ];

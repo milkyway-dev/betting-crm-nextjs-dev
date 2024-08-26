@@ -128,3 +128,8 @@ export interface loader{
   show:Boolean
  }
  
+export interface UpdateCreditInterface {
+  globlestate: {
+  updateCredit: boolean;
+  }
+}

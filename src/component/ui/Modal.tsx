@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
 import {deletePlayer, deleteSubordinates, transactions,updatePlayer, updateSubordinates } from "@/utils/action";
 import toast from "react-hot-toast";
-import ReactDOM from 'react-dom'; // Import createPortal
+import ReactDOM from 'react-dom'; 
 import Loader from "./Loader";
-// Other imports remain unchanged
+import { UpdateCredit } from "@/redux/ReduxSlice";
+import { useDispatch } from "react-redux";
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, Tabs = [], Page }) => {
   const [load, setLoad] = useState(false)
+  const dispatch=useDispatch()
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
@@ -97,6 +99,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
       onClose();
       toast.success(`${caseType} Successful!`)
       setLoad(false)
+      dispatch(UpdateCredit(true))
     } catch (error) {
       
       setLoad(false)
