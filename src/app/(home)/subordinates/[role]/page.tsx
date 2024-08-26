@@ -1,15 +1,23 @@
-import SearchBar from "@/component/ui/SearchBar";
 import Table from "@/component/ui/Table";
 import { config } from "@/utils/config";
 import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 
-async function getSubordinates(role: string) {
+async function getSubordinates(role: string,searchString:string) {
   const token = await getCookie();
   const user: any = await getCurrentUser();
+  let url: string = `/api/subordinates?type=${role}`;
+  if (searchString?.length>0) {
+    url += `&search=${encodeURIComponent(String(searchString))}`;
+  }
 
+  let subordinatesurl: string = `/api/subordinates/${user?.username}/subordinates?type=username`;
+  if (searchString?.length>0) {
+    subordinatesurl += `&search=${encodeURIComponent(String(searchString))}`;
+  }
+  
   try {
-    const response = await fetch(`${config.server}${user?.role === 'admin' ? `/api/subordinates?type=${role}` : `/api/subordinates/${user?.username}/subordinates?type=username`}`, {
+    const response = await fetch(`${config.server}${user?.role === 'admin' ? url : subordinatesurl}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -28,6 +36,8 @@ async function getSubordinates(role: string) {
 
     const data = await response.json();
     const all = data;
+  console.log(data,"admin ka data")
+
     return all;
   } catch (error) {
     console.log("error:", error);
@@ -38,7 +48,8 @@ async function getSubordinates(role: string) {
 
 
 const page = async ({ params, searchParams }: any) => {
-  const data = await getSubordinates(params?.role);
+  const data = await getSubordinates(params?.role,searchParams?.search);
+
   const fieldsHeadings = [
     "Username",
     "Status",
@@ -56,22 +67,6 @@ const page = async ({ params, searchParams }: any) => {
     "createdAt",
     "actions"
   ]
-
-  const debounce = (func:any, wait:number) => {
-    let timerId:any;
-    return (...args:any) => {
-      if (timerId) clearTimeout(timerId);
-      timerId = setTimeout(() => {
-        func(...args);
-      }, wait);
-    };
-  };
-
-  const debouncedFunction = debounce(() => console.log('Helloasdasd World!'), 1000);
-
-  if (debouncedFunction) {
-    debouncedFunction();
-  }
   
   return (
     <>

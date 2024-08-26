@@ -70,9 +70,9 @@ const page = async ({params}:any) => {
         <Header Back={<Back />} />
         <div className="px-4 md:px-10 py-5">
         <SubordinatesReport reportData={reportData} />
-          <div className="flex items-center justify-between">
+          <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
-            <div className="md:w-[40%] w-[50%] lg:w-[35%] xl:w-[25%] pb-2">
+            <div className="md:w-[40%] w-[100%] lg:w-[35%] xl:w-[25%] pb-2">
               <SearchBar />
             </div>
           </div>
