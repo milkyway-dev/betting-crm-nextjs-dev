@@ -196,11 +196,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                         onChange={(e) =>
                           setFormData({ ...formData, status: e.target.value })
                         }
-                        className="outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base dark:bg-onDark dark:text-black text-white text-opacity-40 py-2.5 appearance-none"
+                        className={`outline-none w-full bg-[#1A1A1A] ${formData?.status==='active'?' text-green-500':'text-red-500'} rounded-lg px-3 text-base dark:bg-onDark dark:text-black  text-opacity-40 py-2.5 appearance-none`}
                         style={{ paddingRight: "30px" }}
                       >
                         <option value="">Select</option>
-                        <option value="active">Active</option>
+                        <option value="active"  className="text-green-500">Active</option>
                         <option value="inactive">InActive</option>
                       </select>
                       <span className="pr-4 text-white dark:text-black text-opacity-40">

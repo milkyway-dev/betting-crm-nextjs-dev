@@ -42,8 +42,6 @@ async function getAllSubordinates(username:string,searchString:string) {
 const page = async ({params,searchParams}:any) => {
   const data = await getAllSubordinates(params?.report,searchParams?.search);
   const reportData = await getSubordinatesReport(params?.report)
-  console.log(reportData,"data hjjklhlgh")
-
   const fieldsHeadings = [
       "Username",
       "Status",

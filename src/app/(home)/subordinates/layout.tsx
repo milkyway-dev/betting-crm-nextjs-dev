@@ -17,7 +17,6 @@ export default async function RootLayout({
 }>) {
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
-
   let tabs = await rolesHierarchy(userRole)
   return (
     <>

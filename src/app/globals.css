@@ -20,6 +20,11 @@
 body{
   background-color: #0E0F0F;
 }
+
+body:is(.dark *) {
+  background-color: #fff;
+}
+
 .loader {
     width: 3.25em;
     transform-origin: center;

@@ -32,7 +32,6 @@ const Page: React.FC = () => {
           setSelectRole(response)
         }
       } catch (error) {
-        console.error("Failed to fetch user role:", error);
       }
     };
 

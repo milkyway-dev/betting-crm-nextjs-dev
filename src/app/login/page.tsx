@@ -57,8 +57,6 @@ const Page: React.FC = () => {
         }));
       }
     } catch (error: any) {
-      console.log(error);
-
     }
   };
   useEffect(() => {

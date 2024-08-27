@@ -1,5 +1,4 @@
 import Sidebar from "@/component/common/Sidebar";
-import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 import Notifications from "@/component/ui/Notifications";
 
