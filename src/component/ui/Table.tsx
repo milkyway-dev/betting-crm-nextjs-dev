@@ -9,9 +9,13 @@ const Table: React.FC<TableProps> = async({
   fieldData,
   data = [],
 }) => {
+
+  
+
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
   let tabs = await rolesHierarchy(userRole)
+
   return (
     <>
       <div className="bg-[#0E0F0F]  overflow-x-scroll capitalize dark:bg-white pb-5">
@@ -46,13 +50,13 @@ const Table: React.FC<TableProps> = async({
                           return (
                             <td key={idx} className={`pt-4 ${field === "status" ? "hidden xl:inline-block": ""} pb-3`} >
                               {["active", "recharge", "Success"].includes(data[field]) ? (
-                                <span className="bg-green-700 bg-opacity-30 text-green-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2 rounded-xl">
+                                <span className="bg-green-700 bg-opacity-30 dark:bg-opacity-100  text-green-500 dark:bg-green-200 dark:text-green-600 dark:font-semibold w-[80px] md:w-[100px] inline-block py-1.5 md:py-2 rounded-xl">
                                   {data[field]}
                                 </span>
                               ) : ["redeem", "inactive", "fail"].includes(
                                   data[field]
                                 ) ? (
-                                <span className="bg-red-700 bg-opacity-30 text-red-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2  rounded-xl">
+                                <span className="bg-red-700 bg-opacity-30  dark:bg-opacity-100   dark:bg-red-200 dark:text-red-600 dark:font-semibold text-red-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2  rounded-xl">
                                   {data[field]}
                                 </span>
                               ) : (
@@ -74,32 +78,32 @@ const Table: React.FC<TableProps> = async({
                         case "receiver":
                           return (
                             <td key={idx} className="pt-4">
-                              {data[field] ? data[field].username : "N/A"}
+                              {data[field]}
                             </td>
                           );
                         
                           case "odds":
                             return (
                               <td key={idx} className="pt-4">
-                                {data.bet_on === "home_team"
-                                  ? data.home_team?.odds
-                                  : data.away_team?.odds}
+                                {data.data[0]?.bet_on === "home_team"
+                                  ? data.data[0]?.home_team?.odds
+                                  : data.data[0]?.away_team?.odds}
                               </td>
                             );
 
                           case "match_info":
                           return (
                             <td key={idx} className="pt-4 xl:inline-block hidden">
-                              {`${data.home_team?.name} vs ${data.away_team?.name}`}
+                              {`${data.data[0]?.home_team?.name} vs ${data.data[0]?.away_team?.name}`}
                             </td>
                           );  
 
                           case "pick":
                             return (
                               <td key={idx} className="pt-4">
-                                {data.bet_on === "home_team"
-                                  ? data.home_team?.name
-                                  : data.away_team?.name}
+                                {data.data[0]?.bet_on === "home_team"
+                                  ? data.data[0]?.home_team?.name
+                                  : data.data[0]?.away_team?.name}
                               </td>
                             );     
                        
