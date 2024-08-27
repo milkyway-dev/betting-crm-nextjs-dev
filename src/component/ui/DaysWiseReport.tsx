@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -9,8 +9,8 @@ const DaysWiseReport = () => {
         router.push(`/?report=${days}`)
     }, [days])
     return (
-        <div className='w-[92%]'>
-            <select value={days} onChange={(e) => setDays(e.target.value)} className="cursor-pointer ml-auto max-w-[150px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <div className='pb-2'>
+            <select value={days} onChange={(e) => setDays(e.target.value)} className="cursor-pointer outline-none mr-auto max-w-[150px] bg-black dark:bg-gray-200 dark:text-black text-white border-[1px]  border-gray-300 dark:border-gray-300  text-sm rounded-lg  block w-full p-[.5rem]  dark:placeholder-gray-400">
                 <option value={'today'}>Today</option>
                 <option value={'week'}>Weakly</option>
                 <option value={'month'}>Monthly</option>

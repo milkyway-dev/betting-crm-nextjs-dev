@@ -3,9 +3,8 @@ import { formatDate } from "@/utils/utils";
 import React from "react";
 
 const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
-
   return (
-    <div className="border-[1px] flex-.7 border-[#282828] dark:border-opacity-40 mt-4 md:mt-0 text-white  rounded-3xl">
+    <div className="border-[1px] flex-.7 border-[#282828] dark:border-opacity-10 mt-4 md:mt-0 text-white  rounded-3xl">
       <div className="text-white px-6 tracking-wide py-2 m-3 text-[.9rem] md:text-base bg-light_black dark:text-black dark:bg-[#F4F4F4] rounded-3xl inline-block">
         Recent Bets
       </div>
@@ -30,8 +29,8 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
                   <span className={`text-white ${item?.status === 'win'?'text-green-600':'dark:text-black'}  dark:group-hover:text-white group-hover:text-black text-sm pt-1.5`}>
                     {item?.home_team?.name}
                   </span>
-                  <span className="text-2xl text-white">-</span>
-                  <span className={`text-white dark:text-black dark:group-hover:text-white group-hover:text-black  ${item?.status !== 'win'?'text-green-600':'dark:text-black'} text-sm pt-1.5`}>
+                  <span className="text-2xl text-white dark:text-black">-</span>
+                  <span className={`text-white dark:text-black dark:group-hover:text-white group-hover:text-black  ${item?.status === 'win'?'text-green-600':'dark:text-black'} text-sm pt-1.5`}>
                     {item?.away_team?.name}
                   </span>
                 </div>

@@ -182,7 +182,7 @@ export default async function Home({searchParams}:any) {
     <div className="flex-1">
       <Header />
       <div className="p-4">
-        <DaysWiseReport />
+          <DaysWiseReport />
         <div className="grid pt-3 grid-cols-12 gap-2 xl:w-[92%] md:gap-y-5   md:gap-5 ">
           <Card TopCards={TopCards[userRole as keyof typeof TopCards]} />
         </div>
