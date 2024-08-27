@@ -30,7 +30,6 @@ async function getSummary(days:string) {
 
     const data = await response.json();
     const summary = data;
-  console.log(summary,"asdhasdjkhh")
     return summary;
   } catch (error) {
     

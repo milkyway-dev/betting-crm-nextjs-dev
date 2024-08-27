@@ -129,7 +129,7 @@ const Sidebar = () => {
             <div className="text-white dark:text-black dark:text-opacity-80  capitalize tracking-wide text-base font-semibold">
               {user?.username}
             </div>
-            <div className="text-white text-opacity-50 text-sm font-semibold">
+            <div className="text-white dark:text-black dark:text-opacity-50 text-opacity-50 text-sm font-semibold">
               {user?.role}
             </div>
           </div>

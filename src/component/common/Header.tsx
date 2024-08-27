@@ -39,12 +39,12 @@ const Header = ({Back}:any) => {
       <button className="lg:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>
       {Back&&<button onClick={() => router.push('/subordinates/all')} className="xl:block hidden">{Back}</button>}
       <div className="flex items-center space-x-3 w-[90%] mx-auto justify-end">
-        {user?<div className="bg-gradient-to-tr from-[#F1A535] to-[#FCD361] p-[1px] rounded-xl">
+        {user?<div className="bg-[#E3F5FF] p-[1px] rounded-xl">
           <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">
             <span className="text-white text-[.9rem] md:text-[.9] dark:text-black tracking-wider">Credits :</span>
             <span className="text-white text-opacity-40 text-[.9rem] dark:text-black">{user?.credits == null ? <Infinite /> : user?.credits}</span>
           </div>
-        </div>: <div className="invisible bg-gradient-to-tr from-[#F1A535]  to-[#FCD361] p-[1px] rounded-xl">
+        </div>: <div className="invisible p-[1px] rounded-xl">
           <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">
             <span className="text-white text-[.9rem] md:text-[.9] dark:text-black tracking-wider">Credits :</span>
             <span className="text-white text-opacity-40 text-[.9rem] dark:text-black">{user?.credits == null ? <Infinite /> : user?.credits}</span>

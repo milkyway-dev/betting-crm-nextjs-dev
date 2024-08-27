@@ -21,8 +21,6 @@ export const getCurrentUser = async () => {
 };
 
 export const formatDate = (dateString: string) => {
-  console.log(dateString);
-  
     const date = new Date(dateString);
     
     const formattedDate = date.toLocaleDateString("en-US", {
