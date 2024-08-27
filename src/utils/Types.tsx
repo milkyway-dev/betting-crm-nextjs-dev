@@ -133,3 +133,7 @@ export interface UpdateCreditInterface {
   updateCredit: boolean;
   }
 }
+
+export interface JwtPayload {
+  role?: string;
+}

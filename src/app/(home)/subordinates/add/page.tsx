@@ -108,14 +108,14 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <div className="pt-3 h-screen xl:h-auto lg:min-h-[85vh] md:bg-[#0E0F0F] dark:bg-white md:p-5 dark:border-opacity-30 lg:border-[1px] rounded-b-2xl rounded-bl-2xl md:rounded-tl-none rounded-r-2xl border-[#313131]">
+      <div className="pt-3 h-screen xl:h-auto lg:min-h-[85vh] md:bg-[#0E0F0F] dark:bg-white md:p-5 dark:border-opacity-10 lg:border-[1px] rounded-b-2xl rounded-bl-2xl md:rounded-tl-none rounded-r-2xl border-[#313131]">
         <div className="px-5 md:px-12 py-14 border-[1px] border-[#464646] w-[100%] dark:border-opacity-30 md:w-[70%] lg:w-[50%]  xl:w-[45%] rounded-[1.5rem] md:rounded-[2.5rem] mx-auto dark:bg-white bg-[#0E0E0E]">
           <form onSubmit={handleSubmit}>
             <div>
               <div className="text-white dark:text-black  text-opacity-40 text-base pl-2 pb-2">
                 Username
               </div>
-              <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+              <div className="bg-[#1A1A1A] dark:bg-onDark dark:border-opacity-10 flex pl-4 items-center mb-5 border-opacity-20 border-dark_black rounded-lg border-[2px] ">
                 <input
                   type="text"
                   name="UserName"

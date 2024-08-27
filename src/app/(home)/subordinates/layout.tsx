@@ -28,7 +28,7 @@ export default async function RootLayout({
               <SearchBar  />
             </div>
             <Link href={'/subordinates/add'}>
-              <button className="text-white bg-light_black px-6 rounded-lg py-1.5">Add+</button>
+              <button className="text-white dark:bg-gray-600 bg-light_black px-6 rounded-lg py-1.5">Add+</button>
             </Link>
           </div>
           <Tabs tabs={tabs} initialTab="subordinates" />

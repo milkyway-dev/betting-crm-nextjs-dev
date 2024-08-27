@@ -43,10 +43,10 @@ const SubordinatesReport = ({ reportData }: any) => {
 
         </div>
         <div>
-          {reportData?.status === 'active' ? <span className="bg-green-700 bg-opacity-30 text-green-500 w-[80px] md:w-[100px] inline-block text-center py-1.5 md:py-2 rounded-xl">
+          {reportData?.status === 'active' ? <span className="bg-green-700 bg-opacity-30 capitalize text-green-500 w-[80px] md:w-[100px] inline-block text-center py-1.5 md:py-2 rounded-xl">
             {reportData?.status}
           </span> :
-            <span className="bg-red-700 text-center capitalize bg-opacity-30 text-red-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2  rounded-xl">
+            <span className="bg-red-700 bg-opacity-30  dark:bg-opacity-15   dark:bg-[#ff0000] dark:text-[#6b0000] capitalize text-center text-red-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2  rounded-xl">
               {reportData?.status}
             </span>}
         </div>
