@@ -4,7 +4,7 @@ import Image from "next/image";
 import ShowEye from "@/component/svg/ShowEye";
 import HideEye from "@/component/svg/HideEye";
 import { useRouter } from "next/navigation";
-import { DecodeToken, Field, FormData } from "@/utils/Types";
+import { DecodeToken, Field, FormData, JwtPayload } from "@/utils/Types";
 import toast from "react-hot-toast";
 import { GetCaptcha, loginUser } from "@/utils/action";
 import User from "@/component/svg/User";
@@ -85,9 +85,14 @@ const Page: React.FC = () => {
         const response = await loginUser(formData);
         if (response?.token) {
           const token = response?.token;
-          Cookies.set("token", token);
+          if (jwtDecode<JwtPayload>(token)?.role === 'player') {
+            toast.error('Access denied !')
+          } else {
+            Cookies.set("token", token);
             router.push("/");
             toast.success(response?.message)
+          }
+
         } else {
           toast.error(response.error);
           fetchCaptcha();
@@ -116,7 +121,7 @@ const Page: React.FC = () => {
               quality={100}
             />
           </div>
-          <form onSubmit={(e)=>handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div className="pt-8  pb-4">
               {Fields.map((item, ind) => (
                 <div

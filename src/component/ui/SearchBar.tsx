@@ -18,7 +18,9 @@ const SearchBar = () => {
       handleClick()
     }
   }
-
+  if (pathname==="/subordinates/add") {
+    return;
+  }
   return (
     <div className='bg-light_black dark:bg-onDark rounded-3xl flex w-full items-center space-x-1 p-[1px] pl-2'>
       <Search/>
@@ -27,10 +29,10 @@ const SearchBar = () => {
         onChange={(e) => setSearch(e.target.value)}
         onKeyDown={handleKeyPress}
         type="search" 
-        className='bg-transparent w-full px-3 py-1.5 outline-none dark:text-black text-white' 
+        className='bg-transparent w-full px-3 py-[.37rem] outline-none dark:text-black text-white' 
         placeholder='search'
       />
-      <button onClick={handleClick} className='text-white text-opacity-75 bg-black dark:bg-gray-300 dark:text-opacity-75 dark:text-black py-1.5 rounded-r-3xl  px-3'>Search</button>
+      <button onClick={handleClick} className='text-white text-opacity-75 bg-black dark:bg-gray-600 dark:text-opacity-100 dark:text-white py-[.4rem] rounded-r-3xl  px-3'>Search</button>
     </div>
   )
 }

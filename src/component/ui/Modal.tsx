@@ -172,7 +172,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                     <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                       Update Password
                     </div>
-                    <div className="bg-[#1A1A1A] flex pl-4 items-center dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] ">
+                    <div className="bg-[#1A1A1A] flex pl-4 items-center dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[1px] ">
                       <input
                         type="password"
                         name="password"
@@ -181,7 +181,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
                         }
-                        className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs dark:bg-onDark dark:placeholder:text-black  rounded-lg px-3 text-base text-white md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
+                        className="outline-none w-full bg-[#1A1A1A] placeholder:text-xs dark:bg-onDark dark:placeholder:text-black  rounded-lg px-3 text-base text-white dark:text-black md:placeholder:text-xl placeholder:font-extralight placeholder:text-white placeholder:text-opacity-50 py-2.5"
                       />
                     </div>
                   </div>
@@ -189,7 +189,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                     <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                       Update Status
                     </div>
-                    <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[2px] relative">
+                    <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[1px] relative">
                       <select
                         name="status"
                         value={formData.status}
@@ -215,13 +215,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
 
                     <button
                       type="submit"
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                      className="text-white w-[90%] bg-[#c6c6c63b]  uppercase border-[2px] dark:text-black border-black dark:border-opacity-50 text-sm text-center py-3 rounded-xl shadow-sm"
                     >
                       SAVE
                     </button>
                     <button
                       onClick={onClose}
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                      className="text-white w-[90%] bg-[#c6c6c63b] uppercase border-[2px] dark:text-black border-black dark:border-opacity-50 text-sm text-center py-3 rounded-xl shadow-sm"
                     >
                       CANCLE
                     </button>
@@ -266,13 +266,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                   <div className="flex space-x-4 justify-center pt-4">
                     <button
                       onClick={onClose}
-                      className="text-white w-[90%] bg-[#69696933] uppercase border-[1px] dark:text-black border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                      className="text-white w-[90%] bg-[#c6c6c63b] uppercase border-[2px]  dark:text-black border-black dark:border-opacity-40 text-sm text-center py-3 rounded-xl shadow-sm"
                     >
                       CANCLE
                     </button>
                     <button
                       type="submit"
-                      className="text-white w-[90%] bg-[#69696933] dark:text-black uppercase border-[1px] border-[#AAAAAA] text-sm text-center py-3 rounded-xl shadow-xl"
+                      className="text-white w-[90%] bg-[#c6c6c63b] dark:text-black uppercase border-[2px] border-black dark:border-opacity-40 text-sm text-center py-3 rounded-xl shadow-sm"
                     >
                       SAVE
                     </button>

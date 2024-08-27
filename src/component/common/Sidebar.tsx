@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
 import Profile from "../svg/Profile";
 
-const Sidebar = () => {
+const Sidebar = ({ params }: any) => {
   const isOpen = useSelector((state: { globlestate: { openHeader: Boolean } }) => state?.globlestate.openHeader)
   const dispatch = useDispatch()
   const router = usePathname();
@@ -21,7 +21,7 @@ const Sidebar = () => {
     },
     {
       text: "Subordinates",
-      Link: "/subordinates/all",
+      Link:'/subordinates/all',
     },
     {
       text: "transactions",

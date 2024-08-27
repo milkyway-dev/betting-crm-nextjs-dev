@@ -338,7 +338,7 @@ export async function getAllBets() {
 export async function getAllTransactions(user: any, searchString: string) {
   let transaction: string = `/api/transactions`;
   if (searchString?.length>0) {
-    transaction += `&search=${encodeURIComponent(String(searchString))}`;
+    transaction += `?search=${encodeURIComponent(String(searchString))}`;
   }
   let transaction_subordinates: string = `/api/transactions/${user?.username}/subordinate?type=username`;
   if (searchString?.length>0) {
@@ -366,7 +366,6 @@ export async function getAllTransactions(user: any, searchString: string) {
   } catch (error) {
   }
 }
-
 export async function getSubordinates(role: string,searchString:string) {
   const token = await getCookie();
   const user: any = await getCurrentUser();

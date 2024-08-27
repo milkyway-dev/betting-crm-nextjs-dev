@@ -15,7 +15,7 @@ const TableUserName: React.FC<TableUserNameProps> = async ({ username, index, Id
             <td
                 key={index}
             >
-                <Link href={tabs.includes(role) ? (role === 'player' ? `/Reports/player/coins/${username}` : `/Reports/${username}`) : ''} className="flex cursor-pointer items-center pb-3 justify-start space-x-2 py-4">
+                <Link href={tabs.includes(role) ? (role === 'player' ? `/Reports/player/coins/${username}` : `/Reports/${username}`) : ''} className="flex cursor-pointer items-center  pb-2 pl-2 justify-start space-x-2 py-4">
                     <div>
                         <Image
                             alt="profile"
