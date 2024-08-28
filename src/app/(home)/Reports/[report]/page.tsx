@@ -3,10 +3,8 @@ import Table from "@/component/ui/Table";
 import { getCookie } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
 import ReportTabs from "../ReportTabs";
-import Header from "@/component/common/Header";
 import { config } from "@/utils/config";
 import SubordinatesReport from "@/component/ui/SubordinatesReport";
-import Back from "@/component/svg/Back";
 import { getSubordinatesReport } from "@/utils/action";
 
 async function getAllSubordinates(username:string,searchString:string) {
@@ -69,7 +67,6 @@ const page = async ({params,searchParams}:any) => {
       <div
         className="flex-1 h-screen overflow-y-scroll "
       >
-        <Header Back={<Back />} />
         <div className="px-4 md:px-10 py-5">
           <SubordinatesReport reportData={reportData} />
           <div className="md:flex items-center justify-between">

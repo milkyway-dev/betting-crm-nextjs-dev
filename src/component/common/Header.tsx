@@ -36,7 +36,7 @@ const Header = ({ Back }: any) => {
 
   return (
     <div className="text-white pl-5 flex items-center sticky top-0 dark:bg-white dark:text-black dark:text-opacity-75 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] dark:border-opacity-10 justify-end">
-      <button className="lg:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>
+      <button className="xl:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>
       {Back && <button onClick={() => router.push('/subordinates/all')} className="xl:block hidden">{Back}</button>}
       <div className="flex items-center space-x-4 w-[90%] mx-auto justify-end">
         
