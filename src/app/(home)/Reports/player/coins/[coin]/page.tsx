@@ -71,7 +71,6 @@ const page = async ({params,searchParams}:any) => {
      <div
         className="flex-1 h-screen overflow-y-scroll "
       >
-        <Header Back={<Back />} />
         <div className="px-4 md:px-10 py-5">
         <SubordinatesReport reportData={reportData} />
           <div className="md:flex items-center justify-between">
