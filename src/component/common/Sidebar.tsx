@@ -75,8 +75,8 @@ const Sidebar = ({ params }: any) => {
 
   return (
     <>
-      <div className={`flex flex-col fixed ${!isOpen ? '-left-[200%]' : 'left-0'} z-[55] transition-all xl:sticky xl:top-0 flex-.2 h-screen dark:bg-white bg-dark_black lg:bg-transparent items-center justify-between px-4 py-10 border-r-[.5px] dark:border-opacity-10 border-[#313131]`}>
-        <button onClick={() => dispatch(UpdateHeader(false))} className="lg:hidden absolute top-2 left-2"><Close /></button>
+      <div className={`flex flex-col fixed ${!isOpen ? '-left-[200%]' : 'left-0'} z-[55] transition-all xl:sticky xl:top-0 w-[55%] md:w-[40%] xl:w-[15%] h-screen dark:bg-white bg-dark_black items-center justify-between px-4 py-10 border-r-[.5px] dark:border-opacity-10 border-[#313131]`}>
+        <button onClick={() => dispatch(UpdateHeader(false))} className="xl:hidden absolute top-2 left-2"><Close /></button>
         <div>
           <div className="flex items-center justify-center">
             <Image
