@@ -12,12 +12,12 @@ const RecentTransaction: React.FC<TransactionProps> = ({ data }) => {
         Recent Transactions
       </div>
       {/* Transaction Table */}
-      <div className="lg:h-[44vh] xl:h-[62vh] lg:overflow-y-scroll">
+      <div>
         <div className="h-full dark:bg-white relative  rounded-3xl">
           {data?.map((item: any, index: any) => (
             <div key={index}>
-              <div className="flex  justify-between border-b-[1px]  border-white border-opacity-10 dark:border-black dark:border-opacity-10 pb-3 lg:mx-4 pt-8 px-1 md:px-8">
-                <div className="flex space-x-2  w-[50%] md:space-x-4">
+              <div className="flex  justify-between border-b-[1px] hover:bg-black hover:rounded-3xl transition-all lg:my-1 dark:hover:bg-gray-100 border-white border-opacity-10 dark:border-black dark:border-opacity-10 pb-3 lg:mx-4 pt-8 px-1 md:px-8">
+                <div className="flex space-x-2  w-[50%] md:w-full md:space-x-4">
                   {item?.type === "redeem" ? <Redeem /> : <Recharge />}
                   <div>
                     <div className="text-[.8rem] md:text-[1rem] text-white dark:text-black tracking-widest capitalize">

@@ -21,7 +21,7 @@ const Redeem = () => {
         <path
           d="M16.9996 22.7813L16.9996 12.5156"
           stroke="#E31A1A"
-          stroke-width="1.59375"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
         />

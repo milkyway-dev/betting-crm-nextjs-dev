@@ -171,7 +171,7 @@ export default async function Home({searchParams}:any) {
         <div className="grid pt-3 grid-cols-12 gap-2 xl:w-[92%] md:gap-y-5   md:gap-5 ">
           <Card TopCards={TopCards[userRole as keyof typeof TopCards]} />
         </div>
-        <div className="items-start space-y-5 xl:space-y-0 xl:space-x-5  xl:flex  md:w-full pt-10">
+        <div className="items-start space-y-5 xl:space-y-0 xl:space-x-5  xl:flex  md:w-full pt-5">
           <RecentTransaction  data={summary?.lastTransactions} />
           {summary?.lastBets?.length > 0 && <RecentBets data={summary?.lastBets} />}
         </div>

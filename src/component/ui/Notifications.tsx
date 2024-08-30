@@ -46,21 +46,21 @@ const Notifications = () => {
             {item.icon}
           </div>
           <div>
-            <span className="text-[.8rem] md:text-xl tracking-wider text-white dark:text-black">{item.text}</span>
+            <span className="text-[.8rem] md:text-base tracking-wider text-white dark:text-black">{item.text}</span>
             <div className=" py-2 space-y-2">
               <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem] md:text-[1rem]">
+                <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem]">
                   Debitor
                 </span>
-                <span className="text-white dark:text-black  text-opacity-70 text-[.7rem] md:text-[.9rem]">
+                <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
                   {item.debitor}
                 </span>
               </div>
               <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem] md:text-[1rem]">
+                <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem]">
                   Creditor
                 </span>
-                <span className="text-white dark:text-black  text-opacity-70 text-[.7rem] md:text-[.9rem]">
+                <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
                   {item.creditor}
                 </span>
               </div>

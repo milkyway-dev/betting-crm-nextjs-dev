@@ -109,7 +109,7 @@ const Table: React.FC<TableProps> = async({
                        
                           case "player":
                             return (
-                              <td key={idx} className="pt-4 pb-2">
+                              <td key={idx} className="pt-4 text-left pb-2">
                                 {data[field] ? data[field].username : "N/A"}
                               </td>
                             );
