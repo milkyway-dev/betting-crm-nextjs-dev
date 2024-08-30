@@ -148,12 +148,7 @@ export default async function Home({searchParams}:any) {
         percentage: "+9.8",
         arrow: <ArrowUp />,
       },
-      {
-        Text: "Subordinates",
-        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
-        arrow: <ArrowUp />,
-      },]
+     ]
   };
 
   function formatNumber(num: number): string {
