@@ -13,7 +13,7 @@ import ReportTabs from "../../../ReportTabs";
 async function getPlayerBettings(username:string){
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/bets/${username}/bets?type=username`, {
+    const response = await fetch(`${config.server}/api/bets/${username}/bets?type=username&status=all`, {
       method:"GET",
       credentials:"include",
       headers:{
@@ -40,7 +40,7 @@ const page = async ({params}:any) => {
   const data = await getPlayerBettings(params?.betting)
   const reportData = await getSubordinatesReport(params?.betting)
  
-  const fieldsHeadings = [
+  const fieldsHeadings = [ 
     "Username",
     "Status",
     "Odds",

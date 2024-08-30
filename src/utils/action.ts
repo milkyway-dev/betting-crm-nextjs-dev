@@ -312,10 +312,10 @@ export const getSubordinatesReport = async (username: string) => {
     revalidatePath('/')
   }
 }
-export async function getAllBets() {
+export async function getAllBets(user:any) {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/bets/`, {
+    const response = await fetch(`${config.server}${user?.role==="admin"?'/api/bets/':`/api/bets/${user?.userId}`}`, {
       method: "GET",
       credentials: "include",
       headers: {

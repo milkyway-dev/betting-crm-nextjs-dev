@@ -17,7 +17,7 @@ export default async function RootLayout({
 
   let tabs = ["coin", "betting"];
   const user:any = await getCurrentUser()
-
+  const accessto=['admin','agent'] 
   return (
     <>
       <div className="flex-1">
@@ -26,7 +26,7 @@ export default async function RootLayout({
           <div className="w-full md:w-[50%] pb-4">
              <SearchBar/>
           </div>
-          <Tabs tabs={user?.role=='admin'?tabs:[]} initialTab="transactions" />
+          <Tabs tabs={accessto.includes(user?.role)?tabs:[]} initialTab="transactions" />
           {children}
         </div>
       </div>

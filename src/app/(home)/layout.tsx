@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-        <div className="md:flex  dark:bg-white bg-bg_dashboard">
+      <div className="md:flex  dark:bg-white bg-bg_dashboard">
           <Sidebar />
           {children}
           <Notifications />

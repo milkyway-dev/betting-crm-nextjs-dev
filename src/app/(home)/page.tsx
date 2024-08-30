@@ -61,11 +61,10 @@ export default async function Home({searchParams}:any) {
         Text: "players",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         arrow: <ArrowUp />,
-      },
+      }, 
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       },],
     distributor: [
@@ -78,19 +77,16 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     subdistributor: [
@@ -103,19 +99,16 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     agent: [
@@ -133,27 +126,19 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "players",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
-      {
-        Text: "Subordinates",
-        counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
-        arrow: <ArrowUp />,
-      },]
+     ]
   };
 
   function formatNumber(num: number): string {
@@ -186,7 +171,7 @@ export default async function Home({searchParams}:any) {
         <div className="grid pt-3 grid-cols-12 gap-2 xl:w-[92%] md:gap-y-5   md:gap-5 ">
           <Card TopCards={TopCards[userRole as keyof typeof TopCards]} />
         </div>
-        <div className="items-start space-y-5 xl:space-y-0 xl:space-x-5  xl:flex  md:w-full pt-10">
+        <div className="items-start space-y-5 xl:space-y-0 xl:space-x-5  xl:flex  md:w-full pt-5">
           <RecentTransaction  data={summary?.lastTransactions} />
           {summary?.lastBets?.length > 0 && <RecentBets data={summary?.lastBets} />}
         </div>

@@ -45,7 +45,6 @@ async function getPlayerTransactions(username: string,searchString:string) {
 const page = async ({params,searchParams}:any) => {
   const data = await getPlayerTransactions(params?.coin,searchParams?.search)
   const reportData = await getSubordinatesReport(params?.coin)
- 
   const fieldsHeadings = [
     "Amount",
     "Type",
