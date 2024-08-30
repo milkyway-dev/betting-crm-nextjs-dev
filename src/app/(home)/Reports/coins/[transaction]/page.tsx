@@ -42,7 +42,7 @@ async function getAllTransactions(username: string,searchString:string) {
 const page = async ({params,searchParams}:any) => {
   const data = await getAllTransactions(params?.transaction,searchParams?.search)
   const reportData = await getSubordinatesReport(params?.transaction)
- 
+
   const fieldsHeadings = [
     "Amount",
     "Type",

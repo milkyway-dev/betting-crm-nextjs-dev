@@ -1,8 +1,10 @@
 import Table from "@/component/ui/Table";
 import { getAllBets } from "@/utils/action";
+import { getCurrentUser } from "@/utils/utils";
 
 const page = async () => {
-  const data = await getAllBets();
+  const user = await getCurrentUser()
+  const data = await getAllBets(user);
   const fieldsHeadings = [
     "Username",
     "Status",

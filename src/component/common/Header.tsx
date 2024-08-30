@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import Infinite from "../svg/Infinite";
 import { getCredits } from "@/utils/action";
 import { UpdateCreditInterface } from "@/utils/Types";
+import toast from "react-hot-toast";
 const Header = ({ Back }: any) => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -55,7 +56,7 @@ const Header = ({ Back }: any) => {
           !mounted ? null :
             currentTheme === "dark" ? <button onClick={() => setTheme("light")}><DarkMode /></button> : <button onClick={() => setTheme("dark")}><LightMode /></button>
         }
-        <Setting />
+        <button onClick={()=>toast.error('Feature Under Development!')}><Setting /></button>
         <button onClick={() => dispatch(UpdateNotification(true))}><Notification /></button>
         <Logout />
       </div>
