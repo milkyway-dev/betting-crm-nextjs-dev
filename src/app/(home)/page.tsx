@@ -61,11 +61,10 @@ export default async function Home({searchParams}:any) {
         Text: "players",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
         arrow: <ArrowUp />,
-      },
+      }, 
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       },],
     distributor: [
@@ -78,19 +77,16 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     subdistributor: [
@@ -103,19 +99,16 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Subordinates",
         counts: formatNumber(summary?.subordinateCounts?.subordinatesPeriod)||'0',
-        percentage: "+7.1",
         arrow: <ArrowUp />,
       }],
     agent: [
@@ -133,19 +126,16 @@ export default async function Home({searchParams}:any) {
       {
         Text: "Recharged",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "Redeemed",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
       {
         Text: "players",
         counts: formatNumber(summary?.playerCounts?.playersPeriod)||'0',
-        percentage: "+9.8",
         arrow: <ArrowUp />,
       },
      ]
