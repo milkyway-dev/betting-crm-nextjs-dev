@@ -8,9 +8,8 @@ const Table: React.FC<TableProps> = async({
   fieldsHeadings,
   fieldData,
   data = [],
+  Page
 }) => {
-
-  
 
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
@@ -20,7 +19,7 @@ const Table: React.FC<TableProps> = async({
     <>
       <div className="bg-[#0E0F0F]  overflow-x-scroll capitalize dark:bg-white pb-5">
         <div
-          className={` dark:bg-white  p-3 border-[1px]  min-w-[460px] md:w-full rounded-b-2xl rounded-bl-2xl rounded-tl-2xl md:rounded-tl-none  rounded-r-2xl dark:border-opacity-10 border-[#313131]`}
+          className={` dark:bg-white  p-3 border-[1px]  min-w-[460px] md:w-full rounded-b-2xl rounded-bl-2xl  ${Page?'rounded-tl-2xl':' md:rounded-tl-none'}  rounded-r-2xl dark:border-opacity-10 border-[#313131]`}
         >
           <table className="w-full ">
             <thead className="text-white border-b  dark:text-black border-[#858585] ">
