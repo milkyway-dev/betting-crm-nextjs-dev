@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import Loader from "@/component/ui/Loader";
 import { createPlayer, createSubordinates } from "@/utils/action";
+import Down from "@/component/svg/Down";
 
 const Page: React.FC = () => {
   const [load, setLoad] = useState(false)
@@ -87,8 +88,8 @@ const Page: React.FC = () => {
     try {
       setLoad(true)
       let response;
-      if (formData?.role==='player') {
-        response = await createPlayer(dataObject);  
+      if (formData?.role === 'player') {
+        response = await createPlayer(dataObject);
       } else {
         response = await createSubordinates(dataObject);
       }
@@ -162,8 +163,8 @@ const Page: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, role: e.target.value })
                   }
-                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] px-5 dark:text-black  text-white text-opacity-40 rounded-lg  pr-3 text-base  py-2.5"
-                  style={{ paddingRight: "30px" }}
+                  className="outline-none w-full dark:bg-onDark bg-[#1A1A1A] px-5 dark:text-black text-white text-opacity-40 rounded-lg pr-3 text-base py-2.5"
+                  style={{ paddingRight: "30px", WebkitAppearance: "none", MozAppearance: "none", appearance: "none" }}
                 >
                   <option value={''}>select</option>
                   {selectRole.filter(role => role !== "all").map((role, idx) => (
@@ -172,6 +173,9 @@ const Page: React.FC = () => {
                     </option>
                   ))}
                 </select>
+                <span className="pr-4 text-white text-opacity-40 font-bold dark:text-black">
+                   <Down />
+                </span>
               </div>
               {errors.role && (
                 <p className="text-red-500 text-xs pl-2">{errors.role}</p>

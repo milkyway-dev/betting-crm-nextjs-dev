@@ -22,7 +22,7 @@ const page = async ({ params, searchParams }: any) => {
     "actions"
   ]
   
-  return (<Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} Page={'Player'} />);
+  return (<Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} />);
 };
 
 export default page;

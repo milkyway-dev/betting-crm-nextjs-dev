@@ -25,7 +25,11 @@ const Sidebar = ({ params }: any) => {
     },
     {
       text: "transactions",
-      Link: "/transactions/coin",
+      Link: "/transactions",
+    },
+    {
+      text: "betting",
+      Link: "/betting",
     },
   ]);
   const fetchUser = async () => {

@@ -22,7 +22,10 @@ const page = async () => {
     "match_info",
     "pick"
   ]
-  return (<Table  fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />);
+  // return (<Table Page="betting" fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />);
+  return (
+    <div className="text-white">Betting Graph</div>
+  )
 };
 
 export default page;
