@@ -366,6 +366,7 @@ export async function getAllTransactions(user: any, searchString: string) {
   } catch (error) {
   }
 }
+
 export async function getSubordinates(role: string,searchString:string) {
   const token = await getCookie();
   const user: any = await getCurrentUser();
@@ -402,4 +403,34 @@ export async function getSubordinates(role: string,searchString:string) {
   } finally {
     revalidatePath("/");
   }
+
+  
+}
+
+export async function getUserNotifications(){
+  console.log("gettting called");
+  
+  const token = await getCookie();
+try{
+  const response = await fetch(`${config.server}/api/notifications/`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `userToken=${token}`,
+    }
+  })
+  if (!response.ok) {
+    const error = await response.json();
+    return { error: error.message };
+  }
+  const data = await response.json();
+  console.log(data);
+  
+  return data;
+
+}catch(error){
+}finally {
+  revalidatePath("/");
+}
 }
