@@ -45,7 +45,6 @@ const page = async ({ params }: any) => {
   const data = await getPlayerBettings(params?.betting);
   const reportData = await getSubordinatesReport(params?.betting);
 
-
   const tabs = [
     { name: "Coins", route: `/Reports/player/coins/${params?.betting}` },
     { name: "Betting", route: `/Reports/player/betting/${params?.betting}` },
@@ -62,7 +61,6 @@ const page = async ({ params }: any) => {
   ];
 
   return (
-
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">
         <div className="px-4 md:px-10 py-5">
@@ -84,7 +82,9 @@ const page = async ({ params }: any) => {
                     >
                       <div className="flex w-full items-center justify-center gap-2">
                         {/* <span>{item.icon}</span> */}
-                        <span className="text-sm md:text-base text-white">{item.text}</span>
+                        <span className="text-sm md:text-base text-white">
+                          {item.text}
+                        </span>
                       </div>
                     </th>
                   ))}
@@ -98,18 +98,20 @@ const page = async ({ params }: any) => {
                       item.data.map((data: any, dataIndex: any) => (
                         <tr
                           key={`${item._id}-${dataIndex}-single`}
-                          className={`text-center font-extralight hover:bg-[#8585851A]  border-[#414141] ${data.status === "redeem"
-                            ? "bg-[#121216]"
-                            : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
-                            } border-t-[1px]  `}
+                          className={`text-center font-extralight hover:bg-[#8585851A]  border-[#414141] ${
+                            data.status === "redeem"
+                              ? "bg-[#121216]"
+                              : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
+                          } border-t-[1px]  `}
                         >
                           <td className="w-[20%] py-2 md:py-4">
                             <div className="w-full flex flex-col gap-1 px-3">
                               <span
-                                className={`${data.status === "redeem"
-                                  ? "text-[#55545a]"
-                                  : "text-white"
-                                  } font-medium  text-left text-sm md:text-lg`}
+                                className={`${
+                                  data.status === "redeem"
+                                    ? "text-[#55545a]"
+                                    : "text-white"
+                                } font-medium  text-left text-sm md:text-lg`}
                               >
                                 {data.sport_title}
                               </span>
@@ -117,14 +119,16 @@ const page = async ({ params }: any) => {
                                 <span
                                   className={
                                     data.bet_on === "home_team"
-                                      ? `${data.status === "redeem"
-                                        ? "text-[#57555f]"
-                                        : "text-[#FFC400]"
-                                      }`
-                                      : `${data.status === "redeem"
-                                        ? "text-[#424149]"
-                                        : "text-white"
-                                      }`
+                                      ? `${
+                                          data.status === "redeem"
+                                            ? "text-white"
+                                            : "text-[#FFC400]"
+                                        }`
+                                      : `${
+                                          data.status === "redeem"
+                                            ? "text-white"
+                                            : "text-white"
+                                        }`
                                   }
                                 >
                                   {data.home_team.name}
@@ -141,54 +145,67 @@ const page = async ({ params }: any) => {
                                 <span
                                   className={
                                     data.bet_on === "away_team"
-                                      ? `${data.status === "redeem"
-                                        ? "text-[#7b7984]"
-                                        : "text-[#FFC400]"
-                                      }`
-                                      : `${data.status === "redeem"
-                                        ? "text-[#424149]"
-                                        : "text-white"
-                                      }`
+                                      ? `${
+                                          data.status === "redeem"
+                                            ? "text-white"
+                                            : "text-[#FFC400]"
+                                        }`
+                                      : `${
+                                          data.status === "redeem"
+                                            ? "text-[#424149]"
+                                            : "text-white"
+                                        }`
                                   }
                                 >
                                   {data.away_team.name}
                                 </span>
                               </span>
                               <span
-                                className={`text-[9px] md:text-[11px] p-1  border-[1px] ${data.status === "redeem"
-                                  ? "bg-[#17161f] text-[#56555d] border-[#353342]"
-                                  : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
-                                  }  rounded-lg w-fit`}
+                                className={`text-[9px] md:text-[11px] p-1  border-[1px] ${
+                                  data.status === "redeem"
+                                    ? "bg-[#17161f] text-[#56555d] border-[#353342]"
+                                    : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
+                                }  rounded-lg w-fit`}
                               >
-                                {(data.commence_time)}
+                                {data.commence_time}
                               </span>
                             </div>
                           </td>
                           <td
-                            className={`${data.status === "redeem" ? "text-[#555458]" : ""
-                              } text-sm md:text-lg`}
+                            className={`${
+                              data.status === "redeem"
+                                ? "text-white"
+                                : "text-white"
+                            } text-sm md:text-lg`}
                           >
                             $ {item.amount}
                           </td>
                           <td
-                            className={`uppercase text-sm md:text-lg ${data.status === "redeem" ? "text-[#555458]" : ""
-                              }`}
+                            className={`uppercase text-sm md:text-lg ${
+                              data.status === "redeem"
+                                ? "text-[#555458]"
+                                : "text-white"
+                            }`}
                           >
                             {data.market}
                           </td>
                           <td className="text-sm md:text-lg">
                             <div className="flex flex-col gap-2">
                               <span
-                                className={`${data.status === "redeem"
-                                  ? "text-[#403f4b]"
-                                  : "text-gray-400"
-                                  } text-sm`}
+                                className={`${
+                                  data.status === "redeem"
+                                    ? "text-[#403f4b]"
+                                    : "text-gray-400"
+                                } text-sm`}
                               >
                                 {data.oddsFormat}
                               </span>
                               <span
-                                className={`${data.status === "redeem" ? "text-[#555458]" : ""
-                                  }`}
+                                className={`${
+                                  data.status === "redeem"
+                                    ? "text-[#555458]"
+                                    : "text-white"
+                                }`}
                               >
                                 {data.bet_on === "away_team"
                                   ? data.away_team.odds
@@ -197,21 +214,27 @@ const page = async ({ params }: any) => {
                             </div>
                           </td>
                           <td
-                            className={`${data.status === "redeem" ? "text-[#555458]" : ""
-                              } text-sm md:text-lg`}
+                            className={`${
+                              data.status === "redeem"
+                                ? "text-[#555458]"
+                                : "text-white"
+                            } text-sm md:text-lg`}
                           >
                             {item.possibleWinningAmount.toFixed(3)}
                           </td>
                           <td
-                            className={`text-sm ${data.status === "redeem"
-                              ? "text-gray-500"
-                              : "text-[#FF6A00]"
-                              } md:text-lg capitalize `}
+                            className={`text-sm ${
+                              data.status === "redeem"
+                                ? "text-gray-500"
+                                : "text-[#FF6A00]"
+                            } md:text-lg capitalize `}
                           >
                             {data.status}
                           </td>
                           <td className="text-white">
-                            {!data.isResolved && (data.status === 'failed') && <ResolveButton id={data._id} />}
+                            {!data.isResolved && data.status === "failed" && (
+                              <ResolveButton id={data.key + ""} />
+                            )}
                           </td>
                         </tr>
                       ))
@@ -220,22 +243,26 @@ const page = async ({ params }: any) => {
                         {item.data.map((data: any, dataIndex: any) => (
                           <tr
                             key={`${item._id}-${dataIndex}-combo`}
-                            className={`${dataIndex === 0 ? "border-t-[1px]" : ""
-                              } text-center font-extralight border-[#f3aa3589] border-x-[1px] border-b-[1px] ${dataIndex === item.data.length - 1
+                            className={`${
+                              dataIndex === 0 ? "border-t-[1px]" : ""
+                            } text-center font-extralight border-[#f3aa3589] border-x-[1px] border-b-[1px] ${
+                              dataIndex === item.data.length - 1
                                 ? "border-b-[#d8d2d2a3]"
                                 : "border-b-[#414141]"
-                              }  hover:bg-[#8585851A] ${data.status === "redeem"
+                            }  hover:bg-[#8585851A] ${
+                              data.status === "redeem"
                                 ? "bg-[#121216]"
                                 : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
-                              }`}
+                            }`}
                           >
                             <td className="w-[20%] py-4">
                               <div className="w-full flex flex-col gap-1 px-3">
                                 <span
-                                  className={`${data.status === "redeem"
-                                    ? "text-[#55545a]"
-                                    : "text-white"
-                                    } font-medium text-left text-sm md:text-lg`}
+                                  className={`${
+                                    data.status === "redeem"
+                                      ? "text-[#55545a]"
+                                      : "text-white"
+                                  } font-medium text-left text-sm md:text-lg`}
                                 >
                                   {data.sport_title}
                                 </span>
@@ -243,14 +270,16 @@ const page = async ({ params }: any) => {
                                   <span
                                     className={
                                       data.bet_on === "home_team"
-                                        ? `${data.status === "redeem"
-                                          ? "text-[#57555f]"
-                                          : "text-[#FFC400]"
-                                        }`
-                                        : `${data.status === "redeem"
-                                          ? "text-[#424149]"
-                                          : "text-white"
-                                        }`
+                                        ? `${
+                                            data.status === "redeem"
+                                              ? "text-[#57555f]"
+                                              : "text-[#FFC400]"
+                                          }`
+                                        : `${
+                                            data.status === "redeem"
+                                              ? "text-[#424149]"
+                                              : "text-white"
+                                          }`
                                     }
                                   >
                                     {data.home_team.name}
@@ -267,26 +296,29 @@ const page = async ({ params }: any) => {
                                   <span
                                     className={
                                       data.bet_on === "away_team"
-                                        ? `${data.status === "redeem"
-                                          ? "text-[#57555f]"
-                                          : "text-[#FFC400]"
-                                        }`
-                                        : `${data.status === "redeem"
-                                          ? "text-[#424149]"
-                                          : "text-white"
-                                        }`
+                                        ? `${
+                                            data.status === "redeem"
+                                              ? "text-[#57555f]"
+                                              : "text-[#FFC400]"
+                                          }`
+                                        : `${
+                                            data.status === "redeem"
+                                              ? "text-[#424149]"
+                                              : "text-white"
+                                          }`
                                     }
                                   >
                                     {data.away_team.name}
                                   </span>
                                 </span>
                                 <span
-                                  className={`text-[9px] md:text-[11px] p-1 ${data.status === "redeem"
-                                    ? "bg-[#17161f] text-[#56555d] border-[#353342]"
-                                    : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
-                                    } border-[1px]  rounded-lg w-fit`}
+                                  className={`text-[9px] md:text-[11px] p-1 ${
+                                    data.status === "redeem"
+                                      ? "bg-[#17161f] text-[#56555d] border-[#353342]"
+                                      : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
+                                  } border-[1px]  rounded-lg w-fit`}
                                 >
-                                  {(data.commence_time)}
+                                  {data.commence_time}
                                 </span>
                               </div>
                             </td>
@@ -294,24 +326,29 @@ const page = async ({ params }: any) => {
                               --/--
                             </td>
                             <td
-                              className={`uppercase text-sm md:text-lg ${data.status === "redeem" ? "text-[#555458]" : ""
-                                }`}
+                              className={`uppercase text-sm md:text-lg ${
+                                data.status === "redeem" ? "text-[#555458]" : "text-white"
+                              }`}
                             >
                               {data.market}
                             </td>
                             <td className="text-sm md:text-lg">
                               <div className="flex flex-col gap-2">
                                 <span
-                                  className={`text-sm ${data.status === "redeem"
-                                    ? "text-[#403f4b]"
-                                    : "text-gray-400"
-                                    }`}
+                                  className={`text-sm ${
+                                    data.status === "redeem"
+                                      ? "text-[#403f4b]"
+                                      : "text-gray-400"
+                                  }`}
                                 >
                                   {data.oddsFormat}
                                 </span>
                                 <span
-                                  className={`${data.status === "redeem" ? "text-[#555458]" : ""
-                                    }`}
+                                  className={`${
+                                    data.status === "redeem"
+                                      ? "text-[#555458]"
+                                      : "text-white"
+                                  }`}
                                 >
                                   {data.bet_on === "away_team"
                                     ? data.away_team.odds
@@ -323,48 +360,56 @@ const page = async ({ params }: any) => {
                               --/--
                             </td>
                             <td
-                              className={`text-sm ${data.status === "redeem"
-                                ? "text-gray-500"
-                                : "text-[#FF6A00]"
-                                }  md:text-lg capitalize `}
+                              className={`text-sm ${
+                                data.status === "redeem"
+                                  ? "text-gray-500"
+                                  : "text-[#FF6A00]"
+                              }  md:text-lg capitalize `}
                             >
                               {data.status}
                             </td>
                             <td className="text-white">
-                              {!data.isResolved && (data.status === 'failed') && <ResolveButton id={data._id} />}
+                              {!data.isResolved && data.status === "failed" && (
+                                <ResolveButton id={data._id} />
+                              )}
                             </td>
                           </tr>
                         ))}
                         <tr className="text-center font-extralight bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d] border-[1px] border-[#f3aa357c]">
                           <td className="py-3"></td>
                           <td
-                            className={`py-3 text-lf ${item.status === "redeem"
-                              ? "text-[#55545a]"
-                              : "text-white"
-                              }`}
+                            className={`py-3 text-lf ${
+                              item.status === "redeem"
+                                ? "text-[#55545a]"
+                                : "text-white"
+                            }`}
                           >
                             $ {item.amount}
                           </td>
                           <td className="py-3"></td>
                           <td className="py-3"></td>
                           <td
-                            className={`py-3 text-lf ${item.status === "redeem"
-                              ? "text-[#55545a]"
-                              : "text-white"
-                              }`}
+                            className={`py-3 text-lf ${
+                              item.status === "redeem"
+                                ? "text-[#55545a]"
+                                : "text-white"
+                            }`}
                           >
                             {item.possibleWinningAmount.toFixed(3)}
                           </td>
                           <td
-                            className={`text-sm ${item.status === "redeem"
-                              ? "text-gray-500"
-                              : "text-[#FF6A00]"
-                              } py-3 md:text-lg capitalize `}
+                            className={`text-sm ${
+                              item.status === "redeem"
+                                ? "text-gray-500"
+                                : "text-[#FF6A00]"
+                            } py-3 md:text-lg capitalize `}
                           >
                             {item.status}
                           </td>
                           <td className="text-white">
-                            {!item.isResolved && (item.status === 'failed') && <ResolveButton id={item._id} />}
+                            {!item.isResolved && item.status === "failed" && (
+                              <ResolveButton id={item._id} />
+                            )}
                           </td>
                         </tr>
                       </>
