@@ -1,16 +1,17 @@
 import { EditFormData, ModalProps } from "@/utils/Types";
 import React, { useState } from "react";
 import ChevronDown from "../svg/ChevronDown";
-import {deletePlayer, deleteSubordinates, transactions,updatePlayer, updateSubordinates } from "@/utils/action";
+import { deletePlayer, deleteSubordinates, resolveStatus, transactions, updatePlayer, updateSubordinates } from "@/utils/action";
 import toast from "react-hot-toast";
-import ReactDOM from 'react-dom'; 
+import ReactDOM from 'react-dom';
 import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, Tabs = [], Page }) => {
+const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose = () => { }, Type, data, Tabs = [], Page }) => {
   const [load, setLoad] = useState(false)
-  const dispatch=useDispatch()
+  const [betStatus, setBetStatus] = useState('')
+  const dispatch = useDispatch()
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
   const [formData, setFormData] = useState<EditFormData>({
@@ -22,7 +23,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
     if (data?.role !== "player") {
       try {
         setLoad(true)
-        const response = await updateSubordinates(formData,data?._id);
+        const response = await updateSubordinates(formData, data?._id);
         if (response?.error) {
           return toast.error(response?.error || "Can't Update Agent");
         }
@@ -35,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
     } else {
       try {
         setLoad(true)
-        const response = await updatePlayer(formData,data?._id);
+        const response = await updatePlayer(formData, data?._id);
         if (response?.error) {
           return toast.error(response?.error || "Can't Update Player");
         }
@@ -101,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
       setLoad(false)
       dispatch(UpdateCredit(true))
     } catch (error) {
-      
+
       setLoad(false)
     }
   }
@@ -113,6 +114,21 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
   if (!modalElement) {
     toast.error('Element with id "modal" not found');
     return null;
+  }
+
+  //Handel Resolve Bete Api
+  const handelBetResolve = async (id: string, status: string) => {
+    const data = {
+      status: status
+    }
+    try {
+      const response = await resolveStatus(data, id)
+      if (response) {
+        console.log(response, "bet resolve status")
+      }
+    } catch (error) {
+
+    }
   }
 
   switch (Type) {
@@ -196,11 +212,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
                         onChange={(e) =>
                           setFormData({ ...formData, status: e.target.value })
                         }
-                        className={`outline-none w-full bg-[#1A1A1A] ${formData?.status==='active'?' text-green-500':'text-red-500'} rounded-lg px-3 text-base dark:bg-onDark dark:text-black  text-opacity-40 py-2.5 appearance-none`}
+                        className={`outline-none w-full bg-[#1A1A1A] ${formData?.status === 'active' ? ' text-green-500' : 'text-red-500'} rounded-lg px-3 text-base dark:bg-onDark dark:text-black  text-opacity-40 py-2.5 appearance-none`}
                         style={{ paddingRight: "30px" }}
                       >
                         <option value="">Select</option>
-                        <option value="active"  className="text-green-500">Active</option>
+                        <option value="active" className="text-green-500">Active</option>
                         <option value="inactive">InActive</option>
                       </select>
                       <span className="pr-4 text-white dark:text-black text-opacity-40">
@@ -285,6 +301,32 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose = () => { }, Type, data, 
         </>,
         modalElement
       );
+    case "resolve":
+      return ReactDOM.createPortal(
+        <>
+          <div
+            className="fixed z-[100] inset-0 flex items-center justify-center"
+            onClick={onClose}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="px-12 py-14 border-[1px] dark:bg-white dark:border-opacity-70 border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
+              >
+                <div className="text-white pb-1.5">Select Status</div>
+                <select onChange={(e) => setBetStatus(e.target.value)} className="w-full bg-gray-800 py-2 rounded-md text-white">
+                  <option value="lose">Lose</option>
+                  <option value="lose">Win</option>
+                </select>
+                <div className="flex justify-center pt-5">
+                  <button onClick={() => handelBetResolve(betId!, betStatus)} className="bg-gray-900 px-5 py-2 rounded-lg text-white">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>,
+        modalElement
+      )
     default:
       return null;
   }

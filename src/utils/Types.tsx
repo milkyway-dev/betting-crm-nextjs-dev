@@ -88,6 +88,7 @@ export type EditFormData = {
 };
 
 export interface ModalProps {
+  betId?:string
   isOpen: boolean;
   onClose?: () => void;
   Type?: String;
