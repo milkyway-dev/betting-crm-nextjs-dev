@@ -407,55 +407,56 @@ export async function getSubordinates(role: string,searchString:string) {
   
 }
 
-export async function getUserNotifications(){
+export async function getUserNotifications() {
   console.log("gettting called");
   
   const token = await getCookie();
-try{
-  const response = await fetch(`${config.server}/api/notifications/`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `userToken=${token}`,
-    }
-  })
-  if (!response.ok) {
-    const error = await response.json();
-    return { error: error.message };
-  }
-  const data = await response.json();
-  console.log(data);
-  
-  return data;
-
-}catch(error){
-}finally {
-  revalidatePath("/");
-}
-
-export const resolveStatus = async (data: any, Id: any) => {
-  const token = await getCookie();
-
   try {
-    const response = await fetch(`${config.server}/api/bets/resolve/${Id}`, {
-      method: 'PUT',
+    const response = await fetch(`${config.server}/api/notifications/`, {
+      method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Cookie: `userToken=${token}`,
-      },
-      body: JSON.stringify(data)
+      }
     })
     if (!response.ok) {
       const error = await response.json();
       return { error: error.message };
     }
-    const responseData = await response.json();
-    return { responseData };
+    const data = await response.json();
+    console.log(data);
+  
+    return data;
+
   } catch (error) {
-    console.log(error);
   } finally {
     revalidatePath("/");
   }
 }
+
+  export const resolveStatus = async (data: any, Id: any) => {
+    const token = await getCookie();
+
+    try {
+      const response = await fetch(`${config.server}/api/bets/resolve/${Id}`, {
+        method: 'PUT',
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+        body: JSON.stringify(data)
+      })
+      if (!response.ok) {
+        const error = await response.json();
+        return { error: error.message };
+      }
+      const responseData = await response.json();
+      return { responseData };
+    } catch (error) {
+      console.log(error);
+    } finally {
+      revalidatePath("/");
+    }
+  }
