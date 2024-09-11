@@ -220,7 +220,7 @@ const page = async ({ params }: any) => {
                           </td>
                           <td className="text-white">
                             {!data.isResolved && data.status === "failed" && (
-                              <ResolveButton id={data.key + ""} />
+                              <ResolveButton id={data._id + ""} />
                             )}
                           </td>
                         </tr>
