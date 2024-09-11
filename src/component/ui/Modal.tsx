@@ -8,9 +8,10 @@ import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 
-const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose = () => { }, Type, data, Tabs = [], Page }) => {
+const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose, Type, data, Tabs = [], Page }) => {
+  //FIX: modal close
   const [load, setLoad] = useState(false)
-  const [betStatus, setBetStatus] = useState('')
+  const [betStatus, setBetStatus] = useState<string>('lost')
   const dispatch = useDispatch()
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //Edit
@@ -125,9 +126,13 @@ const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose = () => { }, Type,
       const response = await resolveStatus(data, id)
       if (response) {
         console.log(response, "bet resolve status")
+        toast.success(`${response?.responseData?.message}`)
+        onClose()
       }
     } catch (error) {
 
+      toast.error("Bet could not be resolved")
+      onClose()
     }
   }
 
@@ -315,8 +320,8 @@ const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose = () => { }, Type,
               >
                 <div className="text-white pb-1.5">Select Status</div>
                 <select onChange={(e) => setBetStatus(e.target.value)} className="w-full bg-gray-800 py-2 rounded-md text-white">
-                  <option value="lose">Lose</option>
-                  <option value="lose">Win</option>
+                  <option value="lost">Lost</option>
+                  <option value="won">Won</option>
                 </select>
                 <div className="flex justify-center pt-5">
                   <button onClick={() => handelBetResolve(betId!, betStatus)} className="bg-gray-900 px-5 py-2 rounded-lg text-white">Submit</button>
