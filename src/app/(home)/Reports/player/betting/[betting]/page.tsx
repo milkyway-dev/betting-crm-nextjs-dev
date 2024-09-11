@@ -98,7 +98,7 @@ const page = async ({ params }: any) => {
                       item.data.map((data: any, dataIndex: any) => (
                         <tr
                           key={`${item._id}-${dataIndex}-single`}
-                          className={`text-center font-extralight hover:bg-[#8585851A]  border-[#414141] ${data.status === "redeem"
+                          className={`text-center font-extralight bg-slate-800 dark:bg-slate-100   border-[#414141] ${data.status === "redeem"
                             ? "bg-[#121216]"
                             : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
                             } border-t-[1px]  `}
@@ -377,11 +377,8 @@ const page = async ({ params }: any) => {
                           >
                             {item.status}
                           </td>
-                          {/* <td className="text-white"> */}
-                          {/*   {!item.isResolved && item.status === "failed" && ( */}
-                          {/*     <ResolveButton id={item._id} /> */}
-                          {/*   )} */}
-                          {/* </td> */}
+                          <td className="text-white">
+                          </td>
                         </tr>
                       </>
                     )
