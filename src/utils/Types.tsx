@@ -56,22 +56,22 @@ interface TableDataType {
 export interface TableProps {
   fieldsHeadings: string[];
   fieldData: string[];
-  Page?: string; 
+  Page?: string;
   data: string[];
 }
 
-export interface TransactionProps{
-  data:any
+export interface TransactionProps {
+  data: any
 }
-export interface RecentBetsProps{
-  data:any
+export interface RecentBetsProps {
+  data: any
 }
 
 
 
 
 export interface TabProps {
-  tabs:string[];
+  tabs: string[];
   initialTab?: string;
 }
 
@@ -84,16 +84,16 @@ export type AddFormData = {
 export type EditFormData = {
   password: string;
   status: string;
- 
+
 };
 
 export interface ModalProps {
-  betId?:string
+  betId?: string
   isOpen: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   Type?: String;
   data?: any;
-  Page?:string;
+  Page?: string;
   Tabs?: string[];
 }
 export interface DeleteUserProps {
@@ -101,8 +101,8 @@ export interface DeleteUserProps {
 }
 
 export interface TableThreeDotsProps {
-  data: any; 
-  isDisable:boolean
+  data: any;
+  isDisable: boolean
 }
 
 export interface TableUserNameProps {
@@ -116,8 +116,8 @@ export interface ReportsData {
   globlestate: {
     Agent: {
       username: string;
-      Id: Number;  
-    }  
+      Id: Number;
+    }
   }
 }
 
@@ -125,13 +125,13 @@ export interface ReportModal {
   openModal: boolean;
 }
 
-export interface loader{
-  show:Boolean
- }
- 
+export interface loader {
+  show: Boolean
+}
+
 export interface UpdateCreditInterface {
   globlestate: {
-  updateCredit: boolean;
+    updateCredit: boolean;
   }
 }
 
