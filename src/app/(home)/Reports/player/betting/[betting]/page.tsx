@@ -82,7 +82,7 @@ const page = async ({ params }: any) => {
                     >
                       <div className="flex w-full items-center justify-center gap-2">
                         {/* <span>{item.icon}</span> */}
-                        <span className="text-sm md:text-base text-white">
+                        <span className="text-sm md:text-base text-slate-400">
                           {item.text}
                         </span>
                       </div>
@@ -218,11 +218,11 @@ const page = async ({ params }: any) => {
                           >
                             {data.status}
                           </td>
-                          {/* <td className="text-white"> */}
-                          {/*   {!data.isResolved && data.status === "failed" && ( */}
-                          {/*     <ResolveButton id={data.key + ""} /> */}
-                          {/*   )} */}
-                          {/* </td> */}
+                          <td className="text-white">
+                            {!data.isResolved && data.status === "failed" && (
+                              <ResolveButton id={data.key + ""} />
+                            )}
+                          </td>
                         </tr>
                       ))
                     ) : (
