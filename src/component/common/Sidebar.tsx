@@ -31,6 +31,10 @@ const Sidebar = ({ params }: any) => {
       text: "betting",
       Link: "/betting",
     },
+    {
+      text: "banner",
+      Link: "/banners"
+    }
   ]);
   const fetchUser = async () => {
     const currentUser: any = await getCurrentUser();
@@ -70,7 +74,6 @@ const Sidebar = ({ params }: any) => {
   };
   useEffect(() => {
     fetchUser();
-
   }, []);
 
 
