@@ -319,12 +319,12 @@ const Modal: React.FC<ModalProps> = ({ betId, isOpen, onClose, Type, data, Tabs 
                 className="px-12 py-14 border-[1px] dark:bg-white dark:border-opacity-70 border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
               >
                 <div className="text-white pb-1.5">Select Status</div>
-                <select onChange={(e) => setBetStatus(e.target.value)} className="w-full bg-gray-800 py-2 rounded-md text-white">
+                <select onChange={(e) => setBetStatus(e.target.value)} className="w-full bg-gray-800 dark:bg-gray-200 dark:text-black dark:text-opacity-70 py-2 rounded-md text-white">
                   <option value="lost">Lost</option>
                   <option value="won">Won</option>
                 </select>
                 <div className="flex justify-center pt-5">
-                  <button onClick={() => handelBetResolve(betId!, betStatus)} className="bg-gray-900 px-5 py-2 rounded-lg text-white">Submit</button>
+                  <button onClick={() => handelBetResolve(betId!, betStatus)} className="bg-gray-900 px-5 py-2 rounded-lg dark:bg-gray-500 dark:hover:bg-gray-400 text-white">Submit</button>
                 </div>
               </div>
             </div>

@@ -19,8 +19,6 @@ const Notifications = () => {
     getNotification();
   },[]);
 
-  console.log(notificationData, "data");
-  
   const data = [
     {
       icon: <Redeem />,
