@@ -522,3 +522,49 @@ export const getBanners = async (category: string, status: string) => {
     console.log(error);
   }
 };
+
+export const updateBannerStatus = async (banners: string[], status: string) => {
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/banner`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+      body: JSON.stringify({ banners, status }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteBanners = async (banners: string[]) => {
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/banner`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+      body: JSON.stringify({ banners }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log(error);
+  }
+};

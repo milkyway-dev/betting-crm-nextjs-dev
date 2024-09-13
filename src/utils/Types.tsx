@@ -17,7 +17,7 @@ export interface FormData {
 }
 
 export interface BannerData {
-  category: string;
+  category: string[];
   banner: File | null;
   title: string;
 }

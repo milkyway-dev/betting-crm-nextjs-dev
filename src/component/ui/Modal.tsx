@@ -16,6 +16,7 @@ import ReactDOM from "react-dom";
 import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
+import Select from "react-select";
 
 const Modal: React.FC<ModalProps> = ({
   betId,
@@ -31,11 +32,13 @@ const Modal: React.FC<ModalProps> = ({
   const [betStatus, setBetStatus] = useState<string>("lost");
   const dispatch = useDispatch();
   const [bannerPreview, setBannerPreview] = useState<any>();
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<
+    { value: string; label: string }[]
+  >([]);
   const caseType = Type === "Recharge" ? "Recharge" : "Redeem";
   //banner
   const [bannerData, setBannerData] = useState<BannerData>({
-    category: "All",
+    category: ["All"],
     banner: null,
     title: "",
   });
@@ -82,9 +85,12 @@ const Modal: React.FC<ModalProps> = ({
     if (bannerData.banner === null) {
       return toast.error("Banner image is required");
     }
+    if (bannerData.category.length === 0) {
+      return toast.error("Category is required");
+    }
     console.log(bannerData);
     const formData = new FormData();
-    formData.append("category", bannerData.category);
+    formData.append("category", JSON.stringify(bannerData.category));
     formData.append("banner", bannerData.banner);
     formData.append("title", bannerData.title);
     setLoad(true);
@@ -96,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({
     toast.success(response.message);
     setBannerData({
       ...bannerData,
-      category: categories[0],
+      category: ["All"],
       title: "",
     });
     handleClearFile();
@@ -105,7 +111,11 @@ const Modal: React.FC<ModalProps> = ({
 
   const fetchCategoryData = async () => {
     const category = await fetchSportsCategory();
-    setCategories(category);
+    const options = category.map((category: any) => ({
+      value: category,
+      label: category,
+    }));
+    setCategories(options);
   };
 
   useEffect(() => {
@@ -226,6 +236,15 @@ const Modal: React.FC<ModalProps> = ({
     } else {
       setBannerPreview(null);
     }
+  };
+
+  const handleSelect = (e: any) => {
+    const selectedOptions = Array.isArray(e) ? e.map((x) => x.value) : [];
+
+    setBannerData({
+      ...bannerData,
+      category: selectedOptions,
+    });
   };
 
   switch (Type) {
@@ -513,28 +532,35 @@ const Modal: React.FC<ModalProps> = ({
                     <div className="text-white text-opacity-40 dark:text-black text-base pl-2 pb-2">
                       Add Category
                     </div>
-                    <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[1px] relative">
-                      <select
-                        name="category"
-                        value={bannerData.category}
-                        onChange={(e) =>
-                          setBannerData({
-                            ...bannerData,
-                            category: e.target.value,
-                          })
-                        }
-                        className={`outline-none w-full bg-[#1A1A1A] rounded-lg px-3 text-base dark:bg-onDark text-white dark:text-black  text-opacity-40 py-2.5 appearance-none`}
-                        style={{ paddingRight: "30px" }}
-                      >
-                        {categories?.map((data, index) => (
-                          <option key={index} value={data}>
-                            {data}
-                          </option>
-                        ))}
-                      </select>
-                      <span className=" text-white dark:text-black text-opacity-40 p-2">
-                        <ChevronDown />
-                      </span>
+                    <div className="bg-[#1A1A1A] flex items-center  dark:bg-onDark dark:border-opacity-30 mb-5 border-opacity-60 border-dark_black rounded-lg border-[1px] relative">
+                      <Select
+                        styles={{
+                          control: (provided) => ({
+                            ...provided,
+                            background: "transparent",
+                            display: "flex",
+                            flexWrap: "nowrap",
+                            borderColor: "transparent",
+                            overflowY: "scroll",
+                            border: "0",
+                          }),
+                          menu: (provided) => ({
+                            ...provided,
+                            background: "#1A1A1A",
+                            color: "#fff",
+                          }),
+                        }}
+                        options={categories}
+                        value={categories.filter((obj) =>
+                          bannerData.category.includes(obj.value)
+                        )}
+                        onChange={handleSelect}
+                        className="basic-multi-select w-full outline-none focus:outline-none bg-[#343232bd] rounded-lg"
+                        classNamePrefix="select"
+                        placeholder="Select category"
+                        isMulti
+                        isClearable
+                      />
                     </div>
                   </div>
 
