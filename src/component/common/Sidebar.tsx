@@ -10,8 +10,11 @@ import { UpdateHeader } from "@/redux/ReduxSlice";
 import Profile from "../svg/Profile";
 
 const Sidebar = ({ params }: any) => {
-  const isOpen = useSelector((state: { globlestate: { openHeader: Boolean } }) => state?.globlestate.openHeader)
-  const dispatch = useDispatch()
+  const isOpen = useSelector(
+    (state: { globlestate: { openHeader: Boolean } }) =>
+      state?.globlestate.openHeader
+  );
+  const dispatch = useDispatch();
   const router = usePathname();
   const [user, setUser] = useState<any | null>(null);
   const [nav, setNav] = useState([
@@ -21,7 +24,7 @@ const Sidebar = ({ params }: any) => {
     },
     {
       text: "Subordinates",
-      Link:'/subordinates/all',
+      Link: "/subordinates/all",
     },
     {
       text: "transactions",
@@ -35,9 +38,9 @@ const Sidebar = ({ params }: any) => {
   const fetchUser = async () => {
     const currentUser: any = await getCurrentUser();
     setUser(currentUser);
-  
+
     switch (currentUser?.role) {
-      case 'distributor':
+      case "distributor":
         setNav((prevNav) =>
           prevNav.map((navItem) =>
             navItem.text === "Subordinates"
@@ -46,7 +49,7 @@ const Sidebar = ({ params }: any) => {
           )
         );
         break;
-      case 'subdistributor':
+      case "subdistributor":
         setNav((prevNav) =>
           prevNav.map((navItem) =>
             navItem.text === "Subordinates"
@@ -55,7 +58,7 @@ const Sidebar = ({ params }: any) => {
           )
         );
         break;
-      case 'agent':
+      case "agent":
         setNav((prevNav) =>
           prevNav.map((navItem) =>
             navItem.text === "Subordinates"
@@ -70,14 +73,21 @@ const Sidebar = ({ params }: any) => {
   };
   useEffect(() => {
     fetchUser();
-
   }, []);
-
 
   return (
     <>
-      <div className={`flex flex-col fixed ${!isOpen ? '-left-[200%]' : 'left-0'} z-[55] transition-all xl:sticky xl:top-0 w-[55%] md:w-[40%] xl:w-[15%] h-screen dark:bg-white bg-dark_black items-center justify-between px-4 py-10 border-r-[.5px] dark:border-opacity-10 border-[#313131]`}>
-        <button onClick={() => dispatch(UpdateHeader(false))} className="xl:hidden absolute top-2 left-2"><Close /></button>
+      <div
+        className={`flex flex-col fixed ${
+          !isOpen ? "-left-[200%]" : "left-0"
+        } z-[55] transition-all xl:sticky xl:top-0 w-[55%] md:w-[40%] xl:w-[15%] h-screen dark:bg-white bg-dark_black items-center justify-between px-4 py-10 border-r-[.5px] dark:border-opacity-10 border-[#313131]`}
+      >
+        <button
+          onClick={() => dispatch(UpdateHeader(false))}
+          className="xl:hidden absolute top-2 left-2"
+        >
+          <Close />
+        </button>
         <div>
           <div className="flex items-center justify-center">
             <Image
@@ -109,10 +119,11 @@ const Sidebar = ({ params }: any) => {
                   >
                     <Link
                       href={nav.Link}
-                      className={`rounded-xl uppercase ${router === nav.Link
-                        ? "border-white border border-opacity-30 dark:border-gray-600 dark:border-[1.5px] dark:bg-onDark bg-light_black"
-                        : ""
-                        } py-2 w-full px-5 lg:px-0 text-center`}
+                      className={`rounded-xl uppercase ${
+                        router === nav.Link
+                          ? "border-white border border-opacity-30 dark:border-gray-600 dark:border-[1.5px] dark:bg-onDark bg-light_black"
+                          : ""
+                      } py-2 w-full px-5 lg:px-0 text-center`}
                     >
                       {nav.text}
                     </Link>
@@ -120,6 +131,27 @@ const Sidebar = ({ params }: any) => {
                   <span className="w-[80%] opacity-35 -translate-y-2 inline-block mt-1 h-[1px] mx-[15%] rounded-full bg-gradient-to-r dark:from-[#2e2e2e00] dark:to-[#2e2e2e00] dark:via-[#313131] via-[#979797] from-[#313131] to-[#313131] "></span>
                 </>
               ))}
+              {user?.role === "admin" && (
+                <>
+                  {" "}
+                  <li
+                    onClick={() => dispatch(UpdateHeader(false))}
+                    className="flex flex-col items-center justify-center font-light dark:text-black text-white"
+                  >
+                    <Link
+                      href="/banners"
+                      className={`rounded-xl uppercase ${
+                        router === "/banner"
+                          ? "border-white border border-opacity-30 dark:border-gray-600 dark:border-[1.5px] dark:bg-onDark bg-light_black"
+                          : ""
+                      } py-2 w-full px-5 lg:px-0 text-center`}
+                    >
+                      Banner
+                    </Link>
+                  </li>
+                  <span className="w-[80%] opacity-35 -translate-y-2 inline-block mt-1 h-[1px] mx-[15%] rounded-full bg-gradient-to-r dark:from-[#2e2e2e00] dark:to-[#2e2e2e00] dark:via-[#313131] via-[#979797] from-[#313131] to-[#313131] "></span>
+                </>
+              )}
             </ul>
           </div>
         </div>
@@ -136,7 +168,12 @@ const Sidebar = ({ params }: any) => {
           </div>
         </div>
       </div>
-      {isOpen && <div className="fixed  transition-all top-0 left-0 w-full z-[53] h-screen lg:hidden bg-black bg-opacity-35" onClick={() => dispatch(UpdateHeader(false))} ></div>}
+      {isOpen && (
+        <div
+          className="fixed  transition-all top-0 left-0 w-full z-[53] h-screen lg:hidden bg-black bg-opacity-35"
+          onClick={() => dispatch(UpdateHeader(false))}
+        ></div>
+      )}
     </>
   );
 };

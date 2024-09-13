@@ -98,9 +98,10 @@ const page = async ({ params }: any) => {
                       item.data.map((data: any, dataIndex: any) => (
                         <tr
                           key={`${item._id}-${dataIndex}-single`}
-                          className={`text-center font-extralight bg-slate-800 dark:bg-slate-100   border-[#414141] ${data.status === "redeem"
-                            ? "bg-[#121216]"
-                            : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
+                          className={`text-center font-extralight  border-[#414141] 
+${data.status === "redeem"
+                              ? "bg-[#121216] dark:bg-slate-50"
+                              : " bg-gradient-to-b from-[#1c1a2176] dark:from-slate-100 to-[#0d0c156d] dark:to-slate-200"
                             } border-t-[1px]  `}
                         >
                           <td className="w-[20%] py-2 md:py-4">
@@ -108,7 +109,7 @@ const page = async ({ params }: any) => {
                               <span
                                 className={`${data.status === "redeem"
                                   ? "text-[#55545a]"
-                                  : "text-white"
+                                  : "text-white dark:text-black"
                                   } font-medium  text-left text-sm md:text-lg`}
                               >
                                 {data.sport_title}
@@ -118,12 +119,12 @@ const page = async ({ params }: any) => {
                                   className={
                                     data.bet_on === "home_team"
                                       ? `${data.status === "redeem"
-                                        ? "text-white"
+                                        ? "text-white "
                                         : "text-[#FFC400]"
                                       }`
                                       : `${data.status === "redeem"
-                                        ? "text-white"
-                                        : "text-white"
+                                        ? "text-slate-400"
+                                        : "text-white dark:text-black"
                                       }`
                                   }
                                 >
@@ -133,7 +134,7 @@ const page = async ({ params }: any) => {
                                   className={
                                     data.status === "redeem"
                                       ? "text-[#424149]"
-                                      : "text-white"
+                                      : "text-white dark:text-black"
                                   }
                                 >
                                   v/s
@@ -147,7 +148,7 @@ const page = async ({ params }: any) => {
                                       }`
                                       : `${data.status === "redeem"
                                         ? "text-[#424149]"
-                                        : "text-white"
+                                        : "text-white dark:text-black"
                                       }`
                                   }
                                 >
@@ -167,7 +168,7 @@ const page = async ({ params }: any) => {
                           <td
                             className={`${data.status === "redeem"
                               ? "text-white"
-                              : "text-white"
+                              : "text-white dark:text-black"
                               } text-sm md:text-lg`}
                           >
                             $ {item.amount}
@@ -175,7 +176,7 @@ const page = async ({ params }: any) => {
                           <td
                             className={`uppercase text-sm md:text-lg ${data.status === "redeem"
                               ? "text-[#555458]"
-                              : "text-white"
+                              : "text-white dark:text-black"
                               }`}
                           >
                             {data.market}
@@ -193,7 +194,7 @@ const page = async ({ params }: any) => {
                               <span
                                 className={`${data.status === "redeem"
                                   ? "text-[#555458]"
-                                  : "text-white"
+                                  : "text-white dark:text-black"
                                   }`}
                               >
                                 {data.bet_on === "away_team"
@@ -205,7 +206,7 @@ const page = async ({ params }: any) => {
                           <td
                             className={`${data.status === "redeem"
                               ? "text-[#555458]"
-                              : "text-white"
+                              : "text-white dark:text-black"
                               } text-sm md:text-lg`}
                           >
                             {item.possibleWinningAmount.toFixed(3)}
@@ -244,7 +245,7 @@ const page = async ({ params }: any) => {
                                 <span
                                   className={`${data.status === "redeem"
                                     ? "text-[#55545a]"
-                                    : "text-white"
+                                    : "text-white dark:text-black"
                                     } font-medium text-left text-sm md:text-lg`}
                                 >
                                   {data.sport_title}
@@ -259,7 +260,7 @@ const page = async ({ params }: any) => {
                                         }`
                                         : `${data.status === "redeem"
                                           ? "text-[#424149]"
-                                          : "text-white"
+                                          : "text-white dark:text-black"
                                         }`
                                     }
                                   >
@@ -269,7 +270,7 @@ const page = async ({ params }: any) => {
                                     className={
                                       data.status === "redeem"
                                         ? "text-[#424149]"
-                                        : "text-white"
+                                        : "text-white dark:text-black"
                                     }
                                   >
                                     v/s
@@ -283,7 +284,7 @@ const page = async ({ params }: any) => {
                                         }`
                                         : `${data.status === "redeem"
                                           ? "text-[#424149]"
-                                          : "text-white"
+                                          : "text-white dark:text-black"
                                         }`
                                     }
                                   >
@@ -322,7 +323,7 @@ const page = async ({ params }: any) => {
                                 <span
                                   className={`${data.status === "redeem"
                                     ? "text-[#555458]"
-                                    : "text-white"
+                                    : "text-white dark:text-black"
                                     }`}
                                 >
                                   {data.bet_on === "away_team"
@@ -354,7 +355,7 @@ const page = async ({ params }: any) => {
                           <td
                             className={`py-3 text-lf ${item.status === "redeem"
                               ? "text-[#55545a]"
-                              : "text-white"
+                              : "text-white dark:text-black"
                               }`}
                           >
                             $ {item.amount}
@@ -364,7 +365,7 @@ const page = async ({ params }: any) => {
                           <td
                             className={`py-3 text-lf ${item.status === "redeem"
                               ? "text-[#55545a]"
-                              : "text-white"
+                              : "text-white dark:text-black"
                               }`}
                           >
                             {item.possibleWinningAmount.toFixed(3)}
