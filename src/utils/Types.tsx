@@ -16,6 +16,12 @@ export interface FormData {
   captcha: string;
 }
 
+export interface BannerData {
+  category: string[];
+  banner: File | null;
+  title: string;
+}
+
 export interface DecodeToken {
   role: any;
 }
@@ -61,14 +67,11 @@ export interface TableProps {
 }
 
 export interface TransactionProps {
-  data: any
+  data: any;
 }
 export interface RecentBetsProps {
-  data: any
+  data: any;
 }
-
-
-
 
 export interface TabProps {
   tabs: string[];
@@ -84,11 +87,10 @@ export type AddFormData = {
 export type EditFormData = {
   password: string;
   status: string;
-
 };
 
 export interface ModalProps {
-  betId?: string
+  betId?: string;
   isOpen: boolean;
   onClose: () => void;
   Type?: String;
@@ -102,7 +104,7 @@ export interface DeleteUserProps {
 
 export interface TableThreeDotsProps {
   data: any;
-  isDisable: boolean
+  isDisable: boolean;
 }
 
 export interface TableUserNameProps {
@@ -117,8 +119,8 @@ export interface ReportsData {
     Agent: {
       username: string;
       Id: Number;
-    }
-  }
+    };
+  };
 }
 
 export interface ReportModal {
@@ -126,13 +128,13 @@ export interface ReportModal {
 }
 
 export interface loader {
-  show: Boolean
+  show: Boolean;
 }
 
 export interface UpdateCreditInterface {
   globlestate: {
     updateCredit: boolean;
-  }
+  };
 }
 
 export interface JwtPayload {
