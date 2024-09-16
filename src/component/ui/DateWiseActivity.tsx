@@ -1,59 +1,141 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import { formatDate } from '@/utils/utils';
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from "react";
+import { format, parseISO } from "date-fns";
+import { getDailyActivity } from "@/utils/action";
 
-export default function DateWiseActivity({ activityData }: { activityData: any[] }) {
-    const [selectedDate, setSelectedDate] = useState<string>('');
-    const [data, setData] = useState<any>(null);
-    const router = useRouter()
-
-    useEffect(() => {
-        if (selectedDate) {
-            // Find the activity data for the selected date
-            const selectedActivity = activityData.find(activity => activity.date === selectedDate);
-            setData(selectedActivity);
-        }
-    }, [selectedDate, activityData]);
-
-    const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedDate(e.target.value);        
-    };
-
-    return (
-        <div className='pb-2'>
-            <select
-                className="cursor-pointer outline-none mr-auto max-w-[180px] bg-black dark:bg-gray-200 dark:text-black text-white border-[1px] border-gray-300 dark:border-gray-300 text-sm rounded-lg block w-full p-[.5rem] dark:placeholder-gray-400"
-                value={selectedDate}
-                onChange={handleDateChange}
-            >
-                <option value="" disabled>Select a date</option>
-                {activityData?.map((dailyActivity: any) => (
-                    <option key={dailyActivity?.date} value={dailyActivity?.date}>
-                        {formatDate(dailyActivity?.date)}
-                    </option>
-                ))}
-            </select>
-            {data && (
-                <div className="mt-4">
-                    <h2 className="text-lg font-semibold mb-2">Activity for {formatDate(data.date)}</h2>
-                    {/* Render your fetched data here */}
-                    <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
-                        {JSON.stringify(data, null, 2)}
-                    </pre>
-                </div>
-            )}
-        </div>
-    );
+interface Activity {
+  _id: string;
+  date: string;
+  player: string;
+  actvity: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
+export default function DailyActivityViewer({
+  username,
+}: {
+  username: string;
+}) {
+  const [selectedDate, setSelectedDate] = useState(
+    format(new Date(), "yyyy-MM-dd")
+  );
+  const [activityData, setActivityData] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+      try {
+        const result = await getDailyActivity(username);
+        if ("error" in result) {
+          setError(result.error);
+        } else {
+          setActivityData(result);
+        }
+      } catch (err) {
+        setError("An unexpected error occurred");
+      } finally {
+        setLoading(false);
+      }
+    }
 
+    fetchData();
+  }, [username]);
 
+  const availableDates = activityData.map((item) =>
+    format(parseISO(item.date), "yyyy-MM-dd")
+  );
 
+  const selectedActivity = activityData.find(
+    (item) => format(parseISO(item.date), "yyyy-MM-dd") === selectedDate
+  );
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+        Loading...
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+        Error: {error}
+      </div>
+    );
+  }
 
+  return (
+    <div className="flex-1 min-h-screen bg-gray-900 text-white p-6">
+      <h1 className="text-3xl font-bold mb-6">Daily Activity for {username}</h1>
 
+      <div className="mb-6">
+        <label htmlFor="date-select" className="block text-sm font-medium mb-2">
+          Select Date:
+        </label>
+        <input
+          type="date"
+          id="date-select"
+          value={selectedDate}
+          onChange={handleDateChange}
+          className="bg-gray-800 text-white rounded-md px-3 py-2 w-full max-w-xs"
+        />
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-2">Available Dates:</h2>
+        <ul className="list-disc list-inside">
+          {availableDates.map((date) => (
+            <li
+              key={date}
+              className="cursor-pointer hover:text-blue-400"
+              onClick={() => setSelectedDate(date)}
+            >
+              {format(parseISO(date), "MMMM d, yyyy")}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {selectedActivity ? (
+        <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            {format(parseISO(selectedActivity.date), "MMMM d, yyyy")}
+          </h2>
+          <div className="space-y-2">
+            <p>
+              <span className="font-medium">Player ID:</span>{" "}
+              {selectedActivity.player}
+            </p>
+            <p>
+              <span className="font-medium">Activities:</span>{" "}
+              {selectedActivity.actvity.length}
+            </p>
+            <p>
+              <span className="font-medium">Created:</span>{" "}
+              {format(parseISO(selectedActivity.createdAt), "PPpp")}
+            </p>
+            <p>
+              <span className="font-medium">Updated:</span>{" "}
+              {format(parseISO(selectedActivity.updatedAt), "PPpp")}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p className="text-gray-400">
+          No activity data available for the selected date.
+        </p>
+      )}
+    </div>
+  );
+}
