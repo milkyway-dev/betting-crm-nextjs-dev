@@ -58,7 +58,7 @@ const Page = () => {
             <div key={ind}>
               <div>
                 <Link
-                  href={`/banners/${data}`}
+                  href={`/banner/${data}`}
                   className={`${
                     `/${data}` == pathname
                       ? "bg-[#0E0F0F] dark:bg-white dark:text-black rounded-[1rem] md:rounded-none md:rounded-t-[2rem] text-white "
