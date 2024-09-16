@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { format, parseISO } from "date-fns";
-import { getDailyActivity } from "@/utils/action";
+import { getActivitiesByDateAndPlayer, getDailyActivity } from "@/utils/action";
+import Activity from "./Activity";
 
 interface Activity {
   _id: string;
@@ -47,6 +48,7 @@ export default function DailyActivityViewer({
     fetchData();
   }, [username]);
 
+
   const availableDates = activityData.map((item) =>
     format(parseISO(item.date), "yyyy-MM-dd")
   );
@@ -55,8 +57,20 @@ export default function DailyActivityViewer({
     (item) => format(parseISO(item.date), "yyyy-MM-dd") === selectedDate
   );
 
+    const player:any = selectedActivity?.player;
+     const date:any = selectedActivity?.date;
+  console.log(player, "player", selectedActivity?.date);
+  
+
+
+  console.log(selectedActivity, "selected activity");
+  
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    
     setSelectedDate(e.target.value);
+    console.log(selectedDate, "date");
+    
   };
 
   if (loading) {
@@ -95,9 +109,9 @@ export default function DailyActivityViewer({
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Available Dates:</h2>
         <ul className="list-disc list-inside">
-          {availableDates.map((date) => (
+          {availableDates.map((date, index) => (
             <li
-              key={date}
+              key={index}
               className="cursor-pointer hover:text-blue-400"
               onClick={() => setSelectedDate(date)}
             >
@@ -129,11 +143,12 @@ export default function DailyActivityViewer({
               <span className="font-medium">Updated:</span>{" "}
               {format(parseISO(selectedActivity.updatedAt), "PPpp")}
             </p>
+            <Activity date={date} player={player}/>
+
           </div>
         </div>
       ) : (
         <p className="text-gray-400">
-          No activity data available for the selected date.
         </p>
       )}
     </div>

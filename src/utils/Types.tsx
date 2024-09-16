@@ -142,3 +142,12 @@ export interface UpdateCreditInterface {
 export interface JwtPayload {
   role?: string;
 }
+
+export interface ActivityProps{
+  date:any,
+  player:any
+}
+export interface ActivityDetails {
+  bets: [];
+  transactions: [];
+}

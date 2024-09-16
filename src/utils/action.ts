@@ -485,3 +485,65 @@ export const resolveStatus = async (data: any, Id: any) => {
     }
   }
   
+
+
+export async function getActivitiesByDateAndPlayer(date: string, playerId: string) {
+  console.log(playerId,"player id");
+  
+  const token = await getCookie();
+  try {
+      const response = await fetch(`${config.server}/api/userActivities?date=${encodeURIComponent(date)}&playerId=${encodeURIComponent(playerId)}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              Cookie: `userToken=${token}`,
+          },
+      });
+
+      if (!response.ok) {
+          const error = await response.json();
+          return { error: error.message };
+      }
+
+      const data = await response.json();
+      return data;
+
+  } catch (error) {
+      return { error: 'An error occurred while fetching activities.' };
+  }
+}
+
+
+export async function getBetsAndTransactions(startTime: string, endTime: string, playerId: string) {
+  const token = await getCookie();
+  console.log(startTime, endTime, playerId);
+  
+
+  try {
+      const response = await fetch(`${config.server}/api/userActivities`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              "Cookie": `userToken=${token}`,
+          },
+          body: JSON.stringify({ startTime, endTime, playerId }),
+      });
+
+      if (!response.ok) {
+          const error = await response.json();
+          console.log(error);
+          
+          return { error: error.message };
+      }
+
+      const data = await response.json();
+      console.log(data);
+      
+      return data;
+
+  } catch (error) {
+      return { error: 'An error occurred while fetching bets and transactions.' };
+  }
+}
