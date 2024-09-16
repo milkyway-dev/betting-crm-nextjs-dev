@@ -112,6 +112,10 @@ export interface TableUserNameProps {
   role?: string;
 }
 
+export interface DateWiseActivityProps{
+  data:string
+}
+
 export interface ReportsData {
   globlestate: {
     Agent: {

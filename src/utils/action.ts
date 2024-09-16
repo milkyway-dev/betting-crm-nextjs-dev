@@ -435,7 +435,7 @@ export async function getUserNotifications() {
   }
 }
 
-  export const resolveStatus = async (data: any, Id: any) => {
+export const resolveStatus = async (data: any, Id: any) => {
     const token = await getCookie();
 
     try {
@@ -460,3 +460,28 @@ export async function getUserNotifications() {
       revalidatePath("/");
     }
   }
+
+  export async function getDailyActivity(username:string) {
+    
+    const token = await getCookie();
+    try {
+      const response = await fetch(`${config.server}/api/userActivities/${username}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        }
+      })
+      if (!response.ok) {
+        const error = await response.json();
+        return { error: error.message };
+      }
+      const data = await response.json();
+    
+      return data;
+  
+    } catch (error) {
+    }
+  }
+  
