@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
 import { UpdateNotification } from "@/redux/ReduxSlice";
-import { getUserNotifications } from "@/utils/action";
+import { getUserNotifications, setViewedNotification } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
 import Info from "../svg/Info";
@@ -34,10 +34,16 @@ const Notifications = () => {
       eventSource.close();
     };
   }, []);
+  const handleViewNotification = async (Id: any) => {
+    const data: any = await setViewedNotification(Id);
+    if (data?.responseData) {
+      getNotification();
+    }
+  }
 
   const getNotification = async () => {
     const data: any = await getUserNotifications();
-    // console.log(data, 'data');
+    console.log(data, 'data');
     setNotifications(data);
 
   }
@@ -61,14 +67,14 @@ const Notifications = () => {
         {/* </p> */}
 
         {notifications?.map((item, index) => (
-          <div key={index}>
-            <div key={index} className={`p-3 shadow-sm w-[400px] ${item.viewed ? 'bg-gray-600' : 'bg-black'} shadow-black `}>
-              <div className='flex items-center space-x-3'>
-                {item.type === 'alert' ? <Alert /> : item.type === 'message' ? <Message /> : <Info />}
-                <div className='text-white text-opacity-70 tracking-wide font-light text-sm'>{item?.data.message}</div>
-              </div>
-              <div className='text-[.6rem] text-right text-white text-opacity-70 pt-1'>{new Date(item?.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} At <span className="text-right">{new Date(item.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span></div>
+          <div key={index} className={`p-3 shadow-sm w-[400px] cursor-pointer ${item.viewed ? 'bg-gray-600' : 'bg-black'} shadow-black `}
+            onClick={() => handleViewNotification(item._id)}
+          >
+            <div className='flex items-center space-x-3'>
+              {item.type === 'alert' ? <Alert /> : item.type === 'message' ? <Message /> : <Info />}
+              <div className='text-white text-opacity-70 tracking-wide font-light text-sm'>{item?.data.message}</div>
             </div>
+            <div className='text-[.6rem] text-right text-white text-opacity-70 pt-1'>{new Date(item?.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} At <span className="text-right">{new Date(item.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span></div>
           </div>
         ))}
       </div>

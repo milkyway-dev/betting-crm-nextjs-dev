@@ -11,7 +11,7 @@ import { UpdateCredit, UpdateHeader, UpdateNotification } from "@/redux/ReduxSli
 import HamBurger from "../svg/HamBurger";
 import { useRouter } from "next/navigation";
 import Infinite from "../svg/Infinite";
-import { getCredits } from "@/utils/action";
+import { getCredits, getUserNotifications } from "@/utils/action";
 import { UpdateCreditInterface } from "@/utils/Types";
 import toast from "react-hot-toast";
 const Header = ({ Back }: any) => {
@@ -20,9 +20,22 @@ const Header = ({ Back }: any) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [unseenCount, setUnseenCount] = useState(0);
   useEffect(() => {
     setMounted(true);
+    checkUnseen()
   }, []);
+
+  const checkUnseen = async () => {
+    try {
+
+      const data: any = await getUserNotifications();
+      const count = data?.filter((item: any) => item?.viewed === false).length
+      setUnseenCount(count)
+    } catch (err) {
+      console.log("error fetching Notification count", err)
+    }
+  }
 
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const fetchUser = async () => {
@@ -40,7 +53,7 @@ const Header = ({ Back }: any) => {
       <button className="xl:hidden" onClick={() => dispatch(UpdateHeader(true))}><HamBurger /></button>
       {Back && <button onClick={() => router.push('/subordinates/all')} className="xl:block hidden">{Back}</button>}
       <div className="flex items-center space-x-4 w-[90%] mx-auto justify-end">
-        
+
         {user ? <div className="bg-[#E3F5FF] dark:bg-black dark:bg-opacity-40 p-[1px] rounded-xl">
           <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">
             <span className="text-white text-[.9rem] md:text-[.9] dark:text-black tracking-wider">Credits :</span>
@@ -56,8 +69,14 @@ const Header = ({ Back }: any) => {
           !mounted ? null :
             currentTheme === "dark" ? <button onClick={() => setTheme("light")}><DarkMode /></button> : <button onClick={() => setTheme("dark")}><LightMode /></button>
         }
-        <button onClick={()=>toast.error('Feature Under Development!')}><Setting /></button>
-        <button onClick={() => dispatch(UpdateNotification(true))}><Notification /></button>
+        <button onClick={() => toast.error('Feature Under Development!')}><Setting /></button>
+        <button onClick={() => dispatch(UpdateNotification(true))}><Notification />
+          {unseenCount > 0 && (
+            <span className="absolute top-4 right-20 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {unseenCount}
+            </span>
+          )}
+        </button>
         <Logout />
       </div>
     </div>
