@@ -71,38 +71,38 @@ const Page = (params: any) => {
           <button onClick={() => router.back()}>
             <Back />
           </button>
-          <h3 className="dark:text-black text-white text-xl font-semibold capitalize">
+          <h3 className="dark:text-black text-white md:text-xl font-semibold capitalize">
             {category}
           </h3>
         </div>
         <div className="flex gap-3 items-center justify-center">
-          <div className="bg-[#1A1A1A] flex pl-4 items-center  dark:bg-onDark dark:border-opacity-30 border-opacity-60 border-dark_black rounded-lg border-[1px] relative">
+          <div className="bg-[#1A1A1A] flex items-center  dark:bg-onDark dark:border-opacity-30 border-opacity-60 border-dark_black rounded-lg border-[1px] relative">
             <select
               name="category"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className={`outline-none w-full bg-[#1A1A1A] rounded-lg px-3 dark:bg-onDark text-white dark:text-black  text-opacity-40 appearance-none`}
+              className={`outline-none w-full bg-[#1A1A1A] rounded-lg px-1 md:px-3 dark:bg-onDark text-white dark:text-black  text-opacity-40 appearance-none`}
               style={{ paddingRight: "30px" }}
             >
               <option value="active">active</option>
               <option value="inactive">inactive</option>
             </select>
-            <span className=" text-white dark:text-black text-opacity-40 p-2">
+            <span className=" text-white dark:text-black text-opacity-40 p-1 md:p-2">
               <ChevronDown />
             </span>
           </div>
           <UploadBanner refresh={refresh} setRefresh={setRefresh} />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-4 border-2 h-[75vh] overflow-y-scroll p-2 px-4 rounded-2xl border-[#dfdfdf40] ">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4 border-2 h-[75vh] overflow-y-scroll p-2 px-4 rounded-2xl border-[#dfdfdf40] ">
         {banners.length > 0 ? (
           banners?.map((data: any, index) => (
             <div
               key={index}
-              className="flex items-center justify-center w-full h-[23vh] relative"
+              className="flex items-center justify-center w-full h-[12vh] md:h-[23vh] relative"
             >
               <Image src={data.url} alt={data.title} fill objectFit="contain" />
-              <button onClick={() => {}} className="absolute left-4 top-4">
+              <button onClick={() => {}} className="absolute left-4 md:top-4">
                 <input
                   type="checkbox"
                   checked={selectedBanner.includes(data._id)}
