@@ -64,6 +64,7 @@ const page = async ({params,searchParams}:any) => {
   const tabs = [
     { name: 'Coins', route: `/Reports/player/coins/${params?.coin}` },
     { name: 'Betting', route: `/Reports/player/betting/${params?.coin}` },
+    { name: 'Activity', route:`/Reports/player/activity/${params?.coin}`}
   ];
   return (
     <>
