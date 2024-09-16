@@ -7,6 +7,8 @@ import { getUserNotifications } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
 import Info from "../svg/Info";
+import { config } from "@/utils/config";
+
 const Notifications = () => {
   const dispatch = useDispatch()
   const isOpen = useSelector((state: { globlestate: { openNotification: Boolean } }) => state?.globlestate.openNotification)
@@ -15,7 +17,7 @@ const Notifications = () => {
 
   useEffect(() => {
     // Create an EventSource connection to the backend SSE endpoint
-    const eventSource = new EventSource('http://localhost:5000/api/notification/agent', {
+    const eventSource = new EventSource(`${config.server}/api/notification/agent`, {
       withCredentials: true,
     });
 

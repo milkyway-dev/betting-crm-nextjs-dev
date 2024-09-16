@@ -2,23 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* General rule for Webkit browsers */
 *::-webkit-scrollbar {
-    width: 0px;
+  width: 0px;
 }
 
 /* Specific for Firefox */
 * {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 
 /* Specific for IE and older Edge versions */
 * {
-    -ms-overflow-style: none;
+  -ms-overflow-style: none;
 }
-body{
-  background-color: #0E0F0F;
+body {
+  background-color: #0e0f0f;
 }
 
 body:is(.dark *) {
@@ -26,39 +25,65 @@ body:is(.dark *) {
 }
 
 .loader {
-    width: 3.25em;
-    transform-origin: center;
-    animation: rotate4 2s linear infinite;
+  width: 3.25em;
+  transform-origin: center;
+  animation: rotate4 2s linear infinite;
+}
+
+.loader circle {
+  fill: none;
+  stroke: hsl(214, 97%, 59%);
+  stroke-width: 2;
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: dash4 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate4 {
+  100% {
+    transform: rotate(360deg);
   }
-  
-  .loader circle {
-    fill: none;
-    stroke: hsl(214, 97%, 59%);
-    stroke-width: 2;
+}
+
+@keyframes dash4 {
+  0% {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;
-    stroke-linecap: round;
-    animation: dash4 1.5s ease-in-out infinite;
   }
-  
-  @keyframes rotate4 {
-    100% {
-      transform: rotate(360deg);
-    }
+
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
   }
-  
-  @keyframes dash4 {
-    0% {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
-    }
-  
-    50% {
-      stroke-dasharray: 90, 200;
-      stroke-dashoffset: -35px;
-    }
-  
-    100% {
-      stroke-dashoffset: -125px;
-    }
+
+  100% {
+    stroke-dashoffset: -125px;
   }
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: 2rem;
+  padding: 0.3rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.522);
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 1.4rem;
+  height: 1.4rem;
+  clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+  transform: scale(0);
+  background-color: #2296f3;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1.5);
+}
