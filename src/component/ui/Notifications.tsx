@@ -1,50 +1,65 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Redeem from "../svg/Redeem";
-import Recharge from "../svg/Recharge";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
 import { UpdateNotification } from "@/redux/ReduxSlice";
-import { getUserNotifications } from "@/utils/action";
+import { getUserNotifications, setViewedNotification } from "@/utils/action";
+import Alert from "../svg/Alert";
+import Message from "../svg/Message";
+import Info from "../svg/Info";
+import { config } from "@/utils/config";
+import Link from "next/link";
+
 const Notifications = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(
     (state: { globlestate: { openNotification: Boolean } }) =>
       state?.globlestate.openNotification
   );
-  const [notificationData, setNotificationData] = useState([]);
+
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Create an EventSource connection to the backend SSE endpoint
+    const eventSource = new EventSource(
+      `${config.server}/api/notification/agent`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    // Listen for new notifications
+    eventSource.onmessage = (event) => {
+      const newNotification = JSON.parse(event.data);
+      //check if the new notification is not already here
+      if (
+        !notifications.some(
+          (notification) => notification._id === newNotification._id
+        )
+      ) {
+        //add notification on top of the list
+        setNotifications((prev) => [newNotification, ...prev]);
+      }
+    };
+
+    // Clean up the connection when the component unmounts
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+  const handleViewNotification = async (Id: any) => {
+    const data: any = await setViewedNotification(Id);
+    getNotification();
+  };
+
   const getNotification = async () => {
     const data: any = await getUserNotifications();
-
-    setNotificationData(data);
+    console.log(data, "data");
+    setNotifications(data);
   };
   useEffect(() => {
     getNotification();
   }, []);
-
-  const data = [
-    {
-      icon: <Redeem />,
-      text: "Netflix",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    },
-    {
-      icon: <Recharge />,
-      text: "Hotstar",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    },
-    {
-      icon: <Redeem />,
-      text: "Netflix",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    },
-  ];
 
   return (
     <div
@@ -54,7 +69,7 @@ const Notifications = () => {
           : "-right-[100%] top-0 fixed xl:static transition-all "
       }   ${
         isOpen ? "flex-.2 transition-all" : "w-[0%] hidden"
-      } z-50 h-screen  px-5 py-5 dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}
+      } z-50 h-screen px-5 py-5 dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}
     >
       <button
         className={`absolute top-2 cursor-pointer ${
@@ -67,46 +82,51 @@ const Notifications = () => {
       <div className="text-white bg-[#232525] dark:bg-onDark dark:text-black px-6 md:px-8 py-1.5  text-[.9rem] md:text-lg rounded-3xl tracking-wide inline-block">
         Notification
       </div>
-      <div className="flex-1 overflow-y-scroll h-[80vh]">
-        {data?.map((item, ind) => (
-          <div
-            key={ind}
-            className="flex pt-8 space-x-3 border-b-[1.5px] dark:border-gray-200 border-[#282828] pb-2"
+      <div className="flex flex-col gap-2 py-4 px-2 overflow-y-scroll h-[90vh]">
+        {/* //WARN: remove this */}
+        {/* <p className="text-white text-[.8rem] md:text-lg"> */}
+        {/*   {JSON.stringify(notifications, null, 2)} */}
+        {/* </p> */}
+
+        {notifications?.map((item, index) => (
+          <Link
+            key={index}
+            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
           >
-            <div>{item.icon}</div>
-            <div>
-              <span className="text-[.8rem] md:text-base tracking-wider text-white dark:text-black">
-                {item.text}
-              </span>
-              <div className=" py-2 space-y-2">
-                <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                  <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem]">
-                    Debitor
-                  </span>
-                  <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
-                    {item.debitor}
-                  </span>
+            <div
+              className={`p-3 shadow-sm w-[400px] cursor-pointer ${
+                item.viewed ? "bg-gray-600" : "bg-black"
+              } shadow-black `}
+              onClick={() => handleViewNotification(item._id)}
+            >
+              <div className="flex items-center space-x-3">
+                {item.type === "alert" ? (
+                  <Alert />
+                ) : item.type === "message" ? (
+                  <Message />
+                ) : (
+                  <Info />
+                )}
+                <div className="text-white text-opacity-70 tracking-wide font-light text-sm">
+                  {item?.data.message}
                 </div>
-                <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                  <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem]">
-                    Creditor
-                  </span>
-                  <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
-                    {item.creditor}
-                  </span>
-                </div>
-                {notificationData?.map((notification: any, index: number) => (
-                  <li
-                    key={index}
-                    className="list-none text-white dark:text-black text-[0.9rem] md:text-base tracking-wide bg-dark_light_black dark:bg-onDark px-4 py-2 rounded-md my-2 shadow-sm"
-                  >
-                    {notification.message}
-                  </li>
-                ))}
-                <div></div>
+              </div>
+              <div className="text-[.6rem] text-right text-white text-opacity-70 pt-1">
+                {new Date(item?.createdAt).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}{" "}
+                At{" "}
+                <span className="text-right">
+                  {new Date(item.createdAt).toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

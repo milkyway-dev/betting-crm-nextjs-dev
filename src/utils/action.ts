@@ -403,27 +403,64 @@ export async function getUserNotifications() {
 
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/notifications/`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `userToken=${token}`,
-      },
-    });
+    const response = await fetch(
+      `${config.server}/api/notification?viewedStuatus=${true}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
     if (!response.ok) {
       const error = await response.json();
       return { error: error.message };
     }
     const data = await response.json();
     console.log(data);
+    //sort data according to createdAt
+
+    data.sort((a: any, b: any) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
 
     return data;
   } catch (error) {
+    console.log(error);
   } finally {
     revalidatePath("/");
   }
 }
+
+export const setViewedNotification = async (notificationId: any) => {
+  const token = await getCookie();
+
+  try {
+    const response = await fetch(
+      `${config.server}/api/notification?notificationId=${notificationId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return { responseData };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    revalidatePath("/");
+  }
+};
 
 export const resolveStatus = async (data: any, Id: any) => {
   const token = await getCookie();
@@ -568,3 +605,87 @@ export const deleteBanners = async (banners: string[]) => {
     console.log(error);
   }
 };
+
+  export async function getDailyActivity(username:string) {
+    
+    const token = await getCookie();
+    try {
+      const response = await fetch(`${config.server}/api/userActivities/${username}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        }
+      })
+      if (!response.ok) {
+        const error = await response.json();
+        return { error: error.message };
+      }
+      const data = await response.json();
+    
+      return data;
+  
+    } catch (error) {
+    }
+  }
+
+export async function getActivitiesByDateAndPlayer(date: string, playerId: string) {
+  console.log(playerId,"player id");
+  
+  const token = await getCookie();
+  try {
+      const response = await fetch(`${config.server}/api/userActivities?date=${encodeURIComponent(date)}&playerId=${encodeURIComponent(playerId)}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              Cookie: `userToken=${token}`,
+          },
+      });
+
+      if (!response.ok) {
+          const error = await response.json();
+          return { error: error.message };
+      }
+
+      const data = await response.json();
+      return data;
+
+  } catch (error) {
+      return { error: 'An error occurred while fetching activities.' };
+  }
+}
+
+export async function getBetsAndTransactions(startTime: string, endTime: string, playerId: string) {
+  const token = await getCookie();
+  console.log(startTime, endTime, playerId);
+  
+
+  try {
+      const response = await fetch(`${config.server}/api/userActivities`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              "Cookie": `userToken=${token}`,
+          },
+          body: JSON.stringify({ startTime, endTime, playerId }),
+      });
+
+      if (!response.ok) {
+          const error = await response.json();
+          console.log(error);
+          
+          return { error: error.message };
+      }
+
+      const data = await response.json();
+      console.log(data);
+      
+      return data;
+
+  } catch (error) {
+      return { error: 'An error occurred while fetching bets and transactions.' };
+  }
+}
