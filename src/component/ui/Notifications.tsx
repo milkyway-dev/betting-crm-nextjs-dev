@@ -1,7 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
-import Redeem from "../svg/Redeem";
-import Recharge from "../svg/Recharge";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
 import { UpdateNotification } from "@/redux/ReduxSlice";
