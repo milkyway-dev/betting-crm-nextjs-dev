@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
 import { UpdateNotification } from "@/redux/ReduxSlice";
 import { getUserNotifications } from "@/utils/action";
+import Alert from "../svg/Alert";
+import Message from "../svg/Message";
+import Info from "../svg/Info";
 const Notifications = () => {
   const dispatch = useDispatch()
   const isOpen = useSelector((state: { globlestate: { openNotification: Boolean } }) => state?.globlestate.openNotification)
-  const [notificationData, setNotificationData] = useState([]);
 
-  const [notifications, setNotifications] = useState<string[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
     // Create an EventSource connection to the backend SSE endpoint
@@ -22,7 +24,11 @@ const Notifications = () => {
     // Listen for new notifications
     eventSource.onmessage = (event) => {
       const newNotification = JSON.parse(event.data);
-      setNotifications((prev) => [...prev, newNotification]);
+      //check if the new notification is not already here 
+      if (!notifications.some((notification) => notification._id === newNotification._id)) {
+        //add notification on top of the list
+        setNotifications(prev => [newNotification, ...prev])
+      }
     };
 
     // Clean up the connection when the component unmounts
@@ -33,38 +39,15 @@ const Notifications = () => {
 
   const getNotification = async () => {
     const data: any = await getUserNotifications();
+    // console.log(data, 'data');
+    setNotifications(data);
 
-    setNotificationData(data);
   }
   useEffect(() => {
     getNotification();
   }, []);
 
-  console.log(notificationData, "data");
 
-  const data = [
-    {
-      icon: <Redeem />,
-      text: "Netflix",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    },
-    {
-      icon: <Recharge />,
-      text: "Hotstar",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    },
-    {
-      icon: <Redeem />,
-      text: "Netflix",
-      debitor: "Gaurav",
-      creditor: "Rana",
-      Date: "Live",
-    }
-  ];
 
 
   return (
@@ -79,44 +62,16 @@ const Notifications = () => {
         {/*   {JSON.stringify(notifications, null, 2)} */}
         {/* </p> */}
 
-        {data?.map((item, ind) => (
-          <div key={ind} className="flex pt-8 space-x-3 border-b-[1.5px] dark:border-gray-200 border-[#282828] pb-2">
-            <div>
-              {item.icon}
-            </div>
-            <div>
-              <span className="text-[.8rem] md:text-base tracking-wider text-white dark:text-black">{item.text}</span>
-              <div className=" py-2 space-y-2">
-                <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                  <span className="text-white dark:text-[#9FA1A2]  text-opacity-30 text-[.8rem]">
-                    Debitor
-                  </span>
-                  <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
-                    {item.debitor}
-                  </span>
-                </div>
-                <div className="bg-dark_light_black dark:bg-onDark  px-2 py-1 flex items-center rounded-[.3rem] space-x-4">
-                  <span className="text-white dark:text-[#9FA1A2] text-opacity-30 text-[.8rem]">
-                    Creditor
-                  </span>
-                  <span className="text-white dark:text-black  text-opacity-70 text-[.7rem]">
-                    {item.creditor}
-                  </span>
-                </div>
-                {notificationData?.map((notification: any, index: number) => (
-                  <li
-                    key={index}
-                    className="list-none text-white dark:text-black text-[0.9rem] md:text-base tracking-wide bg-dark_light_black dark:bg-onDark px-4 py-2 rounded-md my-2 shadow-sm"
-                  >
-                    {notification.message}
-                  </li>
-                ))}
-                <div>
-                </div>
+        {notifications?.map((item, index) => (
+          <div key={index}>
+            <div key={index} className={`p-3 shadow-sm w-[400px] ${item.viewed ? 'bg-gray-600' : 'bg-black'} shadow-black `}>
+              <div className='flex items-center space-x-3'>
+                {item.type === 'alert' ? <Alert /> : item.type === 'message' ? <Message /> : <Info />}
+                <div className='text-white text-opacity-70 tracking-wide font-light text-sm'>{item?.data.message}</div>
               </div>
+              <div className='text-[.6rem] text-right text-white text-opacity-70 pt-1'>{new Date(item?.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} At <span className="text-right">{new Date(item.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span></div>
             </div>
           </div>
-
         ))}
       </div>
     </div>

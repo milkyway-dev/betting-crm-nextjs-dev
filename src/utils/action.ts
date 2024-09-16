@@ -226,7 +226,7 @@ export const transactions = async (data: any) => {
 
     return respMessage;
   } catch (error) {
-  }finally {
+  } finally {
     revalidatePath('/')
   }
 }
@@ -312,10 +312,10 @@ export const getSubordinatesReport = async (username: string) => {
     revalidatePath('/')
   }
 }
-export async function getAllBets(user:any) {
+export async function getAllBets(user: any) {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}${user?.role==="admin"?'/api/bets/':`/api/bets/${user?.userId}`}`, {
+    const response = await fetch(`${config.server}${user?.role === "admin" ? '/api/bets/' : `/api/bets/${user?.userId}`}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -337,27 +337,27 @@ export async function getAllBets(user:any) {
 }
 export async function getAllTransactions(user: any, searchString: string) {
   let transaction: string = `/api/transactions`;
-  if (searchString?.length>0) {
+  if (searchString?.length > 0) {
     transaction += `?search=${encodeURIComponent(String(searchString))}`;
   }
   let transaction_subordinates: string = `/api/transactions/${user?.username}/subordinate?type=username`;
-  if (searchString?.length>0) {
+  if (searchString?.length > 0) {
     transaction_subordinates += `&search=${encodeURIComponent(String(searchString))}`;
   }
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}${user?.role=='admin'?transaction:transaction_subordinates}`, {
-      method:"GET",
-      credentials:"include",
-      headers:{
-        "Content-Type":"application/json",
+    const response = await fetch(`${config.server}${user?.role == 'admin' ? transaction : transaction_subordinates}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
         Cookie: `userToken=${token}`,
       }
     })
-     
-    if(!response.ok){
+
+    if (!response.ok) {
       const error = await response.json();
-      return {error:error.message};
+      return { error: error.message };
     }
 
     const data = await response.json();
@@ -367,19 +367,19 @@ export async function getAllTransactions(user: any, searchString: string) {
   }
 }
 
-export async function getSubordinates(role: string,searchString:string) {
+export async function getSubordinates(role: string, searchString: string) {
   const token = await getCookie();
   const user: any = await getCurrentUser();
   let url: string = `/api/subordinates?type=${role}`;
-  if (searchString?.length>0) {
+  if (searchString?.length > 0) {
     url += `&search=${encodeURIComponent(String(searchString))}`;
   }
 
   let subordinatesurl: string = `/api/subordinates/${user?.username}/subordinates?type=username`;
-  if (searchString?.length>0) {
+  if (searchString?.length > 0) {
     subordinatesurl += `&search=${encodeURIComponent(String(searchString))}`;
   }
-  
+
   try {
     const response = await fetch(`${config.server}${user?.role === 'admin' ? url : subordinatesurl}`, {
       method: "GET",
@@ -404,15 +404,15 @@ export async function getSubordinates(role: string,searchString:string) {
     revalidatePath("/");
   }
 
-  
+
 }
 
 export async function getUserNotifications() {
   console.log("gettting called");
-  
+
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/notifications/`, {
+    const response = await fetch(`${config.server}/api/notification/get`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -425,38 +425,45 @@ export async function getUserNotifications() {
       return { error: error.message };
     }
     const data = await response.json();
-    console.log(data);
-  
+    // console.log(data);
+    //sort data according to createdAt 
+
+    data.sort((a: any, b: any) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    })
+
     return data;
 
   } catch (error) {
+    console.log(error);
+
   } finally {
     revalidatePath("/");
   }
 }
 
-  export const resolveStatus = async (data: any, Id: any) => {
-    const token = await getCookie();
+export const resolveStatus = async (data: any, Id: any) => {
+  const token = await getCookie();
 
-    try {
-      const response = await fetch(`${config.server}/api/bets/resolve/${Id}`, {
-        method: 'PUT',
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `userToken=${token}`,
-        },
-        body: JSON.stringify(data)
-      })
-      if (!response.ok) {
-        const error = await response.json();
-        return { error: error.message };
-      }
-      const responseData = await response.json();
-      return { responseData };
-    } catch (error) {
-      console.log(error);
-    } finally {
-      revalidatePath("/");
+  try {
+    const response = await fetch(`${config.server}/api/bets/resolve/${Id}`, {
+      method: 'PUT',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+      body: JSON.stringify(data)
+    })
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
     }
+    const responseData = await response.json();
+    return { responseData };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    revalidatePath("/");
   }
+}
