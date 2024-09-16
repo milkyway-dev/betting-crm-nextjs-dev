@@ -17,7 +17,7 @@ const Table: React.FC<TableProps> = async({
 
   return (
     <>
-      <div className="bg-[#0E0F0F]  overflow-x-scroll capitalize dark:bg-white pb-5">
+      <div className="bg-[#0E0F0F]  overflow-x-scroll  dark:bg-white pb-5">
         <div
           className={` dark:bg-white  p-3 border-[1px]  min-w-[460px] md:w-full rounded-b-2xl rounded-bl-2xl  ${Page?'rounded-tl-2xl':' md:rounded-tl-none'}  rounded-r-2xl dark:border-opacity-10 border-[#313131]`}
         >
