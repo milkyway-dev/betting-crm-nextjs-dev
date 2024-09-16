@@ -403,31 +403,32 @@ export async function getUserNotifications() {
 
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/notification/get`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `userToken=${token}`,
+    const response = await fetch(
+      `${config.server}/api/notification?viewedStuatus=${true}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
       }
-    })
+    );
     if (!response.ok) {
       const error = await response.json();
       return { error: error.message };
     }
     const data = await response.json();
-    // console.log(data);
-    //sort data according to createdAt 
+    console.log(data);
+    //sort data according to createdAt
 
     data.sort((a: any, b: any) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    })
+    });
 
     return data;
-
   } catch (error) {
     console.log(error);
-
   } finally {
     revalidatePath("/");
   }
