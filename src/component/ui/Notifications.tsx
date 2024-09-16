@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
 import { UpdateNotification } from "@/redux/ReduxSlice";
-import { getUserNotifications } from "@/utils/action";
+import { getUserNotifications, setViewedNotification } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
 import Info from "../svg/Info";
@@ -47,11 +47,14 @@ const Notifications = () => {
       eventSource.close();
     };
   }, []);
+  const handleViewNotification = async (Id: any) => {
+    const data: any = await setViewedNotification(Id);
+    getNotification();
+  };
 
   const getNotification = async () => {
     const data: any = await getUserNotifications();
-    console.log("DATA", data);
-    // console.log(data, 'data');
+    console.log(data, "data");
     setNotifications(data);
   };
   useEffect(() => {
@@ -87,14 +90,14 @@ const Notifications = () => {
 
         {notifications?.map((item, index) => (
           <Link
-            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
             key={index}
+            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
           >
             <div
-              key={index}
-              className={`p-3 border-[1px] border-[#dfdfdf34] rounded-md shadow-sm w-[400px] ${
+              className={`p-3 shadow-sm w-[400px] cursor-pointer ${
                 item.viewed ? "bg-gray-600" : "bg-black"
               } shadow-black `}
+              onClick={() => handleViewNotification(item._id)}
             >
               <div className="flex items-center space-x-3">
                 {item.type === "alert" ? (

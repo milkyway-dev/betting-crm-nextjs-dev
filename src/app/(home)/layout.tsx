@@ -2,7 +2,7 @@ import Sidebar from "@/component/common/Sidebar";
 import type { Metadata } from "next";
 import Notifications from "@/component/ui/Notifications";
 
-export const metadata:Metadata = {
+export const metadata: Metadata = {
   title: "CRM - Betting Paradise",
   description: "Betting Paradise Crm.",
 };
@@ -15,10 +15,12 @@ export default function RootLayout({
   return (
     <>
       <div className="md:flex  dark:bg-white bg-bg_dashboard">
-          <Sidebar />
-          {children}
+        <Sidebar />
+        {children}
+        <div className="h-screen">
           <Notifications />
         </div>
+      </div>
     </>
   );
 }
