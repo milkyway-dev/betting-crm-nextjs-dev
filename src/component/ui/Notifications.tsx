@@ -85,15 +85,10 @@ const Notifications = () => {
         Notification
       </div>
       <div className="flex flex-col gap-2 py-4 px-2 overflow-y-scroll h-[90vh]">
-        {/* //WARN: remove this */}
-        {/* <p className="text-white text-[.8rem] md:text-lg"> */}
-        {/*   {JSON.stringify(notifications, null, 2)} */}
-        {/* </p> */}
-
         {notifications?.map((item, index) => (
           <Link
             key={index}
-            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
+            href={`/Reports/player/betting/${item.data.player}?id=${item.data.betId}`}
           >
             <div
               className={`p-3 shadow-sm w-[400px] cursor-pointer ${
