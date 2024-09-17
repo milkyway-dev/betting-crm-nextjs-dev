@@ -3,8 +3,10 @@ import React, { useEffect, useRef } from 'react'
 import ResolveButton from './ResolveButton'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
+import { useAppSelector } from '@/utils/hooks'
 
-const Playerbets = ({ headers, data, activeid }: any) => {
+const Playerbets = ({ headers, data }: any) => {
+    const activeid: any = useAppSelector((state) => state.globlestate.betId)
     const { systemTheme, theme } = useTheme();
     const currentTheme = theme === "system" ? systemTheme : theme;
     const pathname = usePathname()

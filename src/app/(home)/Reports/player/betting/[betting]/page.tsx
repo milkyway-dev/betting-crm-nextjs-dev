@@ -18,7 +18,6 @@ import Action from "@/component/svg/Action";
 import Playerbets from "@/component/ui/Playerbets";
 
 async function getPlayerBettings(username: string) {
-  console.log(username,"username")
   const token = await getCookie();
   try {
     const response = await fetch(
@@ -40,9 +39,6 @@ async function getPlayerBettings(username: string) {
 
     const data = await response.json();
     const bets = data;
-
-    // console.log("BETS : ", bets);
-
     return bets;
   } catch (error) {
   } finally {
@@ -50,7 +46,7 @@ async function getPlayerBettings(username: string) {
   }
 }
 
-const page = async ({ params,searchParams }: any) => {
+const page = async ({ params}: any) => {
   const data = await getPlayerBettings(params?.betting);
   const reportData = await getSubordinatesReport(params?.betting);
   const tabs = [
@@ -83,7 +79,7 @@ const page = async ({ params,searchParams }: any) => {
             </div>
           </div>
           <div className="h-[calc(100%-13vh)] hideScrollBar border-[1px] border-white dark:border-black dark:border-opacity-10 bg-[#0E0F0F] dark:bg-white border-opacity-10 rounded-2xl overflow-y-scroll">
-            <Playerbets headers={headers} data={data} activeid={searchParams?.id} />
+            <Playerbets headers={headers} data={data}/>
           </div>
         </div>
       </div>
