@@ -8,6 +8,10 @@ import { getCurrentUser } from "@/utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
 import Profile from "../svg/Profile";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
+
 
 const Sidebar = ({ params }: any) => {
   const isOpen = useSelector(
@@ -16,6 +20,7 @@ const Sidebar = ({ params }: any) => {
   );
   const dispatch = useDispatch();
   const router = usePathname();
+  const navigate=useRouter()
   const [user, setUser] = useState<any | null>(null);
   const [nav, setNav] = useState([
     {
@@ -38,7 +43,12 @@ const Sidebar = ({ params }: any) => {
   const fetchUser = async () => {
     const currentUser: any = await getCurrentUser();
     setUser(currentUser);
-
+    
+    if (currentUser?.role === "player") {
+      Cookies.remove("token");
+      navigate.push("/login");
+      toast.success('Logout successfully !')
+    }
     switch (currentUser?.role) {
       case "distributor":
         setNav((prevNav) =>
@@ -71,6 +81,7 @@ const Sidebar = ({ params }: any) => {
         break;
     }
   };
+
   useEffect(() => {
     fetchUser();
   }, []);

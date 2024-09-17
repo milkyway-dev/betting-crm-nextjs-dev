@@ -18,28 +18,17 @@ import Infinite from "../svg/Infinite";
 import { getCredits, getUserNotifications } from "@/utils/action";
 import { UpdateCreditInterface } from "@/utils/Types";
 import toast from "react-hot-toast";
+import { useAppSelector } from "@/utils/hooks";
 const Header = ({ Back }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { systemTheme, theme, setTheme } = useTheme();
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [unseenCount, setUnseenCount] = useState(0);
+  const allNotifications = useAppSelector((state: any) => state.globlestate.AllNotification).filter((item:any)=>item.viewed===false)?.length
   useEffect(() => {
     setMounted(true);
-    checkUnseen();
   }, []);
-
-  const checkUnseen = async () => {
-    try {
-      const data: any = await getUserNotifications();
-      const count = data?.filter((item: any) => item?.viewed === false).length;
-      setUnseenCount(count);
-    } catch (err) {
-      console.log("error fetching Notification count", err);
-    }
-  };
-
   const currentTheme = theme === "system" ? systemTheme : theme;
   const fetchUser = async () => {
     const currentUser = await getCredits();
@@ -110,9 +99,9 @@ const Header = ({ Back }: any) => {
           onClick={() => dispatch(UpdateNotification(true))}
         >
           <Notification />
-          {unseenCount > 0 && (
+          { allNotifications>= 0 && (
             <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              {unseenCount}
+              {allNotifications}
             </span>
           )}
         </button>
