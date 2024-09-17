@@ -7,6 +7,7 @@ import {
   fetchSportsCategory,
   resolveStatus,
   transactions,
+  updateBet,
   updatePlayer,
   updateSubordinates,
   uploadBanner,
@@ -26,11 +27,15 @@ const Modal: React.FC<ModalProps> = ({
   data,
   Tabs = [],
   Page,
+  betData
+
 }) => {
   //FIX: modal close
   const [load, setLoad] = useState(false);
   const [betStatus, setBetStatus] = useState<string>("lost");
   const dispatch = useDispatch();
+  const [customStatus, setCustomStatus] = useState<string>('');
+
   const [bannerPreview, setBannerPreview] = useState<any>();
   const [categories, setCategories] = useState<
     { value: string; label: string }[]
@@ -47,6 +52,128 @@ const Modal: React.FC<ModalProps> = ({
     password: "",
     status: data?.status,
   });
+  console.log(betData, "betdata");
+  console.log(betId, "betID");
+  const [betDetailStatus, setBetDetailStatus] = useState<any>();
+  const [parentbetData, setParentBetData] = useState({
+    amount: betData?.amount,
+    isResolved: betData?.isResolved,
+    possibleWinningAmount: betData?.possibleWinningAmount
+  });
+
+  const [betDetails, setBetDetails] = useState<any>(null);
+
+  // Update state when betId or betData changes
+  useEffect(() => {
+    const clickedBetDetail = betData?.data?.find((detail: any) => detail._id === betId);
+    setBetDetailStatus(clickedBetDetail?.status);
+  
+    if (clickedBetDetail) {
+      setBetDetails({
+        detailId: clickedBetDetail._id,
+        market: clickedBetDetail.market,
+        status: clickedBetDetail.status,
+        isResolved: clickedBetDetail.isResolved,
+        odds: clickedBetDetail.bet_on === "away_team"
+          ? clickedBetDetail.away_team.odds
+          : clickedBetDetail.home_team.odds,  // Correctly bind odds based on bet_on
+        bet_on: clickedBetDetail.bet_on,  // Ensure `bet_on` is set
+        home_team: clickedBetDetail.home_team,  // Set home_team to access its odds later
+        away_team: clickedBetDetail.away_team,  // Set away_team to access its odds later
+      });
+    } else {
+      setBetDetails(null);
+    }
+  }, [betId, betData]);
+
+
+
+  const handleChangeBet = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParentBetData({ ...betData, [e.target.name]: e.target.value });
+  };
+  console.log(betDetailStatus, "bet detail status");
+  useEffect(() => {
+    if (betDetails) {
+      const updatedBetDetails = {
+        ...betDetails,
+        status: betDetailStatus
+      };
+      setBetDetails(updatedBetDetails);
+    }
+  }, [betDetailStatus]);
+
+  useEffect(() => {
+    if (betDetails) {
+      const updatedBetDetails = {
+        ...betDetails,
+        status: customStatus
+      };
+      setBetDetails(updatedBetDetails);
+    }
+  }, [customStatus]);
+
+
+
+  const handleChangeBetDetail = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (betDetails) {
+      const { name, value } = e.target;
+  
+      // Update bet details based on the input field's name
+      let updatedBetDetails;
+  
+      if (name === 'odds') {
+        // Update odds for the team based on `bet_on`
+        updatedBetDetails = {
+          ...betDetails,
+          [betDetails.bet_on]: {
+            ...betDetails[betDetails.bet_on],
+            odds: parseFloat(value),  // Ensure odds are stored as a number
+          },
+        };
+      } else {
+        // Update other fields like market, status, etc.
+        updatedBetDetails = {
+          ...betDetails,
+          [name]: value,  // Dynamically update the field (e.g., market)
+        };
+      }
+  
+      // Ensure the status is also updated
+      updatedBetDetails.status = betDetailStatus === 'custom' ? customStatus : betDetailStatus;
+  
+      setBetDetails(updatedBetDetails);
+    }
+  };
+  const handleBetUpdate = async () => {
+    const payload = {
+      betId: betData._id,
+      betData: parentbetData,
+      betDetails,
+    };
+
+    try {
+      setLoad(true);
+      const response = await updateBet(payload)
+      if (response?.error) {
+        return toast.error(response?.error || "Can't Update Agent");
+      }
+      toast.success(response?.message);
+      onClose();
+      setLoad(false);
+    } catch (error) {
+      console.log(error);
+
+      setLoad(false);
+    }
+  };
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    setBetDetailStatus(newStatus);
+    if (newStatus !== 'custom') {
+      setCustomStatus('');
+    }
+  };
+
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (data?.role !== "player") {
@@ -325,11 +452,10 @@ const Modal: React.FC<ModalProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, status: e.target.value })
                         }
-                        className={`outline-none w-full bg-[#1A1A1A] ${
-                          formData?.status === "active"
+                        className={`outline-none w-full bg-[#1A1A1A] ${formData?.status === "active"
                             ? " text-green-500"
                             : "text-red-500"
-                        } rounded-lg px-3 text-base dark:bg-onDark dark:text-black  text-opacity-40 py-2.5 appearance-none`}
+                          } rounded-lg px-3 text-base dark:bg-onDark dark:text-black  text-opacity-40 py-2.5 appearance-none`}
                         style={{ paddingRight: "30px" }}
                       >
                         <option value="">Select</option>
@@ -450,6 +576,115 @@ const Modal: React.FC<ModalProps> = ({
         </>,
         modalElement
       );
+    case "edit":
+      return ReactDOM.createPortal(
+        <>
+          <div
+            className="fixed z-[100] inset-0 flex items-center justify-center"
+            onClick={onClose}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="px-12 py-14 border-[1px] dark:bg-white dark:border-opacity-70 border-[#464646] w-[90%] md:w-[70%] lg:w-[50%]  xl:w-[30%] rounded-[2.5rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#0E0E0E]"
+              >
+                {/* Input field for Bet */}
+                <div className="text-white pb-1.5">Edit Bet</div>
+                <input
+                  type="text"
+                  name="am"
+                  value={parentbetData?.amount}
+                  onChange={(e) => setParentBetData({ ...parentbetData, amount: e.target.value })}
+                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  placeholder="Enter Bet"
+                />
+
+                {/* Input field for Market */}
+                <div className="text-white pb-1.5">Edit Market</div>
+                <input
+                  type="text"
+                  value={betDetails?.market}
+                  name="market"
+                  onChange={(e)=>handleChangeBetDetail(e)}
+                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  placeholder="Enter Market"
+                />
+
+                {/* Input field for Odds */}
+                <div className="text-white pb-1.5">Edit Odds</div>
+                <input
+                  type="number"
+                  name="odds"
+                  value={
+                    betDetails?.bet_on === "away_team"
+                      ? betDetails?.away_team?.odds
+                      : betDetails?.home_team?.odds
+                  }  // Correctly bind odds value
+                  onChange={handleChangeBetDetail}
+                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  placeholder="Enter Odds"
+                />
+
+                {/* Input field for Amount Won */}
+                <div className="text-white pb-1.5">Edit Amount Won</div>
+                <input
+                  type="number"
+                  value={parentbetData.possibleWinningAmount}
+                  onChange={(e) => setParentBetData({ ...parentbetData, possibleWinningAmount: e.target.value })}
+                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  placeholder="Enter Amount Won"
+                />
+
+                {/* Select field for Status */}
+                <div className="text-white p-1.5">Edit Status</div>
+          <select
+            name="status"
+            onChange={handleStatusChange}
+            className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+            value={betDetailStatus}
+          >
+            <option value="lost">Lost</option>
+            <option value="won">Won</option>
+            <option value="pending">Pending</option>
+            <option value="redeem">Redeem</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="custom">Custom</option>
+            <option value="draw">Draw</option>
+            <option value="failed">Failed</option>
+          </select>
+
+          {/* Conditionally render custom status input */}
+          {betDetailStatus === 'custom' && (
+            <div className="text-white pb-1.5">
+              <label htmlFor="customStatus">Enter Custom Status</label>
+              <input
+                type="text"
+                id="customStatus"
+                value={customStatus}
+                onChange={(e) => setCustomStatus(e.target.value)}
+                className="w-full bg-gray-800 py-2 rounded-md text-white mb-4"
+                placeholder="Enter Custom Status"
+              />
+            </div>
+          )}
+
+                {/* Submit Button */}
+                <div className="flex justify-center pt-5">
+                  <button
+                    onClick={() => handleBetUpdate()}
+                    className="bg-gray-900 px-5 py-2 rounded-lg text-white"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>,
+        modalElement
+      );
+
+
     case "Banner":
       return ReactDOM.createPortal(
         <>
@@ -475,9 +710,8 @@ const Modal: React.FC<ModalProps> = ({
                         <>
                           <label
                             htmlFor="fileUpload"
-                            className={`border-[1px] dark:border-opacity-30 dark:border-[#2826265f] dark:text-[#2826265f] dark:hover:border-black dark:hover:text-black border-[#dfdfdf4a] text-[#dfdfdf4a] hover:text-white transition-all duration-150 hover:border-white rounded-xl w-full text-center py-8 cursor-pointer font-light flex justify-center group ${
-                              bannerData.banner && "!text-white border-white"
-                            }`}
+                            className={`border-[1px] dark:border-opacity-30 dark:border-[#2826265f] dark:text-[#2826265f] dark:hover:border-black dark:hover:text-black border-[#dfdfdf4a] text-[#dfdfdf4a] hover:text-white transition-all duration-150 hover:border-white rounded-xl w-full text-center py-8 cursor-pointer font-light flex justify-center group ${bannerData.banner && "!text-white border-white"
+                              }`}
                           >
                             {!bannerData.banner && (
                               <span className="flex">
@@ -507,7 +741,7 @@ const Modal: React.FC<ModalProps> = ({
                             id="fileUpload"
                             accept="image/*"
                             name="banner"
-                            // ref={fileInputRef}
+                          // ref={fileInputRef}
                           />
                         </>
                       ) : (

@@ -97,6 +97,7 @@ export interface ModalProps {
   data?: any;
   Page?: string;
   Tabs?: string[];
+  betData?:any;
 }
 export interface DeleteUserProps {
   deleteToken: () => void;
