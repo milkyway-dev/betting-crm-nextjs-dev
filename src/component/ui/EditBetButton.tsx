@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import Modal from './Modal'
 
-const ResolveButton = ({ id }: { id: string }) => {
+const EditButton = ({ id, betdata }: { id: string, betdata:any }) => {
   const [open, setOpen] = useState(false)
   const [Id, setId] = useState('')
   const handleClose = () => {
@@ -14,10 +14,10 @@ const ResolveButton = ({ id }: { id: string }) => {
   };
   return (
     <>
-      <button onClick={() => handelOpen(id)} className="bg-black px-6 mx-2 py-[6px]  rounded-xl">Resolve</button>
-      <Modal betId={Id} isOpen={open} Type={'resolve'} onClose={handleClose} />
+      <button onClick={() => handelOpen(id)} className="bg-black px-6 py-[6px]  rounded-xl">Edit</button>
+      <Modal betId={Id} isOpen={open} Type={'edit'} onClose={handleClose} betData={betdata}/>
     </>
   )
 }
 
-export default ResolveButton
+export default EditButton

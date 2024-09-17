@@ -8,6 +8,7 @@ import { getSubordinatesReport } from "@/utils/action";
 import ReportTabs from "../../../ReportTabs";
 import Modal from "@/component/ui/Modal";
 import ResolveButton from "@/component/ui/ResolveButton";
+import EditButton from "@/component/ui/EditBetButton";
 
 async function getPlayerBettings(username: string) {
   const token = await getCookie();
@@ -222,9 +223,9 @@ ${data.status === "redeem"
                             {data.status}
                           </td>
                           <td className="text-white">
-                            {!data.isResolved && data.status === "failed" && (
+                         
                               <ResolveButton id={data._id + ""} />
-                            )}
+                              <EditButton id={data._id + ""} betdata={item}  />
                           </td>
                         </tr>
                       ))
