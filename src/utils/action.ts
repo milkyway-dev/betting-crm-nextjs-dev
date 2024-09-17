@@ -688,3 +688,36 @@ export async function getBetsAndTransactions(startTime: string, endTime: string,
       return { error: 'An error occurred while fetching bets and transactions.' };
   }
 }
+
+
+export async function updateBet(payload:any){
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/bets`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+          "Content-Type": "application/json",
+          "Cookie": `userToken=${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+  if (!response.ok) {
+      const error = await response.json();
+      console.log(error);
+      
+      return { error: error.message };
+  }
+
+  const data = await response.json();
+  console.log(data);
+  
+  return data;
+
+} catch (error) {
+  return { error: 'An error occurred while fetching bets and transactions.' };
+}finally {
+  revalidatePath("/");
+}
+}
