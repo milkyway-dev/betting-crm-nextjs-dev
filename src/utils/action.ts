@@ -3,11 +3,10 @@ import { revalidatePath } from "next/cache";
 import { config } from "./config";
 import Cookies from "js-cookie";
 import { getCookie, getCurrentUser } from "./utils";
-import { BannerData } from "./Types";
 
 export const loginUser = async (data: any) => {
   try {
-    const response = await fetch(`${config.server}/api/auth/login`, {
+    const response = await fetch(`${config.server}/api/auth/login?origin=crm`, {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
@@ -404,7 +403,7 @@ export async function getUserNotifications() {
   const token = await getCookie();
   try {
     const response = await fetch(
-      `${config.server}/api/notification?viewedStuatus=${true}`,
+      `${config.server}/api/notifications?viewedStuatus=${true}`,
       {
         method: "GET",
         credentials: "include",
@@ -439,7 +438,7 @@ export const setViewedNotification = async (notificationId: any) => {
 
   try {
     const response = await fetch(
-      `${config.server}/api/notification?notificationId=${notificationId}`,
+      `${config.server}/api/notifications?notificationId=${notificationId}`,
       {
         method: "PUT",
         credentials: "include",
