@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
-import { UpdateNotification } from "@/redux/ReduxSlice";
+import { NewNotification, UpdateNotification } from "@/redux/ReduxSlice";
 import { getUserNotifications, setViewedNotification } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
@@ -18,7 +18,9 @@ const Notifications = () => {
   );
 
   const [notifications, setNotifications] = useState<any[]>([]);
-
+  useEffect(() => {
+    dispatch(NewNotification(notifications));
+  },[notifications])
   useEffect(() => {
     // Create an EventSource connection to the backend SSE endpoint
     const eventSource = new EventSource(
@@ -38,6 +40,7 @@ const Notifications = () => {
         )
       ) {
         //add notification on top of the list
+        
         setNotifications((prev) => [newNotification, ...prev]);
       }
     };
@@ -54,7 +57,6 @@ const Notifications = () => {
 
   const getNotification = async () => {
     const data: any = await getUserNotifications();
-    console.log(data, "data");
     setNotifications(data);
   };
   useEffect(() => {

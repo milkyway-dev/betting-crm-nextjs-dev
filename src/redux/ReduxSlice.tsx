@@ -9,7 +9,8 @@ export const reduxSlice = createSlice({
     },
     openNotification:false,
     openHeader: false,
-    updateCredit:null
+    updateCredit: null,
+    AllNotification:[] 
   },
   reducers: {
     UpdateName: (state, action) => {
@@ -23,6 +24,9 @@ export const reduxSlice = createSlice({
     },
     UpdateCredit: (state,action) => {
       state.updateCredit=action.payload
+    },
+    NewNotification: (state, action) => {
+      state.AllNotification=action.payload
     }
   },
 });
@@ -31,6 +35,7 @@ export const {
   UpdateName,
   UpdateNotification,
   UpdateHeader,
-  UpdateCredit
+  UpdateCredit,
+  NewNotification
 } = reduxSlice.actions;
 export default reduxSlice.reducer;
