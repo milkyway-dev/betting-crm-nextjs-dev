@@ -16,8 +16,10 @@ export default function RootLayout({
     <>
       <div className="md:flex  dark:bg-white bg-bg_dashboard">
         <Sidebar />
-        {children}
-        <div className="h-screen">
+        <div className="h-screen flex overflow-y-scroll w-full">
+          <div className="h-screen flex overflow-y-scroll w-full">
+            {children}
+          </div>
           <Notifications />
         </div>
       </div>
