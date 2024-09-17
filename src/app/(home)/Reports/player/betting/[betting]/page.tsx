@@ -8,6 +8,15 @@ import { getSubordinatesReport } from "@/utils/action";
 import ReportTabs from "../../../ReportTabs";
 import Modal from "@/component/ui/Modal";
 import ResolveButton from "@/component/ui/ResolveButton";
+import EditButton from "@/component/ui/EditBetButton";
+
+import Sport from "@/component/svg/Sport";
+import Bet from "@/component/svg/Bet";
+import Market from "@/component/svg/Market";
+import Odds from "@/component/svg/odds";
+import Amount from "@/component/svg/Amount";
+import Status from "@/component/svg/Status";
+import Action from "@/component/svg/Action";
 
 async function getPlayerBettings(username: string) {
   const token = await getCookie();
@@ -53,13 +62,13 @@ const page = async ({ params }: any) => {
   ];
 
   const headers = [
-    { text: "sport" },
-    { text: "bet" },
-    { text: "market" },
-    { text: "odds" },
-    { text: "amount won" },
-    { text: "status" },
-    { text: "action" },
+    { icon: <Sport />, text: "sport" },
+    { icon: <Bet />, text: "Stake" },
+    { icon: <Market />, text: "Category" },
+    { icon: <Odds />, text: "odds" },
+    { icon: <Amount />, text: "Possible Winning" },
+    { icon: <Status />, text: "status" },
+    { icon: <Action />, text: "action" },
   ];
 
   return (
@@ -73,18 +82,18 @@ const page = async ({ params }: any) => {
               <SearchBar />
             </div>
           </div>
-          <div className="h-[calc(100%-13vh)] hideScrollBar border-[1px] border-[#484848] rounded-2xl overflow-y-scroll">
-            <table className="w-[750px] md:w-[calc(100%-2rem)] mx-auto h-auto">
+          <div className="h-[calc(100%-13vh)] hideScrollBar border-[1px] border-white dark:border-black dark:border-opacity-10 bg-[#0E0F0F] dark:bg-white border-opacity-10 rounded-2xl overflow-y-scroll">
+            <table className="w-[850px] md:w-[calc(100%-2rem)] mx-auto h-auto">
               <thead>
                 <tr className="text-xl">
                   {headers.map((item, index) => (
                     <th
                       key={index}
-                      className="font-extralight uppercase py-5 border-b-[1px] border-b-[#484848]"
+                      className="font-extralight uppercase py-5 border-b-[1px] border-white dark:border-black dark:border-opacity-20 border-opacity-20"
                     >
                       <div className="flex w-full items-center justify-center gap-2">
-                        {/* <span>{item.icon}</span> */}
-                        <span className="text-sm md:text-base text-slate-400">
+                        <span>{item.icon}</span>
+                        <span className="text-sm md:text-base dark:text-black dark:font-light text-white">
                           {item.text}
                         </span>
                       </div>
@@ -98,106 +107,54 @@ const page = async ({ params }: any) => {
                   data.map((item: any) =>
                     item.betType === "single" ? (
                       item.data.map((data: any, dataIndex: any) => (
+
                         <tr
                           key={`${item._id}-${dataIndex}-single`}
-                          className={`text-center font-extralight  border-[#414141] 
-${data.status === "redeem"
-                              ? "bg-[#121216] dark:bg-slate-50"
-                              : " bg-gradient-to-b from-[#1c1a2176] dark:from-slate-100 to-[#0d0c156d] dark:to-slate-200"
-                            } border-t-[1px]  `}
-                        >
+                          className="text-center font-extralight hover:bg-black dark:hover:bg-gray-100 border-white border-opacity-10">
                           <td className="w-[20%] py-2 md:py-4">
                             <div className="w-full flex flex-col gap-1 px-3">
                               <span
-                                className={`${data.status === "redeem"
-                                  ? "text-[#55545a]"
-                                  : "text-white dark:text-black"
-                                  } font-medium  text-left text-sm md:text-lg`}
+                                className={`text-white font-medium dark:text-black dark:text-opacity-85 text-left text-sm md:text-lg`}
                               >
                                 {data.sport_title}
                               </span>
                               <span className="text-[9px]  md:text-[13px] text-left">
                                 <span
-                                  className={
-                                    data.bet_on === "home_team"
-                                      ? `${data.status === "redeem"
-                                        ? "text-white "
-                                        : "text-[#FFC400]"
-                                      }`
-                                      : `${data.status === "redeem"
-                                        ? "text-slate-400"
-                                        : "text-white dark:text-black"
-                                      }`
-                                  }
-                                >
+                                  className={data.bet_on === "home_team" ? "text-[#FFC400]" : "dark:text-black text-white"}>
                                   {data.home_team.name}
                                 </span>{" "}
-                                <span
-                                  className={
-                                    data.status === "redeem"
-                                      ? "text-[#424149]"
-                                      : "text-white dark:text-black"
-                                  }
-                                >
+                                <span className="text-white dark:text-black">
                                   v/s
                                 </span>{" "}
                                 <span
-                                  className={
-                                    data.bet_on === "away_team"
-                                      ? `${data.status === "redeem"
-                                        ? "text-white"
-                                        : "text-[#FFC400]"
-                                      }`
-                                      : `${data.status === "redeem"
-                                        ? "text-[#424149]"
-                                        : "text-white dark:text-black"
-                                      }`
-                                  }
-                                >
+                                  className={data.bet_on === "away_team" ? "text-[#FFC400]" : "dark:text-black text-white"}>
                                   {data.away_team.name}
                                 </span>
                               </span>
                               <span
-                                className={`text-[9px] md:text-[11px] p-1  border-[1px] ${data.status === "redeem"
-                                  ? "bg-[#17161f] text-[#56555d] border-[#353342]"
-                                  : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
-                                  }  rounded-lg w-fit`}
+                                className={`text-[9px] md:text-[11px] px-3 py-1.5  border-[1px] border-white dark:border-black dark:border-opacity-30 dark:text-black border-opacity-30 text-white text-opacity-60 rounded-lg w-fit`}
                               >
-                                {data.commence_time}
+                                {new Date(data.commence_time).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} At <span className="text-right">{new Date(data.commence_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
                               </span>
                             </div>
                           </td>
-                          <td
-                            className={`${data.status === "redeem"
-                              ? "text-white"
-                              : "text-white dark:text-black"
-                              } text-sm md:text-lg`}
-                          >
+                          <td className={`text-white dark:text-black text-sm md:text-lg`}>
                             $ {item.amount}
                           </td>
                           <td
-                            className={`uppercase text-sm md:text-lg ${data.status === "redeem"
-                              ? "text-[#555458]"
-                              : "text-white dark:text-black"
-                              }`}
+                            className="uppercase text-sm md:text-lg dark:text-black text-white"
                           >
                             {data.market}
                           </td>
                           <td className="text-sm md:text-lg">
                             <div className="flex flex-col gap-2">
                               <span
-                                className={`${data.status === "redeem"
-                                  ? "text-[#403f4b]"
-                                  : "text-gray-400"
-                                  } text-sm`}
+                                className="text-sm dark:text-black text-white"
                               >
                                 {data.oddsFormat}
                               </span>
                               <span
-                                className={`${data.status === "redeem"
-                                  ? "text-[#555458]"
-                                  : "text-white dark:text-black"
-                                  }`}
+                                className="text-white dark:text-black"
                               >
                                 {data.bet_on === "away_team"
                                   ? data.away_team.odds
@@ -206,127 +163,83 @@ ${data.status === "redeem"
                             </div>
                           </td>
                           <td
-                            className={`${data.status === "redeem"
-                              ? "text-[#555458]"
-                              : "text-white dark:text-black"
-                              } text-sm md:text-lg`}
+                            className="text-sm text-white dark:text-black md:text-lg"
                           >
                             {item.possibleWinningAmount.toFixed(3)}
                           </td>
                           <td
-                            className={`text-sm ${data.status === "redeem"
+                            className={`text-sm font-semibold ${data.status === "lost"
                               ? "text-gray-500"
-                              : "text-[#FF6A00]"
+                              : data.status === "won" ? "text-green-500" : data.status === "pending" ? 'text-yellow-500' : 'text-red-500'
                               } md:text-lg capitalize `}
                           >
                             {data.status}
                           </td>
                           <td className="text-white">
-                            {!data.isResolved && data.status === "failed" && (
+                         
                               <ResolveButton id={data._id + ""} />
-                            )}
+                              <EditButton id={data._id + ""} betdata={item}  />
                           </td>
                         </tr>
+
                       ))
                     ) : (
                       <>
                         {item.data.map((data: any, dataIndex: any) => (
                           <tr
                             key={`${item._id}-${dataIndex}-combo`}
-                            className={`${dataIndex === 0 ? "border-t-[1px]" : ""
-                              } text-center font-extralight border-[#f3aa3589] border-x-[1px] border-b-[1px] ${dataIndex === item.data.length - 1
+                            className={`${dataIndex === 0 ? "border-t-[1px] border-[#f3aa3589]" : ""
+                              } text-center font-extralight border-[#f3aa3589] border-[1px] ${dataIndex === item.data.length - 1
                                 ? "border-b-[#d8d2d2a3]"
                                 : "border-b-[#414141]"
-                              }  hover:bg-[#8585851A] ${data.status === "redeem"
-                                ? "bg-[#121216]"
-                                : " bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d]"
-                              }`}
+                              }  hover:bg-black dark:hover:bg-gray-100`}
                           >
                             <td className="w-[20%] py-4">
                               <div className="w-full flex flex-col gap-1 px-3">
                                 <span
-                                  className={`${data.status === "redeem"
-                                    ? "text-[#55545a]"
-                                    : "text-white dark:text-black"
-                                    } font-medium text-left text-sm md:text-lg`}
+                                  className={`text-white
+                                  dark:text-black dark:text-opacity-85
+                                  font-medium text-left text-sm md:text-lg`}
                                 >
                                   {data.sport_title}
                                 </span>
-                                <span className="text-[10px] md:text-[13px] text-left">
+                                <span className="text-[9px]  md:text-[13px] text-left">
                                   <span
-                                    className={
-                                      data.bet_on === "home_team"
-                                        ? `${data.status === "redeem"
-                                          ? "text-[#57555f]"
-                                          : "text-[#FFC400]"
-                                        }`
-                                        : `${data.status === "redeem"
-                                          ? "text-[#424149]"
-                                          : "text-white dark:text-black"
-                                        }`
-                                    }
-                                  >
+                                    className={data.bet_on === "home_team" ? "text-[#FFC400]" : "dark:text-black text-white"}>
                                     {data.home_team.name}
                                   </span>{" "}
-                                  <span
-                                    className={
-                                      data.status === "redeem"
-                                        ? "text-[#424149]"
-                                        : "text-white dark:text-black"
-                                    }
-                                  >
+                                  <span className="dark:text-black text-white">
                                     v/s
                                   </span>{" "}
                                   <span
-                                    className={
-                                      data.bet_on === "away_team"
-                                        ? `${data.status === "redeem"
-                                          ? "text-[#57555f]"
-                                          : "text-[#FFC400]"
-                                        }`
-                                        : `${data.status === "redeem"
-                                          ? "text-[#424149]"
-                                          : "text-white dark:text-black"
-                                        }`
-                                    }
-                                  >
+                                    className={data.bet_on === "away_team" ? "text-[#FFC400]" : "dark:text-black text-white"}>
                                     {data.away_team.name}
                                   </span>
                                 </span>
                                 <span
-                                  className={`text-[9px] md:text-[11px] p-1 ${data.status === "redeem"
-                                    ? "bg-[#17161f] text-[#56555d] border-[#353342]"
-                                    : "bg-[#303030] text-[#A1A1A1] border-[#414141] "
-                                    } border-[1px]  rounded-lg w-fit`}
-                                >
-                                  {data.commence_time}
-                                </span>
+                                className={`text-[9px] md:text-[11px] px-3 py-1.5  border-[1px] border-white dark:border-black dark:border-opacity-30 dark:text-black border-opacity-30 text-white text-opacity-60 rounded-lg w-fit`}
+                              >
+                                {new Date(data.commence_time).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })} At <span className="text-right">{new Date(data.commence_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                              </span>
                               </div>
                             </td>
                             <td className="text-sm md:text-lg text-gray-500">
                               --/--
                             </td>
                             <td
-                              className={`uppercase text-sm md:text-lg ${data.status === "redeem" ? "text-[#555458]" : "text-white"
-                                }`}
+                              className={`uppercase text-sm md:text-lg dark:text-black text-white`}
                             >
                               {data.market}
                             </td>
                             <td className="text-sm md:text-lg">
                               <div className="flex flex-col gap-2">
                                 <span
-                                  className={`text-sm ${data.status === "redeem"
-                                    ? "text-[#403f4b]"
-                                    : "text-gray-400"
-                                    }`}
+                                  className={`text-sm text-white dark:text-black`}
                                 >
                                   {data.oddsFormat}
                                 </span>
                                 <span
-                                  className={`${data.status === "redeem"
-                                    ? "text-[#555458]"
-                                    : "text-white dark:text-black"
-                                    }`}
+                                  className={`text-white dark:text-black`}
                                 >
                                   {data.bet_on === "away_team"
                                     ? data.away_team.odds
@@ -338,10 +251,10 @@ ${data.status === "redeem"
                               --/--
                             </td>
                             <td
-                              className={`text-sm ${data.status === "redeem"
+                              className={`text-sm font-semibold ${data.status === "lost"
                                 ? "text-gray-500"
-                                : "text-[#FF6A00]"
-                                }  md:text-lg capitalize `}
+                                : data.status === "won" ? "text-green-500 shadow-md" : data.status === "pending" ? 'text-yellow-500' : 'text-red-500'
+                                } md:text-lg capitalize `}
                             >
                               {data.status}
                             </td>
@@ -351,34 +264,31 @@ ${data.status === "redeem"
                               )}
                             </td>
                           </tr>
+
                         ))}
-                        <tr className="text-center font-extralight bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d] border-[1px] border-[#f3aa357c]">
+                        <tr className="text-center font-extralight dark:bg-gradient-to-b dark:from-gray-100 dark:to-gray-100 bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d] border-[1px] border-[#f3aa357c]">
                           <td className="py-3"></td>
                           <td
-                            className={`py-3 text-lf ${item.status === "redeem"
-                              ? "text-[#55545a]"
-                              : "text-white dark:text-black"
-                              }`}
+                            className={`py-3 text-lf text-white dark:text-black
+                              `}
                           >
                             $ {item.amount}
                           </td>
                           <td className="py-3"></td>
                           <td className="py-3"></td>
                           <td
-                            className={`py-3 text-lf ${item.status === "redeem"
-                              ? "text-[#55545a]"
-                              : "text-white dark:text-black"
-                              }`}
+                            className={`py-3 text-lf text-white dark:text-black
+                              `}
                           >
                             {item.possibleWinningAmount.toFixed(3)}
                           </td>
                           <td
-                            className={`text-sm ${item.status === "redeem"
+                            className={`text-sm font-semibold ${data.status === "lost"
                               ? "text-gray-500"
-                              : "text-[#FF6A00]"
-                              } py-3 md:text-lg capitalize `}
+                              : data.status === "won" ? "text-green-500 shadow-md" : data.status === "pending" ? 'text-yellow-500' : 'text-red-500'
+                              } md:text-lg capitalize `}
                           >
-                            {item.status}
+                            {data.status}
                           </td>
                           <td className="text-white">
                           </td>

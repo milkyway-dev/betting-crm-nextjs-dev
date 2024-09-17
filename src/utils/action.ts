@@ -3,11 +3,10 @@ import { revalidatePath } from "next/cache";
 import { config } from "./config";
 import Cookies from "js-cookie";
 import { getCookie, getCurrentUser } from "./utils";
-import { BannerData } from "./Types";
 
 export const loginUser = async (data: any) => {
   try {
-    const response = await fetch(`${config.server}/api/auth/login`, {
+    const response = await fetch(`${config.server}/api/auth/login?origin=crm`, {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
@@ -404,7 +403,7 @@ export async function getUserNotifications() {
   const token = await getCookie();
   try {
     const response = await fetch(
-      `${config.server}/api/notification?viewedStuatus=${true}`,
+      `${config.server}/api/notifications?viewedStuatus=${true}`,
       {
         method: "GET",
         credentials: "include",
@@ -439,7 +438,7 @@ export const setViewedNotification = async (notificationId: any) => {
 
   try {
     const response = await fetch(
-      `${config.server}/api/notification?notificationId=${notificationId}`,
+      `${config.server}/api/notifications?notificationId=${notificationId}`,
       {
         method: "PUT",
         credentials: "include",
@@ -688,4 +687,37 @@ export async function getBetsAndTransactions(startTime: string, endTime: string,
   } catch (error) {
       return { error: 'An error occurred while fetching bets and transactions.' };
   }
+}
+
+
+export async function updateBet(payload:any){
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/bets`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+          "Content-Type": "application/json",
+          "Cookie": `userToken=${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+  if (!response.ok) {
+      const error = await response.json();
+      console.log(error);
+      
+      return { error: error.message };
+  }
+
+  const data = await response.json();
+  console.log(data);
+  
+  return data;
+
+} catch (error) {
+  return { error: 'An error occurred while fetching bets and transactions.' };
+}finally {
+  revalidatePath("/");
+}
 }
