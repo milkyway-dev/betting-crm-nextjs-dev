@@ -22,7 +22,7 @@ const Notifications = () => {
   useEffect(() => {
     // Create an EventSource connection to the backend SSE endpoint
     const eventSource = new EventSource(
-      `${config.server}/api/notification/agent`,
+      `${config.server}/api/notifications/sse`,
       {
         withCredentials: true,
       }
