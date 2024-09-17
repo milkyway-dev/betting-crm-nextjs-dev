@@ -150,7 +150,7 @@ const Sidebar = ({ params }: any) => {
                     className="flex flex-col items-center justify-center font-light dark:text-black text-white"
                   >
                     <Link
-                      href="/banners"
+                      href="/banner"
                       className={`rounded-xl uppercase ${
                         router === "/banner"
                           ? "border-white border border-opacity-30 dark:border-gray-600 dark:border-[1.5px] dark:bg-onDark bg-light_black"

@@ -23,7 +23,7 @@ const UploadBanner: React.FC<any> = ({ refresh, setRefresh }) => {
       <div className="w-full flex justify-end">
         <button
           onClick={() => handelOpen(true, "Banner")}
-          className="text-white dark:text-black  dark:bg-[#dee1e3] bg-light_black px-6 rounded-lg py-[7px]"
+          className="text-white dark:text-black  dark:bg-[#dee1e3] bg-light_black px-2 md:px-6 rounded-lg py-1 md:py-[7px]"
         >
           Add Banner +
         </button>

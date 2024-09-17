@@ -55,6 +55,8 @@ const page = async ({ params }: any) => {
   const tabs = [
     { name: "Coins", route: `/Reports/player/coins/${params?.betting}` },
     { name: "Betting", route: `/Reports/player/betting/${params?.betting}` },
+    { name: 'Activity', route:`/Reports/player/activity/${params?.coin}`}
+
   ];
 
   const headers = [
