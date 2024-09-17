@@ -123,6 +123,7 @@ const Modal: React.FC<ModalProps> = ({
   
       if (name === 'odds') {
         // Update odds for the team based on `bet_on`
+
         updatedBetDetails = {
           ...betDetails,
           [betDetails.bet_on]: {
@@ -374,6 +375,62 @@ const Modal: React.FC<ModalProps> = ({
     });
   };
 
+  const calculatePossibleWinningAmount = (amount:any, odds:any) => {
+    // Example calculation logic. Adjust this according to your requirements.
+    console.log(amount, odds,"dydsfgtf");
+    const updatedBet = {
+      ...parentbetData,
+      possibleWinningAmount:amount*odds
+    };    
+    setParentBetData(updatedBet)
+    return amount * odds;
+  };
+
+
+  const handleAmountChange = (e: any) => {
+    const newAmount = parseFloat(e.target.value);
+  
+    setParentBetData((prev: any) => {
+
+      const newPossibleWinningAmount = calculatePossibleWinningAmount(
+        newAmount,
+        betDetails[betDetails.bet_on]?.odds || 0
+      );
+      
+      return {
+        ...prev,
+        amount: newAmount,
+        possibleWinningAmount: newPossibleWinningAmount,
+      };
+    });
+  };
+  
+
+
+const handleOddsChange = (e:any) => {
+  const newOdds = parseFloat(e.target.value);
+  console.log(newOdds);
+  
+  setBetDetails((prev:any) => {
+    const updatedBetDetails = {
+      ...prev,
+      [prev.bet_on]: {
+        ...prev[prev.bet_on],
+        odds: newOdds,  // Update the odds for the specified team
+      },
+    };
+
+    // Recalculate possibleWinningAmount based on updated odds
+    return {
+      ...updatedBetDetails,
+      possibleWinningAmount: calculatePossibleWinningAmount(parentbetData.amount, newOdds),
+    };
+  });
+};
+
+  
+  
+
   switch (Type) {
     case "Delete":
       return ReactDOM.createPortal(
@@ -594,7 +651,9 @@ const Modal: React.FC<ModalProps> = ({
                   type="text"
                   name="am"
                   value={parentbetData?.amount}
-                  onChange={(e) => setParentBetData({ ...parentbetData, amount: e.target.value })}
+                  onChange={(e) => {
+                    handleAmountChange(e)
+                    setParentBetData({ ...parentbetData, amount: e.target.value })}}
                   className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
                   placeholder="Enter Bet"
                 />
@@ -620,7 +679,9 @@ const Modal: React.FC<ModalProps> = ({
                       ? betDetails?.away_team?.odds
                       : betDetails?.home_team?.odds
                   }  // Correctly bind odds value
-                  onChange={handleChangeBetDetail}
+                  onChange={(e)=>{handleChangeBetDetail
+                    handleOddsChange(e)}
+                  }
                   className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
                   placeholder="Enter Odds"
                 />
@@ -629,6 +690,7 @@ const Modal: React.FC<ModalProps> = ({
                 <div className="text-white pb-1.5">Edit Amount Won</div>
                 <input
                   type="number"
+                  disabled
                   value={parentbetData.possibleWinningAmount}
                   onChange={(e) => setParentBetData({ ...parentbetData, possibleWinningAmount: e.target.value })}
                   className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
