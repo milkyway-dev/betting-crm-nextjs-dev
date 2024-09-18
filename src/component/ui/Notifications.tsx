@@ -9,6 +9,8 @@ import Message from "../svg/Message";
 import Info from "../svg/Info";
 import { config } from "@/utils/config";
 import Link from "next/link";
+import { getCookie } from "@/utils/utils";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -19,34 +21,59 @@ const Notifications = () => {
 
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  useEffect(() => {
-    // Create an EventSource connection to the backend SSE endpoint
-    const eventSource = new EventSource(
+  const getLiveNotification = async (onmessage: any, onerror: any) => {
+    const token = await getCookie();
+
+    const eventSource = new EventSourcePolyfill(
       `${config.server}/api/notifications/sse`,
       {
-        withCredentials: true,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }
     );
 
-    // Listen for new notifications
-    eventSource.onmessage = (event) => {
-      const newNotification = JSON.parse(event.data);
-      //check if the new notification is not already here
-      if (
-        !notifications.some(
-          (notification) => notification._id === newNotification._id
-        )
-      ) {
-        //add notification on top of the list
-        setNotifications((prev) => [newNotification, ...prev]);
+    eventSource.onmessage = (event: any) => {
+      const data = JSON.parse(event.data);
+      onmessage(data);
+    };
+
+    eventSource.onerror = (err: any) => {
+      onerror(err);
+    };
+
+    return eventSource;
+  };
+
+  useEffect(() => {
+    const onmessage = (data: any) => {
+      setNotifications((prev) => {
+        if (!prev.some((notification) => notification._id === data._id)) {
+          return [data, ...prev];
+        }
+        return prev;
+      });
+    };
+
+    const onerror = async (err: any) => {
+      if (err.status === 401) {
+        console.error("Unauthorized access - re-establishing connection");
       }
     };
 
+    let eventSource: any;
+    getLiveNotification(onmessage, onerror).then((source) => {
+      eventSource = source;
+    });
+
     // Clean up the connection when the component unmounts
     return () => {
-      eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
     };
   }, []);
+
   const handleViewNotification = async (Id: any) => {
     const data: any = await setViewedNotification(Id);
     getNotification();
@@ -54,7 +81,6 @@ const Notifications = () => {
 
   const getNotification = async () => {
     const data: any = await getUserNotifications();
-    console.log(data, "data");
     setNotifications(data);
   };
   useEffect(() => {

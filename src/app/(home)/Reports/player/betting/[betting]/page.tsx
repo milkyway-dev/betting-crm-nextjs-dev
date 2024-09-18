@@ -32,7 +32,6 @@ async function getPlayerBettings(username: string) {
     const data = await response.json();
     const bets = data;
 
-    // console.log("BETS : ", bets);
 
     return bets;
   } catch (error) {
