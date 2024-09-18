@@ -15,7 +15,7 @@ import {
 import HamBurger from "../svg/HamBurger";
 import { useRouter } from "next/navigation";
 import Infinite from "../svg/Infinite";
-import { getCredits, getUserNotifications } from "@/utils/action";
+import { getCredits} from "@/utils/action";
 import { UpdateCreditInterface } from "@/utils/Types";
 import toast from "react-hot-toast";
 import { useAppSelector } from "@/utils/hooks";

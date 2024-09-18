@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
-import { NewNotification, UpdateNotification } from "@/redux/ReduxSlice";
+import { NewNotification, UpdateNotification, setBetId } from "@/redux/ReduxSlice";
 import { getUserNotifications, setViewedNotification } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
@@ -50,9 +50,10 @@ const Notifications = () => {
       eventSource.close();
     };
   }, []);
-  const handleViewNotification = async (Id: any) => {
+  const handleViewNotification = async (Id: any,betId:any) => {
     const data: any = await setViewedNotification(Id);
     getNotification();
+     dispatch(setBetId(betId))
   };
 
   const getNotification = async () => {
@@ -85,21 +86,16 @@ const Notifications = () => {
         Notification
       </div>
       <div className="flex flex-col gap-2 py-4 px-2 overflow-y-scroll h-[90vh]">
-        {/* //WARN: remove this */}
-        {/* <p className="text-white text-[.8rem] md:text-lg"> */}
-        {/*   {JSON.stringify(notifications, null, 2)} */}
-        {/* </p> */}
-
         {notifications?.map((item, index) => (
           <Link
             key={index}
-            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
+            href={`/Reports/player/betting/${item.data.player}`}
           >
             <div
               className={`p-3 shadow-sm w-[400px] cursor-pointer ${
-                item.viewed ? "bg-gray-600" : "bg-black"
-              } shadow-black `}
-              onClick={() => handleViewNotification(item._id)}
+                item.viewed ? "bg-gray-600 dark:bg-gray-300" : " bg-black dark:bg-gray-200"
+              } shadow-black dark:shadow-lg`}
+              onClick={() => handleViewNotification(item._id,item.data.betId)}
             >
               <div className="flex items-center space-x-3">
                 {item.type === "alert" ? (
@@ -109,11 +105,11 @@ const Notifications = () => {
                 ) : (
                   <Info />
                 )}
-                <div className="text-white text-opacity-70 tracking-wide font-light text-sm">
+                <div className="dark:text-black dark:text-opacity-70 text-white text-opacity-70 tracking-wide font-light text-sm">
                   {item?.data.message}
                 </div>
               </div>
-              <div className="text-[.6rem] text-right text-white text-opacity-70 pt-1">
+              <div className="text-[.6rem] text-right dark:text-black dark:text-opacity-70 text-white text-opacity-70 pt-1">
                 {new Date(item?.createdAt).toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "short",
