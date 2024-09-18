@@ -159,11 +159,7 @@ const Playerbets = ({ headers, data }: any) => {
                     key={`${item._id}-${dataIndex}-combo`}
                     className={`${
                       dataIndex === 0 ? "border-t-[1px] border-[#f3aa3589]" : ""
-                    } text-center font-extralight border-[#f3aa3589] border-[1px] ${
-                      dataIndex === item.data.length - 1
-                        ? "border-b-[#d8d2d2a3]"
-                        : "border-b-[#414141]"
-                    }  hover:bg-black dark:hover:bg-gray-100`}
+                    } text-center font-extralight border-[#f3aa3589] border-[1px] hover:bg-black dark:hover:bg-gray-100`}
                   >
                     <td className="w-[20%] py-4">
                       <div className="w-full flex flex-col gap-1 px-3">

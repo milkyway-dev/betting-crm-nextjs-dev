@@ -25,7 +25,11 @@ const Header = ({ Back }: any) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
-  const allNotifications = useAppSelector((state: any) => state.globlestate.AllNotification).filter((item:any)=>item.viewed===false)?.length
+  const [count, setCount] = useState(0)
+  const allNotifications = useAppSelector((state: any) => state.globlestate.AllNotification).filter((item: any) => item.viewed === false)?.length
+  useEffect(() => {
+    setCount(allNotifications)
+  },[allNotifications])
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -99,9 +103,9 @@ const Header = ({ Back }: any) => {
           onClick={() => dispatch(UpdateNotification(true))}
         >
           <Notification />
-          { allNotifications>= 0 && (
+          { count>= 0 && (
             <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              {allNotifications}
+              {count}
             </span>
           )}
         </button>
