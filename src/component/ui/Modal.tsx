@@ -671,7 +671,7 @@ const Modal: React.FC<ModalProps> = ({
                   value={parentbetData?.amount}
                   onChange={handleAmountChange} // Use the handleAmountChange function to update state
 
-                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  className="w-full bg-gray-800 dark:bg-gray-200 dark:text-black p-2 rounded-md text-white mb-4"
                   placeholder="Enter Bet"
                 />
 
@@ -682,7 +682,7 @@ const Modal: React.FC<ModalProps> = ({
                   value={betDetails?.market}
                   name="market"
                   onChange={(e) => handleChangeBetDetail(e)}
-                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  className="w-full bg-gray-800 p-2 rounded-md dark:bg-gray-200 dark:text-black text-white mb-4"
                   placeholder="Enter Market"
                 />
 
@@ -701,7 +701,7 @@ const Modal: React.FC<ModalProps> = ({
                     handleOddsChange(e)
                   }
                   }
-                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  className="w-full bg-gray-800 p-2 dark:bg-gray-200 dark:text-black rounded-md text-white mb-4"
                   placeholder="Enter Odds"
                 />
 
@@ -712,7 +712,7 @@ const Modal: React.FC<ModalProps> = ({
                   disabled
                   value={parentbetData.possibleWinningAmount}
                   onChange={(e) => setParentBetData({ ...parentbetData, possibleWinningAmount: e.target.value })}
-                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  className="w-full bg-gray-800 p-2 dark:bg-gray-200 dark:text-black rounded-md text-white mb-4"
                   placeholder="Enter Amount Won"
                 />
 
@@ -721,7 +721,7 @@ const Modal: React.FC<ModalProps> = ({
                 <select
                   name="status"
                   onChange={handleStatusChange}
-                  className="w-full bg-gray-800 p-2 rounded-md text-white mb-4"
+                  className="w-full bg-gray-800 p-2 dark:bg-gray-200 dark:text-black rounded-md text-white mb-4"
                   value={betDetailStatus}
                 >
                   <option value="lost">Lost</option>
@@ -753,7 +753,7 @@ const Modal: React.FC<ModalProps> = ({
                 <div className="flex justify-center pt-5">
                   <button
                     onClick={() => handleBetUpdate()}
-                    className="bg-gray-900 px-5 py-2 rounded-lg text-white"
+                    className="bg-gray-900 px-5 py-2 dark:bg-gray-200 dark:text-black rounded-lg text-white"
                   >
                     Submit
                   </button>
