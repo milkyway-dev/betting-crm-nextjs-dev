@@ -2,13 +2,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Close from "../svg/Close";
-import { NewNotification, UpdateNotification } from "@/redux/ReduxSlice";
+import { NewNotification, UpdateNotification, setBetId } from "@/redux/ReduxSlice";
 import { getUserNotifications, setViewedNotification } from "@/utils/action";
 import Alert from "../svg/Alert";
 import Message from "../svg/Message";
 import Info from "../svg/Info";
 import { config } from "@/utils/config";
 import Link from "next/link";
+import { getCookie } from "@/utils/utils";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -18,41 +20,67 @@ const Notifications = () => {
   );
 
   const [notifications, setNotifications] = useState<any[]>([]);
-  useEffect(() => {
+
+   useEffect(() => {
     dispatch(NewNotification(notifications));
   },[notifications])
-  useEffect(() => {
-    // Create an EventSource connection to the backend SSE endpoint
-    const eventSource = new EventSource(
+  
+  const getLiveNotification = async (onmessage: any, onerror: any) => {
+    const token = await getCookie();
+
+    const eventSource = new EventSourcePolyfill(
       `${config.server}/api/notifications/sse`,
       {
-        withCredentials: true,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }
     );
 
-    // Listen for new notifications
-    eventSource.onmessage = (event) => {
-      const newNotification = JSON.parse(event.data);
-      //check if the new notification is not already here
-      if (
-        !notifications.some(
-          (notification) => notification._id === newNotification._id
-        )
-      ) {
-        //add notification on top of the list
-        
-        setNotifications((prev) => [newNotification, ...prev]);
+    eventSource.onmessage = (event: any) => {
+      const data = JSON.parse(event.data);
+      onmessage(data);
+    };
+
+    eventSource.onerror = (err: any) => {
+      onerror(err);
+    };
+
+    return eventSource;
+  };
+
+  useEffect(() => {
+    const onmessage = (data: any) => {
+      setNotifications((prev) => {
+        if (!prev.some((notification) => notification._id === data._id)) {
+          return [data, ...prev];
+        }
+        return prev;
+      });
+    };
+
+    const onerror = async (err: any) => {
+      if (err.status === 401) {
+        console.error("Unauthorized access - re-establishing connection");
       }
     };
 
+    let eventSource: any;
+    getLiveNotification(onmessage, onerror).then((source) => {
+      eventSource = source;
+    });
+
     // Clean up the connection when the component unmounts
     return () => {
-      eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
     };
   }, []);
-  const handleViewNotification = async (Id: any) => {
+  const handleViewNotification = async (Id: any,betId:any) => {
     const data: any = await setViewedNotification(Id);
     getNotification();
+     dispatch(setBetId(betId))
   };
 
   const getNotification = async () => {
@@ -85,21 +113,16 @@ const Notifications = () => {
         Notification
       </div>
       <div className="flex flex-col gap-2 py-4 px-2 overflow-y-scroll h-[90vh]">
-        {/* //WARN: remove this */}
-        {/* <p className="text-white text-[.8rem] md:text-lg"> */}
-        {/*   {JSON.stringify(notifications, null, 2)} */}
-        {/* </p> */}
-
         {notifications?.map((item, index) => (
           <Link
             key={index}
-            href={`/Reports/player/betting/${item.data.player}#${item.data.betId}`}
+            href={`/Reports/player/betting/${item.data.player}`}
           >
             <div
               className={`p-3 shadow-sm w-[400px] cursor-pointer ${
-                item.viewed ? "bg-gray-600" : "bg-black"
-              } shadow-black `}
-              onClick={() => handleViewNotification(item._id)}
+                item.viewed ? "bg-gray-600 dark:bg-gray-300" : " bg-black dark:bg-gray-200"
+              } shadow-black dark:shadow-lg`}
+              onClick={() => handleViewNotification(item._id,item.data.betId)}
             >
               <div className="flex items-center space-x-3">
                 {item.type === "alert" ? (
@@ -109,11 +132,11 @@ const Notifications = () => {
                 ) : (
                   <Info />
                 )}
-                <div className="text-white text-opacity-70 tracking-wide font-light text-sm">
+                <div className="dark:text-black dark:text-opacity-70 text-white text-opacity-70 tracking-wide font-light text-sm">
                   {item?.data.message}
                 </div>
               </div>
-              <div className="text-[.6rem] text-right text-white text-opacity-70 pt-1">
+              <div className="text-[.6rem] text-right dark:text-black dark:text-opacity-70 text-white text-opacity-70 pt-1">
                 {new Date(item?.createdAt).toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "short",

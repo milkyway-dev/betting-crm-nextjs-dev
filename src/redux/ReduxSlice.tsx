@@ -5,12 +5,13 @@ export const reduxSlice = createSlice({
   initialState: {
     Agent: {
       username:'',
-      Id:Number
+      Id:null
     },
     openNotification:false,
     openHeader: false,
     updateCredit: null,
-    AllNotification:[] 
+    AllNotification: [],
+    betId:null,
   },
   reducers: {
     UpdateName: (state, action) => {
@@ -27,6 +28,9 @@ export const reduxSlice = createSlice({
     },
     NewNotification: (state, action) => {
       state.AllNotification=action.payload
+    },
+    setBetId: (state, action) => {
+      state.betId=action.payload
     }
   },
 });
@@ -36,6 +40,7 @@ export const {
   UpdateNotification,
   UpdateHeader,
   UpdateCredit,
-  NewNotification
+  NewNotification,
+  setBetId
 } = reduxSlice.actions;
 export default reduxSlice.reducer;

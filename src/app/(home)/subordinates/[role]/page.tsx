@@ -2,8 +2,12 @@ import Table from "@/component/ui/Table";
 import { getSubordinates } from "@/utils/action";
 
 const page = async ({ params, searchParams }: any) => {
-  const data = await getSubordinates(params?.role,searchParams?.search);
-  
+  const data = await getSubordinates(
+    params?.role,
+    searchParams?.search,
+    searchParams?.date
+  );
+
   const fieldsHeadings = [
     "Username",
     "Status",
@@ -19,10 +23,12 @@ const page = async ({ params, searchParams }: any) => {
     "credits",
     "role",
     "createdAt",
-    "actions"
-  ]
-  
-  return (<Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} />);
+    "actions",
+  ];
+
+  return (
+    <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={data} />
+  );
 };
 
 export default page;
