@@ -97,6 +97,7 @@ export interface ModalProps {
   data?: any;
   Page?: string;
   Tabs?: string[];
+  betData?:any;
 }
 export interface DeleteUserProps {
   deleteToken: () => void;
@@ -112,6 +113,10 @@ export interface TableUserNameProps {
   index: number;
   Id: Number;
   role?: string;
+}
+
+export interface DateWiseActivityProps{
+  data:string
 }
 
 export interface ReportsData {
@@ -139,4 +144,13 @@ export interface UpdateCreditInterface {
 
 export interface JwtPayload {
   role?: string;
+}
+
+export interface ActivityProps{
+  date:any,
+  player:any
+}
+export interface ActivityDetails {
+  bets: [];
+  transactions: [];
 }
