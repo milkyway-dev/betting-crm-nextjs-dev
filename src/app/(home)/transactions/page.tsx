@@ -22,7 +22,7 @@ const page = async ({ searchParams }: any) => {
   ]
 
   return (
-    <Table Page="transaction" fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
+    <Table Page="transaction" width={'w-[20px]'} fieldsHeadings={fieldsHeadings} fieldData = {fieldsData} data={data}  />
   );
 };
 

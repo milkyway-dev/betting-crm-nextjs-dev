@@ -17,7 +17,7 @@ export default function RootLayout({
       <div className="md:flex  dark:bg-white bg-bg_dashboard">
         <Sidebar />
         <div className="h-screen flex overflow-y-scroll w-full">
-          <div className="h-screen flex overflow-y-scroll w-full">
+          <div className="h-screen transition-all flex overflow-y-scroll w-full">
             {children}
           </div>
           <Notifications />

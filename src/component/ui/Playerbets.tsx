@@ -54,10 +54,10 @@ const Playerbets = ({ headers, data }: any) => {
         </tr>
       </thead>
       <tbody className="">
-        {data &&
-          data.length > 0 &&
-          data.map((item: any) =>
-            item.betType === "single" ? (
+
+        {data && data.length > 0 && data.map((item: any) => (
+          <>
+            {item.betType === "single" ? (
               item.data.map((data: any, dataIndex: any) => (
                 <tr
                   id={item._id}
@@ -133,15 +133,14 @@ const Playerbets = ({ headers, data }: any) => {
                     {item.possibleWinningAmount.toFixed(3)}
                   </td>
                   <td
-                    className={`text-sm font-semibold ${
-                      data.status === "lost"
-                        ? "text-gray-500"
-                        : data.status === "won"
+                    className={`text-sm font-semibold ${data.status === "lost"
+                      ? "text-gray-500"
+                      : data.status === "won"
                         ? "text-green-500"
                         : data.status === "pending"
-                        ? "text-yellow-500"
-                        : "text-red-500"
-                    } md:text-lg capitalize `}
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      } md:text-lg capitalize `}
                   >
                     {data.status}
                   </td>
@@ -152,8 +151,12 @@ const Playerbets = ({ headers, data }: any) => {
                 </tr>
               ))
             ) : (
-                <>
-                <div className="text-white bg-black inline-block dark:bg-gray-100 dark:text-black dark:text-opacity-70 px-5 py-1.5 rounded-tl-2xl rounded-tr-2xl border-t-[1px] border-t-[#f3aa3589]">Combo</div>
+              <>
+                {item.betType === "combo"  && (
+                  <tr className="text-white bg-black inline-block dark:bg-gray-100 dark:text-black dark:text-opacity-70 px-5 py-1.5 rounded-tl-2xl rounded-tr-2xl border-t-[1px] border-t-[#f3aa3589]">
+                    <td>Combo</td>
+                  </tr>
+                )}
                 {item.data.map((data: any, dataIndex: any) => (
                   <tr
                     id={item._id}
@@ -164,8 +167,8 @@ const Playerbets = ({ headers, data }: any) => {
                       <div className="w-full flex flex-col gap-1 px-3">
                         <span
                           className={`text-white
-                            dark:text-black dark:text-opacity-85
-                            font-medium text-left text-sm md:text-lg`}
+                 dark:text-black dark:text-opacity-85
+                 font-medium text-left text-sm md:text-lg`}
                         >
                           {data.sport_title}
                         </span>
@@ -229,15 +232,14 @@ const Playerbets = ({ headers, data }: any) => {
                     </td>
                     <td className="text-sm md:text-lg text-gray-500">--/--</td>
                     <td
-                      className={`text-sm font-semibold ${
-                        data.status === "lost"
-                          ? "text-gray-500"
-                          : data.status === "won"
+                      className={`text-sm font-semibold ${data.status === "lost"
+                        ? "text-gray-500"
+                        : data.status === "won"
                           ? "text-green-500 shadow-md"
                           : data.status === "pending"
-                          ? "text-yellow-500"
-                          : "text-red-500"
-                      } md:text-lg capitalize `}
+                            ? "text-yellow-500"
+                            : "text-red-500"
+                        } md:text-lg capitalize `}
                     >
                       {data.status}
                     </td>
@@ -247,41 +249,10 @@ const Playerbets = ({ headers, data }: any) => {
                     </td>
                   </tr>
                 ))}
-                <tr className="text-center font-extralight dark:bg-gradient-to-b dark:from-gray-100 dark:to-gray-100 bg-gradient-to-b from-[#1c1a2176] to-[#0d0c156d] border-[1px] border-[#f3aa357c]">
-                  <td className="py-3"></td>
-                  <td
-                    className={`py-3 text-lf text-white dark:text-black
-                        `}
-                  >
-                    $ {item.amount}
-                  </td>
-                  <td className="py-3"></td>
-                  <td className="py-3"></td>
-                  <td
-                    className={`py-3 text-lf text-white dark:text-black
-                        `}
-                  >
-                    {item.possibleWinningAmount.toFixed(3)}
-                  </td>
-                  <td
-                    className={`text-sm font-semibold ${
-                      data.status === "lost"
-                        ? "text-gray-500"
-                        : data.status === "won"
-                        ? "text-green-500 shadow-md"
-                        : data.status === "pending"
-                        ? "text-yellow-500"
-                        : "text-red-500"
-                    } md:text-lg capitalize `}
-                  >
-                    {data.status}
-                  </td>
-
-                  <td className="text-white"></td>
-                </tr>
               </>
-            )
-          )}
+            )}
+          </>
+        ))}
       </tbody>
     </table>
   );

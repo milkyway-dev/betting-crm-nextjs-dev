@@ -3,12 +3,14 @@ import { TableProps } from "@/utils/Types";
 import { formatDate, getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import TableThreeDots from "./TableThreeDots";
 import TableUserName from "./TableUserName";
+import PlayerUsername from "../PlayerUsername";
 
 const Table: React.FC<TableProps> = async ({
   fieldsHeadings,
   fieldData,
   data = [],
   Page,
+  width
 }) => {
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
@@ -18,9 +20,9 @@ const Table: React.FC<TableProps> = async ({
     <>
       <div className="bg-[#0E0F0F]  overflow-x-scroll  dark:bg-white pb-5">
         <div
-          className={` dark:bg-white  p-3 border-[1px]  min-w-[460px] md:w-full rounded-b-2xl rounded-bl-2xl  ${
+          className={` dark:bg-white  md:border-[1px]  ${width} md:w-full rounded-b-2xl rounded-bl-2xl  ${
             Page ? "rounded-tl-2xl" : " md:rounded-tl-none"
-          }  rounded-r-2xl dark:border-opacity-10 border-[#313131]`}
+          }  rounded-r-2xl dark:border-opacity-10 p-3 border-[#313131]`}
         >
           <table className="w-full ">
             <thead className="text-white border-b  dark:text-black border-[#858585] ">
@@ -59,7 +61,7 @@ const Table: React.FC<TableProps> = async ({
                             <TableUserName
                               role={data?.role}
                               username={data[field]}
-                              Id={data?._id}
+                              Id={data._id}
                               index={idx}
                             />
                           );
@@ -67,11 +69,10 @@ const Table: React.FC<TableProps> = async ({
                           return (
                             <td
                               key={idx}
-                              className={`pt-4 ${
-                                field === "status"
-                                  ? "hidden xl:inline-block"
-                                  : ""
-                              } pb-2`}
+                              className={`pt-4 ${field === "status"
+                                ? "hidden xl:inline-block"
+                                : ""
+                                } pb-2`}
                             >
                               {["active", "recharge", "Success"].includes(
                                 data[field]
@@ -80,8 +81,8 @@ const Table: React.FC<TableProps> = async ({
                                   {data[field]}
                                 </span>
                               ) : ["redeem", "inactive", "fail"].includes(
-                                  data[field]
-                                ) ? (
+                                data[field]
+                              ) ? (
                                 <span className="bg-red-700 bg-opacity-30  dark:bg-opacity-15   dark:bg-[#ff0000] dark:text-[#6b0000]  text-red-500 w-[80px] md:w-[100px] inline-block py-1.5 md:py-2  rounded-xl">
                                   {data[field]}
                                 </span>
@@ -97,11 +98,10 @@ const Table: React.FC<TableProps> = async ({
                           return (
                             <td
                               key={idx}
-                              className={`pt-4  pb-2 ${
-                                date === "createdAt"
-                                  ? "hidden xl:inline-block"
-                                  : ""
-                              }`}
+                              className={`pt-4  pb-2 ${date === "createdAt"
+                                ? "hidden xl:inline-block"
+                                : ""
+                                }`}
                             >
                               {formattedDate}
                             </td>
@@ -145,9 +145,7 @@ const Table: React.FC<TableProps> = async ({
 
                         case "player":
                           return (
-                            <td key={idx} className="pt-4 text-left pb-2">
-                              {data[field] ? data[field].username : "N/A"}
-                            </td>
+                            <PlayerUsername id={data?._id} idx={idx} username={data[field].username} />
                           );
                         case "actions":
                           return (
