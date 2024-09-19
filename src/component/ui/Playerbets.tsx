@@ -79,7 +79,7 @@ const Playerbets = ({ headers, data }: any) => {
                               : "dark:text-black text-white"
                           }
                         >
-                          {data.home_team.name}
+                          {/* {data.home_team.name} */}
                         </span>{" "}
                         <span className="text-white dark:text-black">v/s</span>{" "}
                         <span
@@ -89,7 +89,7 @@ const Playerbets = ({ headers, data }: any) => {
                               : "dark:text-black text-white"
                           }
                         >
-                          {data.away_team.name}
+                          {/* {data.away_team.name} */}
                         </span>
                       </span>
                       <span
@@ -123,9 +123,9 @@ const Playerbets = ({ headers, data }: any) => {
                         {data.oddsFormat}
                       </span>
                       <span className="text-white dark:text-black">
-                        {data.bet_on === "away_team"
+                        {/* {data.bet_on === "away_team"
                           ? data.away_team.odds
-                          : data.home_team.odds}
+                          : data.home_team.odds} */}
                       </span>
                     </div>
                   </td>
@@ -180,7 +180,7 @@ const Playerbets = ({ headers, data }: any) => {
                                 : "dark:text-black text-white"
                             }
                           >
-                            {data.home_team.name}
+                            {/* {data.home_team.name} */}
                           </span>{" "}
                           <span className="dark:text-black text-white">
                             v/s
@@ -192,7 +192,7 @@ const Playerbets = ({ headers, data }: any) => {
                                 : "dark:text-black text-white"
                             }
                           >
-                            {data.away_team.name}
+                            {/* {data.away_team.name} */}
                           </span>
                         </span>
                         <span
@@ -224,9 +224,9 @@ const Playerbets = ({ headers, data }: any) => {
                           {data.oddsFormat}
                         </span>
                         <span className={`text-white dark:text-black`}>
-                          {data.bet_on === "away_team"
+                          {/* {data.bet_on === "away_team"
                             ? data.away_team.odds
-                            : data.home_team.odds}
+                            : data.home_team.odds} */}
                         </span>
                       </div>
                     </td>
