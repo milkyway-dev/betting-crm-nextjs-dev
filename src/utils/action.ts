@@ -653,8 +653,6 @@ export async function getActivitiesByDateAndPlayer(
   date: string,
   playerId: string
 ) {
-  console.log(playerId, "player id");
-
   const token = await getCookie();
   try {
     const response = await fetch(
