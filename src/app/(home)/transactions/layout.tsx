@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/component/common/Header";
 import SearchBar from "@/component/ui/SearchBar";
+import DateFilter from "@/component/ui/DateFilter";
 
 export const metadata: Metadata = {
   title: "CRM - Betting Paradise",
@@ -12,14 +13,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <>
       <div className="flex-1">
         <Header />
         <div className="px-4 md:px-10 pt-5">
-          <div className="w-full md:w-[50%] pb-4">
-             <SearchBar/>
+          <div className="w-full flex justify-between">
+            <div className="w-full md:w-[50%] pb-4">
+              <SearchBar />
+            </div>
+            <div>
+              <DateFilter />
+            </div>
           </div>
           {children}
         </div>
