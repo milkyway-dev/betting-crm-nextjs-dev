@@ -20,7 +20,7 @@ export default async function RootLayout({
                 className="flex-1 h-screen overflow-y-scroll "
             >
                 <Header Back={<Back />} />
-                <div className="px-4 md:px-10 py-5">
+                <div className="md:px-10 py-5">
                    {children}
                 </div>
             </div>
