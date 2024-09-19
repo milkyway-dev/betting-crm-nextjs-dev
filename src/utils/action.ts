@@ -292,22 +292,28 @@ export const getSubordinatesReport = async (username: string) => {
     revalidatePath("/");
   }
 };
-export async function getAllBets(user: any) {
+export async function getAllBets(user: any, dateString: string) {
   const token = await getCookie();
+  let url = "/api/bets";
+  if (user?.role === "admin") {
+    if (dateString) {
+      url += `/?date=${dateString}`;
+    }
+  } else {
+    url += `/${user?.userId}`;
+    if (dateString) {
+      url += `/?date=${dateString}`;
+    }
+  }
   try {
-    const response = await fetch(
-      `${config.server}${
-        user?.role === "admin" ? "/api/bets/" : `/api/bets/${user?.userId}`
-      }`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `userToken=${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${config.server}${url}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
 
     if (!response.ok) {
       const error = await response.json();
@@ -418,8 +424,6 @@ export async function getSubordinates(
 }
 
 export async function getUserNotifications() {
-  console.log("gettting called");
-
   const token = await getCookie();
   try {
     const response = await fetch(
@@ -438,7 +442,6 @@ export async function getUserNotifications() {
       return { error: error.message };
     }
     const data = await response.json();
-    console.log(data);
     //sort data according to createdAt
 
     data.sort((a: any, b: any) => {
@@ -524,7 +527,6 @@ export const fetchSportsCategory = async () => {
       return { error: error.message };
     }
     const responseData = await response.json();
-    console.log(responseData);
     return responseData;
   } catch (error) {
     console.log(error);
@@ -689,7 +691,6 @@ export async function getBetsAndTransactions(
   playerId: string
 ) {
   const token = await getCookie();
-  console.log(startTime, endTime, playerId);
 
   try {
     const response = await fetch(`${config.server}/api/userActivities`, {
@@ -710,7 +711,6 @@ export async function getBetsAndTransactions(
     }
 
     const data = await response.json();
-    console.log(data);
 
     return data;
   } catch (error) {

@@ -48,7 +48,6 @@ export default function DailyActivityViewer({
     fetchData();
   }, [username]);
 
-
   const availableDates = activityData.map((item) =>
     format(parseISO(item.date), "yyyy-MM-dd")
   );
@@ -57,20 +56,11 @@ export default function DailyActivityViewer({
     (item) => format(parseISO(item.date), "yyyy-MM-dd") === selectedDate
   );
 
-    const player:any = selectedActivity?.player;
-     const date:any = selectedActivity?.date;
-  console.log(player, "player", selectedActivity?.date);
-  
+  const player: any = selectedActivity?.player;
+  const date: any = selectedActivity?.date;
 
-
-  console.log(selectedActivity, "selected activity");
-  
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    
     setSelectedDate(e.target.value);
-    console.log(selectedDate, "date");
-    
   };
 
   if (loading) {
@@ -143,13 +133,11 @@ export default function DailyActivityViewer({
               <span className="font-medium">Updated:</span>{" "}
               {format(parseISO(selectedActivity.updatedAt), "PPpp")}
             </p>
-            <Activity date={date} player={player}/>
-
+            <Activity date={date} player={player} />
           </div>
         </div>
       ) : (
-        <p className="text-gray-400">
-        </p>
+        <p className="text-gray-400"></p>
       )}
     </div>
   );

@@ -36,8 +36,6 @@ const Activity: React.FC<ActivityProps> = ({ player, date }) => {
  async function fetchActivityDetails(startTime:any, endTime:any, playerId:any){
     const result = await getBetsAndTransactions(startTime, endTime, playerId)
     setActivityDetails(result)    
-    console.log(activityDetails, "activities");
-
  }
 
 
