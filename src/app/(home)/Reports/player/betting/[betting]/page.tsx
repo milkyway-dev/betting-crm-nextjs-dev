@@ -18,21 +18,30 @@ import Amount from "@/component/svg/Amount";
 import Status from "@/component/svg/Status";
 import Action from "@/component/svg/Action";
 import Playerbets from "@/component/ui/Playerbets";
+import DateFilter from "@/component/ui/DateFilter";
 
-async function getPlayerBettings(username: string) {
+async function getPlayerBettings(
+  username: string,
+  searchString: string,
+  dateString: string
+) {
   const token = await getCookie();
+  let url = `/api/bets/${username}/bets?type=username&status=all`;
+  if (searchString?.length > 0) {
+    url += `&search=${encodeURIComponent(String(searchString))}`;
+  }
+  if (dateString?.length > 0) {
+    url += `&date=${encodeURIComponent(String(dateString))}`;
+  }
   try {
-    const response = await fetch(
-      `${config.server}/api/bets/${username}/bets?type=username&status=all`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `userToken=${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${config.server}${url}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
 
     if (!response.ok) {
       const error = await response.json();
@@ -48,14 +57,17 @@ async function getPlayerBettings(username: string) {
   }
 }
 
-const page = async ({ params}: any) => {
-  const data = await getPlayerBettings(params?.betting);
+const page = async ({ params, searchParams }: any) => {
+  const data = await getPlayerBettings(
+    params?.betting,
+    searchParams?.search,
+    searchParams?.date
+  );
   const reportData = await getSubordinatesReport(params?.betting);
   const tabs = [
     { name: "Coins", route: `/Reports/player/coins/${params?.betting}` },
     { name: "Betting", route: `/Reports/player/betting/${params?.betting}` },
-    { name: 'Activity', route:`/Reports/player/activity/${params?.coin}`}
-
+    { name: "Activity", route: `/Reports/player/activity/${params?.coin}` },
   ];
   const headers = [
     { icon: <Sport />, text: "sport" },
@@ -67,8 +79,6 @@ const page = async ({ params}: any) => {
     { icon: <Action />, text: "action" },
   ];
 
-
-
   return (
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">
@@ -76,12 +86,17 @@ const page = async ({ params}: any) => {
           <SubordinatesReport reportData={reportData} />
           <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
-            <div className="md:w-[40%] w-[100%] lg:w-[35%] xl:w-[25%] pb-2">
-              <SearchBar />
+            <div className="flex w-[40%] pb-2 gap-3">
+              <div>
+                <DateFilter />
+              </div>
+              <div className="md:w-[80%] w-[80%]">
+                <SearchBar />
+              </div>
             </div>
           </div>
           <div className="h-[calc(100%-13vh)] hideScrollBar border-[1px] border-white dark:border-black dark:border-opacity-10 bg-[#0E0F0F] dark:bg-white border-opacity-10 rounded-2xl overflow-y-scroll">
-            <Playerbets headers={headers} data={data}/>
+            <Playerbets headers={headers} data={data} />
           </div>
         </div>
       </div>
