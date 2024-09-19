@@ -67,7 +67,8 @@ const page = async ({ params, searchParams }: any) => {
   const tabs = [
     { name: "Coins", route: `/Reports/player/coins/${params?.betting}` },
     { name: "Betting", route: `/Reports/player/betting/${params?.betting}` },
-    { name: "Activity", route: `/Reports/player/activity/${params?.coin}` },
+    { name: 'Activity', route:`/Reports/player/activity/${params?.betting}`}
+
   ];
   const headers = [
     { icon: <Sport />, text: "sport" },
@@ -78,7 +79,6 @@ const page = async ({ params, searchParams }: any) => {
     { icon: <Status />, text: "status" },
     { icon: <Action />, text: "action" },
   ];
-
   return (
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">

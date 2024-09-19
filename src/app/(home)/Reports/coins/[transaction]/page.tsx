@@ -71,9 +71,11 @@ const page = async ({ params, searchParams }: any) => {
   ];
   return (
     <>
-      <div className="flex-1 h-screen overflow-y-scroll ">
-        <div className="px-2 md:px-10 py-5">
-          <SubordinatesReport reportData={reportData} />
+     <div
+        className="flex-1 h-screen overflow-y-scroll "
+      >
+        <div className="md:px-5 py-5">
+        <SubordinatesReport reportData={reportData} />
           <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />
             <div className="flex w-[40%] pb-2 gap-3">

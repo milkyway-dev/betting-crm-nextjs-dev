@@ -95,31 +95,31 @@ const Notifications = () => {
     <div
       className={` ${
         isOpen
-          ? "right-[0%] top-0 fixed xl:static transition-all "
+          ? "right-[0%] top-0 w-full md:w-auto fixed xl:static transition-all "
           : "-right-[100%] top-0 fixed xl:static transition-all "
       }   ${
-        isOpen ? "flex-.2 transition-all" : "w-[0%] hidden"
-      } z-50 h-screen px-5 py-5 dark:bg-white bg-bg_dashboard  border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}
+        isOpen ? "flex-.2 " : "w-[0%] hidden"
+      } z-50 h-screen xl:px-5 py-5 dark:bg-white bg-bg_dashboard transition-all border-l-[1px] dark:border-opacity-10 xl:col-span-0 border-[#282828]`}
     >
       <button
-        className={`absolute top-2 cursor-pointer ${
+        className={`absolute top-2  cursor-pointer ${
           isOpen ? "block" : "hidden"
         } right-2`}
         onClick={() => dispatch(UpdateNotification(false))}
       >
         <Close />
       </button>
-      <div className="text-white bg-[#232525] dark:bg-onDark dark:text-black px-6 md:px-8 py-1.5  text-[.9rem] md:text-lg rounded-3xl tracking-wide inline-block">
+      <div className="text-white mb-2 ml-2 bg-[#232525] dark:bg-onDark dark:text-black px-6 md:px-8 py-1.5  text-[.9rem] md:text-lg rounded-3xl tracking-wide inline-block">
         Notification
       </div>
-      <div className="flex flex-col gap-2 py-4 px-2 overflow-y-scroll h-[90vh]">
+      <div className="flex flex-col gap-y-2  py-4 px-2 overflow-y-scroll h-[90vh]">
         {notifications?.map((item, index) => (
           <Link
             key={index}
             href={`/Reports/player/betting/${item.data.player}`}
           >
             <div
-              className={`p-3 shadow-sm w-[400px] cursor-pointer ${
+              className={`p-3 shadow-sm  md:w-[400px] cursor-pointer ${
                 item.viewed ? "bg-gray-600 dark:bg-gray-300" : " bg-black dark:bg-gray-200"
               } shadow-black dark:shadow-lg`}
               onClick={() => handleViewNotification(item._id,item.data.betId)}

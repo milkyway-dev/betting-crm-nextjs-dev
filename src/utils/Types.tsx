@@ -64,6 +64,7 @@ export interface TableProps {
   fieldData: string[];
   Page?: string;
   data: string[];
+  width?:string;
 }
 
 export interface TransactionProps {
