@@ -41,7 +41,7 @@ const Playerbets = ({ headers, data }: any) => {
           {headers.map((item: any, index: number) => (
             <th
               key={index}
-              className="font-extralight uppercase py-5 border-b-[1px] border-white dark:border-black dark:border-opacity-20 border-opacity-20"
+              className="font-extralight uppercase py-5  border-white dark:border-black dark:border-opacity-20 border-opacity-20"
             >
               <div className="flex w-full items-center justify-center gap-2">
                 <span>{item.icon}</span>
@@ -152,14 +152,13 @@ const Playerbets = ({ headers, data }: any) => {
                 </tr>
               ))
             ) : (
-              <>
+                <>
+                <div className="text-white bg-black inline-block dark:bg-gray-100 dark:text-black dark:text-opacity-70 px-5 py-1.5 rounded-tl-2xl rounded-tr-2xl border-t-[1px] border-t-[#f3aa3589]">Combo</div>
                 {item.data.map((data: any, dataIndex: any) => (
                   <tr
                     id={item._id}
                     key={`${item._id}-${dataIndex}-combo`}
-                    className={`${
-                      dataIndex === 0 ? "border-t-[1px] border-[#f3aa3589]" : ""
-                    } text-center font-extralight border-[#f3aa3589] border-[1px] hover:bg-black dark:hover:bg-gray-100`}
+                    className={`text-center  font-extralight border-[#f3aa3589] border-[1px] hover:bg-black dark:hover:bg-gray-100`}
                   >
                     <td className="w-[20%] py-4">
                       <div className="w-full flex flex-col gap-1 px-3">
