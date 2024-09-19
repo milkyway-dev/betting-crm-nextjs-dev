@@ -71,7 +71,7 @@ const page = async ({ params}: any) => {
   return (
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">
-        <div className="md:px-10 py-5">
+        <div className="px-4 md:px-10 py-5">
           <SubordinatesReport reportData={reportData} />
           <div className="md:flex items-center justify-between">
             <ReportTabs params={params?.report} tabs={tabs} />

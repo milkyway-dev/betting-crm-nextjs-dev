@@ -56,7 +56,7 @@ const Header = ({ Back }: any) => {
       </button>
       {Back && (
         <button
-          onClick={() => router.push("/subordinates/all")}
+          onClick={() => router.back()}
           className="xl:block hidden"
         >
           {Back}
