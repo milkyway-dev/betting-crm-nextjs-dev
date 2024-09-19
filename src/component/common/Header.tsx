@@ -56,7 +56,7 @@ const Header = ({ Back }: any) => {
       </button>
       {Back && (
         <button
-          onClick={() => router.push("/subordinates/all")}
+          onClick={() => router.back()}
           className="xl:block hidden"
         >
           {Back}
@@ -65,8 +65,8 @@ const Header = ({ Back }: any) => {
       <div className="flex items-center space-x-4 w-[90%] mx-auto justify-end">
         {user ? (
           <div className="bg-[#E3F5FF] dark:bg-black dark:bg-opacity-40 p-[1px] rounded-xl">
-            <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">
-              <span className="text-white text-[.9rem] md:text-[.9] dark:text-black tracking-wider">
+            <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-2  md:px-4 py-1 md:py-1.5">
+              <span className="text-white text-[.7rem] md:text-[.9] dark:text-black tracking-wider">
                 Credits :
               </span>
               <span className="text-white text-opacity-40 text-[.9rem] dark:text-black">
@@ -77,7 +77,7 @@ const Header = ({ Back }: any) => {
         ) : (
           <div className="invisible p-[1px] rounded-xl">
             <div className="flex space-x-2 items-center dark:bg-onDark bg-dark_light_black rounded-xl px-4 py-1.5">
-              <span className="text-white text-[.9rem] md:text-[.9] dark:text-black tracking-wider">
+              <span className="text-white text-[.7rem] md:text-[.9] dark:text-black tracking-wider">
                 Credits :
               </span>
               <span className="text-white text-opacity-40 text-[.9rem] dark:text-black">

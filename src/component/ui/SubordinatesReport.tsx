@@ -51,7 +51,7 @@ const SubordinatesReport = ({ reportData }: any) => {
             </span>}
         </div>
       </div>
-      <div className='grid grid-cols-12 pb-8 pt-4 gap-5'>
+      <div className='grid grid-cols-12 pb-8 pt-4 gap-2 lg:gap-5'>
         <Card TopCards={TopCards} />
       </div>
     </div>

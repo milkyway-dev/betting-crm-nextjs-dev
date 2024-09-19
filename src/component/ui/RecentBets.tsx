@@ -3,7 +3,6 @@ import { formatDate } from "@/utils/utils";
 import React from "react";
 
 const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
-  console.log(data, "Recent Bets is Here");
   return (
     <div className="border-[1px] flex-.7 border-[#282828] dark:border-opacity-10 mt-4 md:mt-0 text-white  rounded-3xl">
       <div className="text-white px-6 tracking-wide py-2 m-3 text-[.9rem] md:text-base bg-light_black dark:text-black dark:bg-[#F4F4F4] rounded-3xl inline-block">
