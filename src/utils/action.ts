@@ -655,8 +655,6 @@ export async function getActivitiesByDateAndPlayer(
   date: string,
   playerId: string
 ) {
-  console.log(playerId, "player id");
-
   const token = await getCookie();
   try {
     const response = await fetch(
@@ -691,6 +689,11 @@ export async function getBetsAndTransactions(
   playerId: string
 ) {
   const token = await getCookie();
+  const Time_id={
+    "startTime": startTime,
+    "endTime": endTime,
+    "playerId":playerId
+  }
 
   try {
     const response = await fetch(`${config.server}/api/userActivities`, {
@@ -700,7 +703,7 @@ export async function getBetsAndTransactions(
         "Content-Type": "application/json",
         Cookie: `userToken=${token}`,
       },
-      body: JSON.stringify({ startTime, endTime, playerId }),
+      body: JSON.stringify(Time_id),
     });
 
     if (!response.ok) {
