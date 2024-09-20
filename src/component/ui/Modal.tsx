@@ -76,8 +76,7 @@ const Modal: React.FC<ModalProps> = ({
         category : clickedBetDetail.category,
         status: clickedBetDetail.status,
         isResolved: clickedBetDetail.isResolved,
-        odds: clickedBetDetail?.bet_on?.odds,  // Correctly bind odds based on bet_on
-        bet_on: clickedBetDetail.bet_on.name,  // Ensure `bet_on` is set
+        bet_on: clickedBetDetail.bet_on,  // Ensure `bet_on` is set
       });
     } else {
       setBetDetails(null);
@@ -400,9 +399,11 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value) || 0;
+console.log(newAmount, "newer amount");
 
     setParentBetData((prev: any) => {
-      const odds = betDetails[betDetails.bet_on]?.odds || 0;
+      const odds =betDetails.bet_on.odds || 0;
+
       const newPossibleWinningAmount = calculatePossibleWinningAmount(newAmount, odds);
       return {
         ...prev,
@@ -680,8 +681,7 @@ const Modal: React.FC<ModalProps> = ({
                 <input
                   type="number"
                   name="odds"
-                  value={
-                    betDetails?.odds}
+                  value={betDetails?.bet_on.odds}
                   onChange={(e) => {
                     handleChangeBetDetail
                     handleOddsChange(e)
