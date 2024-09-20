@@ -3,73 +3,88 @@ import { getActivitiesByDateAndPlayer, getBetsAndTransactions } from '@/utils/ac
 import React, { useEffect, useState } from 'react'
 import Activity from './Activity';
 import Profile from '../svg/Profile';
+import { TimeRange } from '@/utils/Types';
 
 
 const DateWiseActivity = ({ AvailableDates, playerId, username }: any) => {
-  interface TimeRange {
-    startTime: string;
-    endTime: string;
-  }
+  const [activities, setActivities] = useState([]);
   const [activitytime, setActivitytime] = useState<TimeRange | null>(null);
-  console.log(activitytime,"activity time")
-  const [session, setSession] = useState([])
-  //Select Date State
+  const [session, setSession] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  console.log(selectedDate, "asdasd")
   const [inputdate, setInputDate] = useState('');
-  // Get Sessions Api
+
   useEffect(() => {
-    const formattedDate = AvailableDates.filter((date: any) => new Date(date?.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) == new Date(inputdate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }));
-    setSelectedDate(formattedDate[0]?.date);
+    const formattedDate = AvailableDates?.filter((date: any) =>
+      new Date(date?.date).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }) ===
+      new Date(inputdate).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      })
+    );
+    setSelectedDate(formattedDate?.[0]?.date || '');
+    if (!formattedDate?.[0]?.date) {
+      setSession([])
+    }
   }, [inputdate]);
 
   const GetSessions = async () => {
     try {
       const session = await getActivitiesByDateAndPlayer(selectedDate, playerId);
       if (session) {
-        console.log(session, "Sessions");
         setSession(session);
       }
     } catch (error) {
-
+      // Handle error
     }
-  }
+  };
+
   useEffect(() => {
     if (selectedDate) {
-      GetSessions();  // Fetch Data on component mount            
+      GetSessions();
+    } else {
+      setSession([]);
     }
-  }, [selectedDate])
+  }, [selectedDate]);
 
-  const handelGetActivities = async(startTime:string,endTime:string,id:string) => {
+  const handelGetActivities = async (startTime: string, endTime: string, id: string) => {
     try {
-      const activity = await getBetsAndTransactions(startTime, endTime, id)
-      console.log(activity,"activity data")
+      const activity = await getBetsAndTransactions(startTime, endTime, id);
+      if (activity) {
+        setActivities(activity);
+      }
     } catch (error) {
-      
+      // Handle error
     }
-  }
+  };
+
   useEffect(() => {
     if (activitytime) {
-      handelGetActivities(activitytime?.startTime, activitytime?.endTime,playerId);      
+      handelGetActivities(activitytime?.startTime, activitytime?.endTime, playerId);
+    } else {
+      setActivities([]);
     }
-  }, [activitytime])
-
+  }, [activitytime]);
 
   return (
-    <div>
+    <div className='px-4'>
       <div className='flex items-center space-x-2 pb-4'>
         <Profile />
-        <div className='text-white capitalize'>{username}</div>
+        <div className='text-white dark:text-black dark:text-opacity-70 capitalize'>{username}</div>
       </div>
-      <div className='flex items-center space-x-2'>
-        <div className='w-[30%]'>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Select a date</label>
+      <div className='md:flex space-y-2 md:space-y-0 items-center md:space-x-2'>
+        <div className='w-[100%] lg:w-[30%]'>
+          <label className="block text-sm font-medium dark:text-gray-700 text-gray-300 mb-2">Select a date</label>
           <div className="relative">
             <input
               onChange={(e) => setInputDate(e.target.value)}
               type="date"
               value={inputdate}
-              className="block w-full cursor-pointer px-4 py-2 text-gray-300 bg-gray-800 border-[3px] border-transparent rounded-md focus:ring-blue-200 focus:border-blue-200 focus:outline-none"
+              className="block w-full cursor-pointer px-4 py-2 text-gray-300 bg-gray-800 dark:bg-gray-300 dark:text-gray-700 border-[3px] border-transparent rounded-md focus:ring-blue-200 focus:border-blue-200 focus:outline-none"
             />
             <div className="absolute inset-y-0 cursor-pointer right-0 flex items-center pr-3 pointer-events-none">
               <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -78,10 +93,10 @@ const DateWiseActivity = ({ AvailableDates, playerId, username }: any) => {
             </div>
           </div>
         </div>
-        <div className='w-[30%]'>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Select Available Dates</label>
+        <div className='w-[100%] lg:w-[30%]'>
+          <label className="block text-sm font-medium dark:text-gray-700 text-gray-300 mb-2">Select Available Dates</label>
           <div className="relative">
-            <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="block appearance-none w-full bg-gray-800 border border-gray-700 text-gray-300 py-3 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-200">
+            <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="block cursor-pointer appearance-none w-full bg-gray-800 dark:bg-gray-300 dark:text-gray-700  text-gray-300 py-3.5 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-200">
               <option value={''}>Select</option>
               {
                 AvailableDates?.length > 0 && AvailableDates.map((date: any, index: number) => (
@@ -100,19 +115,18 @@ const DateWiseActivity = ({ AvailableDates, playerId, username }: any) => {
         </div>
       </div>
       <div className='pt-7'>
-        <div className='pb-5 w-[30%]'>
-          <div className='text-white text-sm'>Check Activity</div>
-          <select  onChange={(e:any)=>setActivitytime(JSON.parse(e.target.value))} className='w-full py-2 outline-none bg-gray-700 text-white'>
-            <option value={''}>Select Time</option>
+        {session.length > 0 && (<div className='pb-5 transition-all w-full md:w-[30%]'>
+          <div className='text-white dark:text-gray-700 pb-1 text-sm'>Check Activity</div>
+          <select onChange={(e: any) => setActivitytime(JSON.parse(e.target.value))} className='w-full cursor-pointer py-2 outline-none dark:bg-gray-300 dark:text-gray-700 rounded-md bg-gray-700 text-white'>
+            <option value={JSON.stringify('')}>Select Time</option>
             {
               session?.length > 0 && session?.map((item: any, ind: number) => (
-                <option key={ind} value={JSON.stringify(item)} >{new Date(item?.startTime).toLocaleTimeString('en-US',{hour:'numeric',minute:'numeric',second:'numeric'})} - {new Date(item?.endTime).toLocaleTimeString('en-US',{hour:'numeric',minute:'numeric',second:'numeric'})}</option>
+                <option key={ind} value={JSON.stringify(item)} >{new Date(item?.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric' })} - {new Date(item?.endTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</option>
               ))
             }
           </select>
-        </div>
-        <Activity />
-
+        </div>)}
+        <Activity activities={activities} />
       </div>
     </div>
   )

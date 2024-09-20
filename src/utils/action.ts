@@ -687,8 +687,11 @@ export async function getBetsAndTransactions(
   playerId: string
 ) {
   const token = await getCookie();
-  console.log(startTime, endTime, playerId);
-
+  const Time_id={
+    "startTime": startTime,
+    "endTime": endTime,
+    "playerId":playerId
+  }
   try {
     const response = await fetch(`${config.server}/api/userActivities`, {
       method: "POST",
@@ -697,7 +700,7 @@ export async function getBetsAndTransactions(
         "Content-Type": "application/json",
         Cookie: `userToken=${token}`,
       },
-      body: JSON.stringify({ startTime, endTime, playerId }),
+      body: JSON.stringify(Time_id),
     });
 
     if (!response.ok) {
