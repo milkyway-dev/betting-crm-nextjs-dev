@@ -73,15 +73,10 @@ const Modal: React.FC<ModalProps> = ({
     if (clickedBetDetail) {
       setBetDetails({
         detailId: clickedBetDetail._id,
-        market: clickedBetDetail.market,
+        category : clickedBetDetail.category,
         status: clickedBetDetail.status,
         isResolved: clickedBetDetail.isResolved,
-        odds: clickedBetDetail.bet_on === "away_team"
-          ? clickedBetDetail.away_team.odds
-          : clickedBetDetail.home_team.odds,  // Correctly bind odds based on bet_on
         bet_on: clickedBetDetail.bet_on,  // Ensure `bet_on` is set
-        home_team: clickedBetDetail.home_team,  // Set home_team to access its odds later
-        away_team: clickedBetDetail.away_team,  // Set away_team to access its odds later
       });
     } else {
       setBetDetails(null);
@@ -119,25 +114,20 @@ const Modal: React.FC<ModalProps> = ({
   const handleChangeBetDetail = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (betDetails) {
       const { name, value } = e.target;
-
-      // Update bet details based on the input field's name
       let updatedBetDetails;
-
       if (name === 'odds') {
-        // Update odds for the team based on `bet_on`
-
         updatedBetDetails = {
           ...betDetails,
-          [betDetails.bet_on]: {
-            ...betDetails[betDetails.bet_on],
-            odds: parseFloat(value),  // Ensure odds are stored as a number
-          },
+          bet_on: {
+            ...betDetails.bet_on,
+            odds: value,  
+          }
         };
+
       } else {
-        // Update other fields like market, status, etc.
         updatedBetDetails = {
           ...betDetails,
-          [name]: value,  // Dynamically update the field (e.g., market)
+          [name]: value,  
         };
       }
 
@@ -381,10 +371,7 @@ const Modal: React.FC<ModalProps> = ({
     let totalOdds = 1;
     for (const bet of parentbetData.betDetailData) {
       const odds =
-        bet.bet_on === "home_team"
-          ? parseFloat(bet.home_team.odds)
-          : parseFloat(bet.away_team.odds);
-
+        bet.bet_on.odds;
       totalOdds *= odds;
     }
     return totalOdds;
@@ -412,9 +399,11 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value) || 0;
+console.log(newAmount, "newer amount");
 
     setParentBetData((prev: any) => {
-      const odds = betDetails[betDetails.bet_on]?.odds || 0;
+      const odds =betDetails.bet_on.odds || 0;
+
       const newPossibleWinningAmount = calculatePossibleWinningAmount(newAmount, odds);
       return {
         ...prev,
@@ -428,15 +417,16 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleOddsChange = (e: any) => {
     const newOdds = parseFloat(e.target.value);
-    // console.log(newOdds);
+    console.log(newOdds);
 
     setBetDetails((prev: any) => {
       const updatedBetDetails = {
         ...prev,
-        [prev.bet_on]: {
-          ...prev[prev.bet_on],
-          odds: newOdds,
-        },
+        bet_on: {
+          ...prev.bet_on,
+          odds: newOdds,  // Correctly access and update the odds inside bet_on
+        }
+        
       };
 
       return {
@@ -667,7 +657,7 @@ const Modal: React.FC<ModalProps> = ({
                 <div className="text-white pb-1.5">Edit Bet</div>
                 <input
                   type="text"
-                  name="am"
+                  name="amount"
                   value={parentbetData?.amount}
                   onChange={handleAmountChange} // Use the handleAmountChange function to update state
 
@@ -679,8 +669,8 @@ const Modal: React.FC<ModalProps> = ({
                 <div className="text-white pb-1.5">Edit Market</div>
                 <input
                   type="text"
-                  value={betDetails?.market}
-                  name="market"
+                  value={betDetails?.category}
+                  name="category"
                   onChange={(e) => handleChangeBetDetail(e)}
                   className="w-full bg-gray-800 p-2 rounded-md dark:bg-gray-200 dark:text-black text-white mb-4"
                   placeholder="Enter Market"
@@ -691,11 +681,7 @@ const Modal: React.FC<ModalProps> = ({
                 <input
                   type="number"
                   name="odds"
-                  value={
-                    betDetails?.bet_on === "away_team"
-                      ? betDetails?.away_team?.odds
-                      : betDetails?.home_team?.odds
-                  }  // Correctly bind odds value
+                  value={betDetails?.bet_on.odds}
                   onChange={(e) => {
                     handleChangeBetDetail
                     handleOddsChange(e)
