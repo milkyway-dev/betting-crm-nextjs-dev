@@ -118,9 +118,7 @@ const Table: React.FC<TableProps> = async ({
                         case "odds":
                           return (
                             <td key={idx} className="pt-4 pb-2">
-                              {data.data[0]?.bet_on === "home_team"
-                                ? data.data[0]?.home_team?.odds
-                                : data.data[0]?.away_team?.odds}
+                              {data.data[0]?.bet_on.odds}
                             </td>
                           );
 
@@ -130,16 +128,15 @@ const Table: React.FC<TableProps> = async ({
                               key={idx}
                               className="pt-4 pb-2 xl:inline-block hidden"
                             >
-                              {`${data.data[0]?.home_team?.name} vs ${data.data[0]?.away_team?.name}`}
+                              {`${data.data[0]?.teams.find((team:any) => team.name === data.data[0].bet_on.name)?.name} vs ${data.data[0]?.teams.find((team:any) => team.name !== data.data[0].bet_on.name)?.name}`}
                             </td>
                           );
 
                         case "pick":
                           return (
                             <td key={idx} className="pt-4">
-                              {data.data[0]?.bet_on === "home_team"
-                                ? data.data[0]?.home_team?.name
-                                : data.data[0]?.away_team?.name}
+                              {data.data[0]?.bet_on.name
+                               }
                             </td>
                           );
 
