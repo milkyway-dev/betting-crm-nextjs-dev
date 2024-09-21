@@ -83,7 +83,7 @@ const RecentBets: React.FC<RecentBetsProps> = ({ data }) => {
                     Odds
                   </div>
                   <div className="text-white group-hover:text-[#3A3A3A] dark:text-black dark:group-hover:text-white dark:group-hover:text-opacity-35 text-sm text-opacity-70">
-                    {item?.data[0]. bet_on?.odds}
+                    {item?.data[0]?.bet_on?.odds}
                   </div>
                 </div>
               </div>
