@@ -155,3 +155,8 @@ export interface ActivityDetails {
   bets: [];
   transactions: [];
 }
+
+export interface TimeRange {
+  startTime: string;
+  endTime: string;
+}
