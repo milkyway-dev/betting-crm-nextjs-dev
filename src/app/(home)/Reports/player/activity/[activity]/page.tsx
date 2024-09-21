@@ -10,4 +10,5 @@ const page = async ({ params }: any) => {
   )
 };
 
+
 export default page;
