@@ -14,22 +14,25 @@ const DateWiseActivity = ({ AvailableDates, playerId, username }: any) => {
   const [inputdate, setInputDate] = useState('');
 
   useEffect(() => {
-    const formattedDate = AvailableDates?.filter((date: any) =>
-      new Date(date?.date).toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      }) ===
-      new Date(inputdate).toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      })
-    );
-    setSelectedDate(formattedDate?.[0]?.date || '');
-    if (!formattedDate?.[0]?.date) {
-      setSession([])
+    if (AvailableDates.length > 0) {
+      const formattedDate = AvailableDates?.filter((date: any) =>
+        new Date(date?.date).toLocaleDateString('en-US', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }) ===
+        new Date(inputdate).toLocaleDateString('en-US', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        })
+      );
+      setSelectedDate(formattedDate?.[0]?.date || '');
+      if (!formattedDate?.[0]?.date) {
+        setSession([])
+      }
     }
+
   }, [inputdate]);
 
   const GetSessions = async () => {
