@@ -26,7 +26,7 @@ const Header = ({ Back }: any) => {
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
   const [count, setCount] = useState(0)
-  const allNotifications = useAppSelector((state: any) => state?.globlestate?.AllNotification).filter((item: any) => item?.viewed === false)?.length
+  const allNotifications = useAppSelector((state: any) => state?.globlestate?.AllNotification)?.filter((item: any) => item?.viewed === false)?.length
   useEffect(() => {
     setCount(allNotifications)
   },[allNotifications])
@@ -37,8 +37,7 @@ const Header = ({ Back }: any) => {
   const fetchUser = async () => {
     const currentUser = await getCredits();
     if (currentUser.error==='Token has expired') {
-      Cookies.remove("token");
-      router.push("/login");
+      router.push("/logout");
     } else {
       setUser(currentUser);
       dispatch(UpdateCredit(false));

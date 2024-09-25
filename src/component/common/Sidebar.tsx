@@ -45,9 +45,7 @@ const Sidebar = ({ params }: any) => {
     const currentUser:any = await getCurrentUser();
     setUser(currentUser);
     if (currentUser?.role === "player") {
-      Cookies.remove("token");
-      navigate.push("/login");
-      toast.success('Logout successfully !')
+      navigate.push("/logout");
     }
     switch (currentUser?.role) {
       case "distributor":
