@@ -27,7 +27,7 @@ const Table: React.FC<TableProps> = async ({
           <table className="w-full ">
             <thead className="text-white border-b  dark:text-black border-[#858585] ">
               <tr>
-                {fieldsHeadings.map((item: string, ind: number) => (
+                {fieldsHeadings?.map((item: string, ind: number) => (
                   <th
                     className={`font-normal ${
                       item === "Created At" ? "hidden xl:block " : ""
@@ -44,12 +44,12 @@ const Table: React.FC<TableProps> = async ({
               </tr>
             </thead>
             <tbody className=" text-center">
-              {data?.map((data: any, ind: number) => {
+              {data.length>0&&data?.map((data: any, ind: number) => {
                 const formattedDate = formatDate(data?.createdAt || data?.date);
                 return (
                   <tr
                     id={data._id}
-                    key={ind}
+                    key={data._id}
                     className="text-center hover:bg-black dark:hover:bg-gray-100  transition-all text-[.8rem] md:text-base font-extralight border-b-[1px] border-white border-opacity-10 dark:border-black dark:border-opacity-10  text-opacity-50 dark:text-black text-white"
                   >
                     {fieldData.map((field, idx) => {

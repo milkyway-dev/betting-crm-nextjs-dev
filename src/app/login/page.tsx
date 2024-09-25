@@ -47,8 +47,6 @@ const Page: React.FC = () => {
     captcha: "",
   });
 
-  console.log(formData, "Form Data");
-
   const fetchCaptcha = async () => {
     try {
       const captcha = await GetCaptcha();
