@@ -7,9 +7,11 @@ import { getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import Loader from "@/component/ui/Loader";
 import { createPlayer, createSubordinates } from "@/utils/action";
 import Down from "@/component/svg/Down";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
   const [load, setLoad] = useState(false)
+  const router = useRouter();
   const [formData, setFormData] = useState<AddFormData>({
     username: "",
     password: "",
@@ -89,6 +91,7 @@ const Page: React.FC = () => {
       }
       if (response?.error) {
         toast.error(response?.error || `Can't create ${formData.role}`);
+        router.push('/logout')
       } else {
         toast.success(`${formData.role} Created Successfully!`);
         setFormData({ username: "", password: "", role: "" });
