@@ -41,9 +41,9 @@ const Sidebar = ({ params }: any) => {
     },
   ]);
   const fetchUser = async () => {
-    const currentUser: any = await getCurrentUser();
-    setUser(currentUser);
     
+    const currentUser:any = await getCurrentUser();
+    setUser(currentUser);
     if (currentUser?.role === "player") {
       Cookies.remove("token");
       navigate.push("/login");
@@ -84,7 +84,7 @@ const Sidebar = ({ params }: any) => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  },[]);
 
   return (
     <>

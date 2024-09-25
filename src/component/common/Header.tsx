@@ -6,19 +6,19 @@ import Notification from "../svg/Notification";
 import Logout from "../svg/Logout";
 import DarkMode from "../svg/DarkMode";
 import { useTheme } from "next-themes";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import {
   UpdateCredit,
   UpdateHeader,
   UpdateNotification,
 } from "@/redux/ReduxSlice";
 import HamBurger from "../svg/HamBurger";
-import { useRouter } from "next/navigation";
+import {useRouter } from "next/navigation";
 import Infinite from "../svg/Infinite";
 import { getCredits} from "@/utils/action";
-import { UpdateCreditInterface } from "@/utils/Types";
 import toast from "react-hot-toast";
 import { useAppSelector } from "@/utils/hooks";
+import Cookies from "js-cookie";
 const Header = ({ Back }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -26,7 +26,7 @@ const Header = ({ Back }: any) => {
   const [user, setUser] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);
   const [count, setCount] = useState(0)
-  const allNotifications = useAppSelector((state: any) => state.globlestate.AllNotification).filter((item: any) => item.viewed === false)?.length
+  const allNotifications = useAppSelector((state: any) => state?.globlestate?.AllNotification).filter((item: any) => item?.viewed === false)?.length
   useEffect(() => {
     setCount(allNotifications)
   },[allNotifications])
@@ -36,16 +36,20 @@ const Header = ({ Back }: any) => {
   const currentTheme = theme === "system" ? systemTheme : theme;
   const fetchUser = async () => {
     const currentUser = await getCredits();
-    setUser(currentUser);
-    dispatch(UpdateCredit(false));
+    if (currentUser.error==='Token has expired') {
+      Cookies.remove("token");
+      router.push("/login");
+    } else {
+      setUser(currentUser);
+      dispatch(UpdateCredit(false));
+    }
   };
-  const creditUpdate = useSelector(
-    (state: UpdateCreditInterface) => state?.globlestate?.updateCredit
+  const creditUpdate = useAppSelector(
+    (state) => state?.globlestate?.updateCredit
   );
   useEffect(() => {
     fetchUser();
   }, [creditUpdate, mounted]);
-
   return (
     <div className="text-white pl-5 flex items-center sticky top-0 dark:bg-white dark:text-black dark:text-opacity-75 bg-bg_dashboard z-50 py-4 border-b-[.5px] border-[#313131] dark:border-opacity-10 justify-end">
       <button
