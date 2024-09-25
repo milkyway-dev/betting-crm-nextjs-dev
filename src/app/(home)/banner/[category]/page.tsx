@@ -95,7 +95,7 @@ const Page = (params: any) => {
         </div>
       </div>
       <div className="grid md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4 border-2 h-[75vh] overflow-y-scroll p-2 px-4 rounded-2xl border-[#dfdfdf40] ">
-        {banners.length > 0 ? (
+        {banners?.length > 0 ? (
           banners?.map((data: any, index) => (
             <div
               key={index}
@@ -119,7 +119,7 @@ const Page = (params: any) => {
           </div>
         )}
       </div>
-      {selectedBanner.length > 0 && (
+      {selectedBanner?.length > 0 && (
         <div className="flex justify-end gap-5 w-full text-white pt-4">
           <button
             onClick={() =>
