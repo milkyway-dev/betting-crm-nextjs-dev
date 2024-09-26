@@ -118,7 +118,10 @@ const Playerbets = ({ headers, data }: any) => {
                       $ {item.amount}
                     </td>
                     <td className="uppercase text-sm md:text-lg dark:text-black text-white">
-                      {data.category} {data?.bet_on?.points && data.category != 'h2h' ? '-' : null} <span className={`text-[.96rem] ${data.category == 'h2h' && 'hidden'} text-opacity-70 text-white dark:text-black`}>({data?.bet_on?.points})</span>
+                      <div className="flex flex-col">
+                        <span>{data.category}</span>
+                        <span className={`text-[.84rem] ${data.category == 'h2h' && 'hidden'}  text-white dark:text-black`}>{data?.bet_on?.points}</span>
+                      </div>
                     </td>
                     <td className="text-sm md:text-lg">
                       <div className="flex flex-col gap-2">
@@ -223,7 +226,10 @@ const Playerbets = ({ headers, data }: any) => {
                       <td
                         className={`uppercase text-sm md:text-lg dark:text-black text-white`}
                       >
-                        {data.category} {data?.bet_on?.points && data.category != 'h2h' ? '-' : null} <span className={`text-[.96rem] ${data.category == 'h2h' && 'hidden'} text-opacity-70 text-white dark:text-black`}>({data?.bet_on?.points})</span>
+                        <div className="flex flex-col">
+                          <span>{data.category}</span>
+                          <span className={`text-[.84rem] ${data.category == 'h2h' && 'hidden'}  text-white dark:text-black`}>{data?.bet_on?.points}</span>
+                        </div>
                       </td>
                       <td className="text-sm md:text-lg">
                         <div className="flex flex-col gap-2">
