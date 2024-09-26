@@ -12,6 +12,7 @@ import Password from "@/component/svg/Password";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import Loader from "@/component/ui/Loader";
+import Refresh from "@/component/svg/Refresh";
 
 
 const Page: React.FC = () => {
@@ -75,6 +76,7 @@ const Page: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!formData.username) {
       toast.error("Enter username!");
     } else if (!formData.password) {
@@ -153,10 +155,13 @@ const Page: React.FC = () => {
                     </button>
                   )}
                   {captchaSrc && item.Name == "captcha" && (
+                    <>
                     <div
                       dangerouslySetInnerHTML={{ __html: captchaSrc }}
                       className="h-full border-[#dfdfdfbc]  bg-[#ffffffc5] rounded-md"
                     ></div>
+                    <button type="button" className="px-3" onClick={fetchCaptcha}><Refresh /></button>
+                    </>
                   )}
                 </div>
               ))}

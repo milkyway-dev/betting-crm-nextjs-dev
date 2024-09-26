@@ -41,13 +41,11 @@ const Sidebar = ({ params }: any) => {
     },
   ]);
   const fetchUser = async () => {
-    const currentUser: any = await getCurrentUser();
-    setUser(currentUser);
     
+    const currentUser:any = await getCurrentUser();
+    setUser(currentUser);
     if (currentUser?.role === "player") {
-      Cookies.remove("token");
-      navigate.push("/login");
-      toast.success('Logout successfully !')
+      navigate.push("/logout");
     }
     switch (currentUser?.role) {
       case "distributor":
@@ -84,7 +82,7 @@ const Sidebar = ({ params }: any) => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  },[]);
 
   return (
     <>
