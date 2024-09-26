@@ -18,7 +18,7 @@ import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const Modal: React.FC<ModalProps> = ({
   betId,
@@ -151,7 +151,7 @@ const Modal: React.FC<ModalProps> = ({
       if (response.error) {
         toast.error(response?.error || "Can't Update Agent");
         if (response.statuscode === 401) {
-          router.push('/logout')
+          redirect('/logout')
         }
         onClose();
       } else {
@@ -182,7 +182,7 @@ const Modal: React.FC<ModalProps> = ({
           toast.error(response?.error || "Can't Update Agent");
           if (response.statuscode === 401) {
             console.log('hi i am updatesubordinate', response)
-            router.push('/logout')
+            redirect('/logout')
           }
         } else {
           toast.success(response?.message);
@@ -197,10 +197,9 @@ const Modal: React.FC<ModalProps> = ({
         setLoad(true);
         const response = await updatePlayer(formData, data?._id);
         if (response.error) {
-          console.log(response,"response is here")
           toast.error(response?.error || "Can't Update Player");
           if (response.statuscode === 401) {
-            router.push('/logout')
+            redirect('/logout')
           }
         } else {
           toast.success(response?.responseData?.message);
@@ -234,7 +233,7 @@ const Modal: React.FC<ModalProps> = ({
     if (response.error) {
       toast.error(response?.error);
       if (response.statuscode === 401) {
-        router.push('/logout')
+        redirect('/logout')
       }
     } else {
       toast.success(response.message);
@@ -272,7 +271,7 @@ const Modal: React.FC<ModalProps> = ({
         if (response.error) {
           toast.error(response?.error || "Can't Delete Agent");
           if (response.statuscode === 401) {
-            router.push('/logout')
+            redirect('/logout')
           }
         }
         onClose();
@@ -287,7 +286,7 @@ const Modal: React.FC<ModalProps> = ({
         if (response.error) {
           toast.error(response?.error || "Can't Delete Player");
           if (response.statuscode === 401) {
-            router.push('/logout')
+            redirect('/logout')
           }
         }
         onClose();
@@ -314,7 +313,7 @@ const Modal: React.FC<ModalProps> = ({
       if (response.error) {
         toast.error(response?.error);
         if (response.statuscode === 401) {
-          router.push('/logout')
+          redirect('/logout')
         }
         onClose();
         setLoad(false);
