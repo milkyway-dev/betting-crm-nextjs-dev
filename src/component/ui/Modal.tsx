@@ -18,6 +18,7 @@ import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
+import { useRouter } from "next/navigation";
 
 const Modal: React.FC<ModalProps> = ({
   betId,
@@ -35,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
   const [betStatus, setBetStatus] = useState<string>("lost");
   const dispatch = useDispatch();
   const [customStatus, setCustomStatus] = useState<string>('');
-
+  const router =useRouter()
   const [bannerPreview, setBannerPreview] = useState<any>();
   const [categories, setCategories] = useState<
     { value: string; label: string }[]
@@ -148,7 +149,8 @@ const Modal: React.FC<ModalProps> = ({
       setLoad(true);
       const response = await updateBet(payload)
       if (response?.error) {
-        return toast.error(response?.error || "Can't Update Agent");
+        toast.error(response?.error || "Can't Update Agent");
+        router.push('/logout')
       }
       toast.success(response?.message);
       onClose();
@@ -174,7 +176,8 @@ const Modal: React.FC<ModalProps> = ({
         setLoad(true);
         const response = await updateSubordinates(formData, data?._id);
         if (response?.error) {
-          return toast.error(response?.error || "Can't Update Agent");
+          toast.error(response?.error || "Can't Update Agent");
+          router.push('/logout')
         }
         toast.success(response?.message);
         onClose();
@@ -187,7 +190,8 @@ const Modal: React.FC<ModalProps> = ({
         setLoad(true);
         const response = await updatePlayer(formData, data?._id);
         if (response?.error) {
-          return toast.error(response?.error || "Can't Update Player");
+          toast.error(response?.error || "Can't Update Player");
+          router.push('/logout')
         }
         toast.success(response?.responseData?.message);
         onClose();
@@ -217,7 +221,8 @@ const Modal: React.FC<ModalProps> = ({
     const response = await uploadBanner(formData);
     setLoad(false);
     if (response?.error) {
-      return toast.error(response?.error);
+      toast.error(response?.error);
+      router.push('/logout')
     }
     toast.success(response.message);
     setBannerData({
@@ -231,11 +236,13 @@ const Modal: React.FC<ModalProps> = ({
 
   const fetchCategoryData = async () => {
     const category = await fetchSportsCategory();
-    const options = category.map((category: any) => ({
-      value: category,
-      label: category,
-    }));
-    setCategories(options);
+    if (category?.length > 0) {
+      const options = category?.map((category: any) => ({
+        value: category,
+        label: category,
+      }));
+      setCategories(options);
+    }
   };
 
   useEffect(() => {
@@ -249,7 +256,8 @@ const Modal: React.FC<ModalProps> = ({
         setLoad(true);
         const response = await deleteSubordinates(id);
         if (response?.error) {
-          return toast.error(response?.error || "Can't Delete Agent");
+          toast.error(response?.error || "Can't Delete Agent");
+          router.push('/logout')
         }
         onClose();
         setLoad(false);
@@ -286,6 +294,7 @@ const Modal: React.FC<ModalProps> = ({
       const response = await transactions(dataObject);
       if (response?.error) {
         toast.error(response?.error || "Can't Recharge");
+        router.push('/logout')
         onClose();
         setLoad(false);
         return;
