@@ -57,7 +57,7 @@ const Page = (params: any) => {
     const response = await deleteBanners(selectedBanner);
     setLoad(false);
     if (response.error) {
-      return toast.error(response?.error);
+      return router.push('/logout');
     }
     toast.success(response.message);
     fetchData(category, status);

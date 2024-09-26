@@ -40,8 +40,6 @@ async function getPlayerTransactions(
 
     if (!response.ok) {
       const error = await response.json();
-      console.log(error);
-
       return { error: error.message };
     }
 

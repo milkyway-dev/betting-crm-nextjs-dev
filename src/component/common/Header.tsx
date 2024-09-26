@@ -36,7 +36,7 @@ const Header = ({ Back }: any) => {
   const currentTheme = theme === "system" ? systemTheme : theme;
   const fetchUser = async () => {
     const currentUser = await getCredits();
-    if (currentUser.error==='Token has expired') {
+    if (currentUser.error) {
       router.push("/logout");
     } else {
       setUser(currentUser);
