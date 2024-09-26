@@ -44,8 +44,9 @@ const Page = (params: any) => {
     setLoad(true);
     const response = await updateBannerStatus(selectedBanner, newStatus);
     setLoad(false);
-    if (response.error) {
-      return toast.error(response?.error);
+    if (response.statuscode===401) {
+      toast.error(response.error)
+       router.push('/logout');
     }
     toast.success(response.message);
     fetchData(category, status);
@@ -56,8 +57,9 @@ const Page = (params: any) => {
     setLoad(true);
     const response = await deleteBanners(selectedBanner);
     setLoad(false);
-    if (response.error) {
-      return router.push('/logout');
+    if (response.statuscode===401) {
+      toast.error(response.error)
+       router.push('/logout');
     }
     toast.success(response.message);
     fetchData(category, status);

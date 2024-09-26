@@ -7,6 +7,7 @@ import RecentTransaction from "@/component/ui/RecentTransaction";
 import { config } from "@/utils/config";
 import { getCookie, getCurrentUser } from "@/utils/utils";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 async function getSummary(days:string) {
   const user: any = await getCurrentUser()
@@ -25,7 +26,7 @@ async function getSummary(days:string) {
     if (!response.ok) {
       const error = await response.json();
       
-      return { error: error.message };
+      return { error: error.message,statuscode: response.status};
     }
 
     const data = await response.json();
@@ -44,6 +45,10 @@ export default async function Home({searchParams}:any) {
 
   const user: any = await getCurrentUser()
   const userRole: string = user?.role;
+
+  if (summary?.statuscode===401) {
+    redirect('/logout')
+  }
   const TopCards = {
     admin: [
       {
