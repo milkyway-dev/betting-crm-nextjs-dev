@@ -3,9 +3,8 @@ import { getAllBets } from "@/utils/action";
 import { getCurrentUser } from "@/utils/utils";
 
 const page = async ({ searchParams }: any) => {
-  console.log(searchParams,"asdagskdhjd")
   const user: any = await getCurrentUser();
-  const data = await getAllBets(user, searchParams?.date);
+   const data = await getAllBets(user,searchParams.date);
   const fieldsHeadings = [
     "Username",
     "Status",

@@ -4,14 +4,19 @@ import { formatDate, getCurrentUser, rolesHierarchy } from "@/utils/utils";
 import TableThreeDots from "./TableThreeDots";
 import TableUserName from "./TableUserName";
 import PlayerUsername from "../PlayerUsername";
+import { redirect } from "next/navigation";
 
 const Table: React.FC<TableProps> = async ({
   fieldsHeadings,
   fieldData,
-  data = [],
+  data,
   Page,
   width
 }) => {
+if (data?.statuscode===401) {
+    redirect('/logout')
+  }
+
   const user: any = await getCurrentUser();
   const userRole: string = user?.role;
   let tabs = await rolesHierarchy(userRole);
@@ -61,7 +66,7 @@ const Table: React.FC<TableProps> = async ({
                             <TableUserName
                               role={data?.role}
                               username={data[field]}
-                              Id={data._id}
+                              Id={data?._id}
                               index={idx}
                             />
                           );
