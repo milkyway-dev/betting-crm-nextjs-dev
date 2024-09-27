@@ -41,10 +41,11 @@ const Sidebar = ({ params }: any) => {
   ]);
   const fetchUser = async () => {
     const currentUser: any = await getCurrentUser();
-    setUser(currentUser);
     if (currentUser?.role === "player") {
       navigate.push("/logout");
     }
+    setUser(currentUser);
+   
     switch (currentUser?.role) {
       case "distributor":
         setNav((prevNav) =>
