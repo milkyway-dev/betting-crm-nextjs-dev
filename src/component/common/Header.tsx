@@ -36,6 +36,7 @@ const Header = ({ Back }: any) => {
   const currentTheme = theme === "system" ? systemTheme : theme;
   const fetchUser = async () => {
     const currentUser = await getCredits();
+
     if (currentUser.statuscode === 401) {
       router.push("/logout");
     } else {

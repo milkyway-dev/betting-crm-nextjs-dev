@@ -22,6 +22,7 @@ const page = async ({ searchParams }: any) => {
     "match_info",
     "pick",
   ];
+
   return (
     <Table
       Page="betting"
