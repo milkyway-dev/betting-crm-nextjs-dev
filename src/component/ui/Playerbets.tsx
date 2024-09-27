@@ -64,13 +64,164 @@ const PlayerBets = ({ headers, data }: any) => {
     }
   }, [pathname, activeid, currentTheme]);
 
+  console.log("DATA", data);
+
+  // const renderTableRows = useMemo(() => {
+  //   return data?.map((item: any, ind: any) =>
+  //     item.betType==="combo" && <tr>Combo</tr>
+  //     item.data.map((bet: any, dataIndex: number) => (
+  //       <tr
+  //         id={item._id}
+  //         key={`${item._id}-${dataIndex}-${item.betType}`}
+  //         className={`${
+  //           item.betType === "single"
+  //             ? "border-white border-opacity-10"
+  //             : "border-[#c73131] border-[1px]"
+  //         } text-center font-extralight hover:bg-black dark:hover:bg-gray-100 `}
+  //       >
+  //         {/* Sport Information */}
+  //         <td className="w-[20%] py-2 md:py-4">
+  //           <div className="w-full flex flex-col gap-1 px-3">
+  //             <span className="text-white font-medium dark:text-black text-left text-sm md:text-lg">
+  //               {bet.sport_title}
+  //             </span>
+  //             {bet?.teams?.length > 0 ? (
+  //               <span className="text-[9px] md:text-[13px] text-left">
+  //                 <span
+  //                   className={
+  //                     bet?.bet_on?.name === bet?.teams[0]?.name
+  //                       ? "text-[#FFC400]"
+  //                       : "dark:text-black text-white"
+  //                   }
+  //                 >
+  //                   {bet.teams[0]?.name}
+  //                 </span>{" "}
+  //                 <span className="text-white dark:text-black">v/s</span>{" "}
+  //                 <span
+  //                   className={
+  //                     bet?.bet_on?.name === bet?.teams[1]?.name
+  //                       ? "text-[#FFC400]"
+  //                       : "dark:text-black text-white"
+  //                   }
+  //                 >
+  //                   {bet.teams[1]?.name}
+  //                 </span>
+  //               </span>
+  //             ) : (
+  //               <span className="text-[9px] md:text-[13px] text-left">
+  //                 <span
+  //                   className={
+  //                     bet?.bet_on === "home_team"
+  //                       ? "text-[#FFC400]"
+  //                       : "dark:text-black text-white"
+  //                   }
+  //                 >
+  //                   {bet?.home_team?.name}
+  //                 </span>{" "}
+  //                 <span className="text-white dark:text-black">v/s</span>{" "}
+  //                 <span
+  //                   className={
+  //                     bet?.bet_on === "away_team"
+  //                       ? "text-[#FFC400]"
+  //                       : "dark:text-black text-white"
+  //                   }
+  //                 >
+  //                   {bet?.away_team?.name}
+  //                 </span>
+  //               </span>
+  //             )}
+  //             <span className="text-[9px] md:text-[11px] px-3 py-1.5 border-[1px] border-white dark:border-black dark:border-opacity-30 text-white text-opacity-60 rounded-lg w-fit">
+  //               {formatDate(bet.commence_time)}
+  //             </span>
+  //           </div>
+  //         </td>
+  //         {/* Bet Amount */}
+  //         <td className="text-white dark:text-black text-sm md:text-lg">
+  //           $ {item.amount}
+  //         </td>
+  //         {/* Category */}
+  //         {bet?.category ? (
+  //           <td className="uppercase text-sm md:text-lg dark:text-black text-white">
+  //             {bet?.category}
+  //           </td>
+  //         ) : (
+  //           <td className="uppercase text-sm md:text-lg dark:text-black text-white">
+  //             {bet?.market}
+  //           </td>
+  //         )}
+  //         {/* Odds */}
+  //         <td className="text-sm md:text-lg">
+  //           <div className="flex flex-col gap-2">
+  //             <span className="text-sm dark:text-black text-white">
+  //               {bet?.oddsFormat}
+  //             </span>
+  //             {bet?.bet_on?.odds ? (
+  //               <span className="text-white dark:text-black">
+  //                 {bet?.bet_on?.odds}
+  //               </span>
+  //             ) : (
+  //               <span className="text-white dark:text-black">
+  //                 {bet?.bet_on === "away_team"
+  //                   ? bet?.away_team?.odds
+  //                   : bet?.home_team?.odds}
+  //               </span>
+  //             )}
+  //           </div>
+  //         </td>
+  //         {/* Possible Winning Amount */}
+  //         <td className="text-sm text-white dark:text-black md:text-lg">
+  //           {item?.possibleWinningAmount?.toFixed(3)}
+  //         </td>
+  //         {/* Status */}
+  //         <td
+  //           className={`text-sm font-semibold md:text-lg capitalize ${getStatusClass(
+  //             bet.status
+  //           )}`}
+  //         >
+  //           {bet.status}
+  //         </td>
+  //         {/* Action Buttons */}
+  //         <td className="text-white">
+  //           <ResolveButton id={bet._id} />
+  //           <EditButton id={bet._id} betdata={item} />
+  //         </td>
+  //       </tr>
+  //     ))
+  //   );
+  // }, [data]);
+
   const renderTableRows = useMemo(() => {
-    return data?.map((item: any, ind: any) =>
-      item.data.map((bet: any, dataIndex: number) => (
+    return data?.flatMap((item: any, ind: any) => {
+      const comboRow =
+        item.betType === "combo" ? (
+          <tr className="text-white font-semibold" key={`combo-${item._id}`}>
+            <td
+              className="bg-black px-5 py-1 rounded-tl-2xl border-[#f3aa3589] border-x-[1px] border-b-[1px] rounded-tr-2xl  inline-block mt-2"
+              colSpan={8}
+            >
+              Combo
+            </td>
+          </tr>
+        ) : null;
+
+      const betRows = item.data.map((bet: any, dataIndex: number) => (
         <tr
           id={item._id}
           key={`${item._id}-${dataIndex}-${item.betType}`}
-          className="text-center font-extralight hover:bg-black dark:hover:bg-gray-100 border-white border-opacity-10"
+          className={`${
+            item.betType === "single"
+              ? "border-white border-opacity-10"
+              : `border-[#ffc40061] border-x-[1px] ${
+                  item.betType === "combo" && dataIndex === 0
+                    ? "border-t-[1px]"
+                    : ""
+                }  ${
+                  item.betType === "combo" &&
+                  dataIndex === item?.data?.length - 1
+                    ? "border-b-[1px]"
+                    : ""
+                }`
+          } text-center font-extralight hover:bg-black dark:hover:bg-gray-100`}
         >
           {/* Sport Information */}
           <td className="w-[20%] py-2 md:py-4">
@@ -133,32 +284,21 @@ const PlayerBets = ({ headers, data }: any) => {
             $ {item.amount}
           </td>
           {/* Category */}
-          {bet?.category ? (
-            <td className="uppercase text-sm md:text-lg dark:text-black text-white">
-              {bet?.category}
-            </td>
-          ) : (
-            <td className="uppercase text-sm md:text-lg dark:text-black text-white">
-              {bet?.market}
-            </td>
-          )}
+          <td className="uppercase text-sm md:text-lg dark:text-black text-white">
+            {bet?.category || bet?.market}
+          </td>
           {/* Odds */}
           <td className="text-sm md:text-lg">
             <div className="flex flex-col gap-2">
               <span className="text-sm dark:text-black text-white">
                 {bet?.oddsFormat}
               </span>
-              {bet?.bet_on?.odds ? (
-                <span className="text-white dark:text-black">
-                  {bet?.bet_on?.odds}
-                </span>
-              ) : (
-                <span className="text-white dark:text-black">
-                  {bet?.bet_on === "away_team"
+              <span className="text-white dark:text-black">
+                {bet?.bet_on?.odds ||
+                  (bet?.bet_on === "away_team"
                     ? bet?.away_team?.odds
-                    : bet?.home_team?.odds}
-                </span>
-              )}
+                    : bet?.home_team?.odds)}
+              </span>
             </div>
           </td>
           {/* Possible Winning Amount */}
@@ -179,8 +319,10 @@ const PlayerBets = ({ headers, data }: any) => {
             <EditButton id={bet._id} betdata={item} />
           </td>
         </tr>
-      ))
-    );
+      ));
+
+      return [comboRow, ...betRows];
+    });
   }, [data]);
 
   return (
