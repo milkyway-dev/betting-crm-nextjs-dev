@@ -66,8 +66,8 @@ export const updateSubordinates = async (data: any, Id: any) => {
     const resdata = await response.json();
     return resdata;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/subordinates");
   }
@@ -91,8 +91,8 @@ export const deleteSubordinates = async (id: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/subordinates");
   }
@@ -116,8 +116,8 @@ export const createSubordinates = async (data: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/subordinates");
   }
@@ -142,8 +142,8 @@ export const updatePlayer = async (data: any, Id: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -167,8 +167,8 @@ export const deletePlayer = async (id: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -193,8 +193,8 @@ export const createPlayer = async (data: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -220,8 +220,8 @@ export const transactions = async (data: any) => {
 
     return respMessage;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -248,8 +248,8 @@ export const getBetsForPlayer = async (userId: any) => {
 
     return bets;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 };
 export const getCredits = async () => {
@@ -275,8 +275,8 @@ export const getCredits = async () => {
 
     return credits;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 };
 export const getSubordinatesReport = async (username: string) => {
@@ -303,8 +303,8 @@ export const getSubordinatesReport = async (username: string) => {
     const report = data;
     return report;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -317,9 +317,9 @@ export async function getAllBets(user: any, dateString: string) {
       url += `/?date=${dateString}`;
     }
   } else {
-    url += `?userId=${user?.userId}`;
+    url += `/${user?.userId}`;
     if (dateString) {
-      url += `&date=${dateString}`;
+      url += `?date=${dateString}`;
     }
   }
   try {
@@ -341,8 +341,8 @@ export async function getAllBets(user: any, dateString: string) {
     }
   } catch (error) {
     // Handle the error
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 }
 export async function getAllTransactions(
@@ -391,8 +391,8 @@ export async function getAllTransactions(
     const transactions = data;
     return transactions;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 }
 
@@ -418,7 +418,6 @@ export async function getSubordinates(
   if (dateString?.length > 0) {
     subordinatesurl += `&date=${dateString}`;
   }
-  console.log(url);
   try {
     const response = await fetch(
       `${config.server}${user?.role === "admin" ? url : subordinatesurl}`,
@@ -441,8 +440,8 @@ export async function getSubordinates(
     const all = data;
     return all;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -475,8 +474,8 @@ export async function getUserNotifications() {
 
     return data;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -504,9 +503,8 @@ export const setViewedNotification = async (notificationId: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
-
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -532,9 +530,8 @@ export const resolveStatus = async (data: any, Id: any) => {
     const responseData = await response.json();
     return { responseData };
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
-
+    Cookies.remove("token");
+    redirect("/login");
   } finally {
     revalidatePath("/");
   }
@@ -559,8 +556,8 @@ export const fetchSportsCategory = async () => {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
     console.log(error);
   }
 };
@@ -584,8 +581,8 @@ export const uploadBanner = async (data: any) => {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
     console.log(error);
   }
 };
@@ -611,8 +608,8 @@ export const getBanners = async (category: string, status: string) => {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 };
 
@@ -635,8 +632,8 @@ export const updateBannerStatus = async (banners: string[], status: string) => {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 };
 
@@ -659,8 +656,8 @@ export const deleteBanners = async (banners: string[]) => {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 };
 
@@ -686,8 +683,8 @@ export async function getDailyActivity(username: string) {
 
     return data;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 }
 
@@ -719,8 +716,8 @@ export async function getActivitiesByDateAndPlayer(
     const data = await response.json();
     return data;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
   }
 }
 
@@ -730,11 +727,11 @@ export async function getBetsAndTransactions(
   playerId: string
 ) {
   const token = await getCookie();
-  const Time_id={
-    "startTime": startTime,
-    "endTime": endTime,
-    "playerId":playerId
-  }
+  const Time_id = {
+    startTime: startTime,
+    endTime: endTime,
+    playerId: playerId,
+  };
 
   try {
     const response = await fetch(`${config.server}/api/userActivities`, {
@@ -758,8 +755,8 @@ export async function getBetsAndTransactions(
 
     return data;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
     return { error: "An error occurred while fetching bets and transactions." };
   }
 }
@@ -785,12 +782,10 @@ export async function updateBet(payload: any) {
     }
 
     const data = await response.json();
-    console.log(data);
-
     return data;
   } catch (error) {
-    Cookies.remove('token');
-    redirect('/login')
+    Cookies.remove("token");
+    redirect("/login");
     return { error: "An error occurred while fetching bets and transactions." };
   } finally {
     revalidatePath("/");

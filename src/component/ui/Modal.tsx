@@ -19,6 +19,7 @@ import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Modal: React.FC<ModalProps> = ({
   betId,
@@ -408,7 +409,6 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value) || 0;
-console.log(newAmount, "newer amount");
 
     setParentBetData((prev: any) => {
       const odds =betDetails.bet_on.odds || 0;
@@ -822,7 +822,7 @@ console.log(newAmount, "newer amount");
                         </>
                       ) : (
                         <div className="relative w-full flex items-start">
-                          <img
+                          <Image
                             src={bannerPreview}
                             alt="banner-Preview"
                             className="h-auto max-h-[10rem] w-full object-contain"

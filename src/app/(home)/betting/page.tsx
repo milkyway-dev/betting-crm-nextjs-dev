@@ -3,7 +3,6 @@ import { getAllBets } from "@/utils/action";
 import { getCurrentUser } from "@/utils/utils";
 
 const page = async ({ searchParams }: any) => {
-  console.log(searchParams,"asdagskdhjd")
   const user: any = await getCurrentUser();
   const data = await getAllBets(user, searchParams?.date);
   const fieldsHeadings = [
@@ -23,6 +22,7 @@ const page = async ({ searchParams }: any) => {
     "match_info",
     "pick",
   ];
+
   return (
     <Table
       Page="betting"
