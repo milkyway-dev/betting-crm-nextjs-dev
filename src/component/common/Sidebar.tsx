@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { UpdateHeader } from "@/redux/ReduxSlice";
 import Profile from "../svg/Profile";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import toast from "react-hot-toast";
 
 
 const Sidebar = ({ params }: any) => {
@@ -43,7 +41,6 @@ const Sidebar = ({ params }: any) => {
   const fetchUser = async () => {
     
     const currentUser: any = await getCurrentUser();
-    console.log(currentUser, "asdjksd")
     if (currentUser?.role === "player") {
       navigate.push("/logout");
     }
