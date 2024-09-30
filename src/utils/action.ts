@@ -716,7 +716,7 @@ export async function getActivitiesByDateAndPlayer(
       return { error: error.message };
     }
 
-    const data = await response.json();
+    const data = await response.json();    
     return data;
   } catch (error) {
     Cookies.remove('token');
