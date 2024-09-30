@@ -710,6 +710,7 @@ export async function getActivitiesByDateAndPlayer(
       const error = await response.json();
        return { error: error.message , statuscode: response?.status };
     }
+
     const data = await response.json();
     return data;
   } catch (error) {
