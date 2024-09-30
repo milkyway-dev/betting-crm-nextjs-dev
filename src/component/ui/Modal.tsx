@@ -18,6 +18,8 @@ import Loader from "./Loader";
 import { UpdateCredit } from "@/redux/ReduxSlice";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
+import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
 
 const Modal: React.FC<ModalProps> = ({
   betId,
@@ -35,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({
   const [betStatus, setBetStatus] = useState<string>("lost");
   const dispatch = useDispatch();
   const [customStatus, setCustomStatus] = useState<string>('');
-
+  const router = useRouter()
   const [bannerPreview, setBannerPreview] = useState<any>();
   const [categories, setCategories] = useState<
     { value: string; label: string }[]
@@ -73,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({
     if (clickedBetDetail) {
       setBetDetails({
         detailId: clickedBetDetail._id,
-        category : clickedBetDetail.category,
+        category: clickedBetDetail.category,
         status: clickedBetDetail.status,
         isResolved: clickedBetDetail.isResolved,
         bet_on: clickedBetDetail.bet_on,  // Ensure `bet_on` is set
@@ -120,14 +122,14 @@ const Modal: React.FC<ModalProps> = ({
           ...betDetails,
           bet_on: {
             ...betDetails.bet_on,
-            odds: value,  
+            odds: value,
           }
         };
 
       } else {
         updatedBetDetails = {
           ...betDetails,
-          [name]: value,  
+          [name]: value,
         };
       }
 
@@ -147,15 +149,19 @@ const Modal: React.FC<ModalProps> = ({
     try {
       setLoad(true);
       const response = await updateBet(payload)
-      if (response?.error) {
-        return toast.error(response?.error || "Can't Update Agent");
+      if (response.error) {
+        toast.error(response?.error || "Can't Update Agent");
+        if (response.statuscode === 401) {
+          redirect('/logout')
+        }
+        onClose();
+      } else {
+        toast.success(response?.message);
+        onClose();
       }
-      toast.success(response?.message);
-      onClose();
       setLoad(false);
     } catch (error) {
       // console.log(error);
-
       setLoad(false);
     }
   };
@@ -173,10 +179,15 @@ const Modal: React.FC<ModalProps> = ({
       try {
         setLoad(true);
         const response = await updateSubordinates(formData, data?._id);
-        if (response?.error) {
-          return toast.error(response?.error || "Can't Update Agent");
+        if (response.error) {
+          toast.error(response?.error || "Can't Update Agent");
+          if (response.statuscode === 401) {
+            console.log('hi i am updatesubordinate', response)
+            redirect('/logout')
+          }
+        } else {
+          toast.success(response?.message);
         }
-        toast.success(response?.message);
         onClose();
         setLoad(false);
       } catch (error) {
@@ -186,10 +197,14 @@ const Modal: React.FC<ModalProps> = ({
       try {
         setLoad(true);
         const response = await updatePlayer(formData, data?._id);
-        if (response?.error) {
-          return toast.error(response?.error || "Can't Update Player");
+        if (response.error) {
+          toast.error(response?.error || "Can't Update Player");
+          if (response.statuscode === 401) {
+            redirect('/logout')
+          }
+        } else {
+          toast.success(response?.responseData?.message);
         }
-        toast.success(response?.responseData?.message);
         onClose();
         setLoad(false);
       } catch (error) {
@@ -216,10 +231,14 @@ const Modal: React.FC<ModalProps> = ({
     setLoad(true);
     const response = await uploadBanner(formData);
     setLoad(false);
-    if (response?.error) {
-      return toast.error(response?.error);
+    if (response.error) {
+      toast.error(response?.error);
+      if (response.statuscode === 401) {
+        redirect('/logout')
+      }
+    } else {
+      toast.success(response.message);
     }
-    toast.success(response.message);
     setBannerData({
       ...bannerData,
       category: ["All"],
@@ -231,11 +250,13 @@ const Modal: React.FC<ModalProps> = ({
 
   const fetchCategoryData = async () => {
     const category = await fetchSportsCategory();
-    const options = category.map((category: any) => ({
-      value: category,
-      label: category,
-    }));
-    setCategories(options);
+    if (category?.length > 0) {
+      const options = category?.map((category: any) => ({
+        value: category,
+        label: category,
+      }));
+      setCategories(options);
+    }
   };
 
   useEffect(() => {
@@ -248,8 +269,11 @@ const Modal: React.FC<ModalProps> = ({
       try {
         setLoad(true);
         const response = await deleteSubordinates(id);
-        if (response?.error) {
-          return toast.error(response?.error || "Can't Delete Agent");
+        if (response.error) {
+          toast.error(response?.error || "Can't Delete Agent");
+          if (response.statuscode === 401) {
+            redirect('/logout')
+          }
         }
         onClose();
         setLoad(false);
@@ -260,8 +284,11 @@ const Modal: React.FC<ModalProps> = ({
       try {
         setLoad(true);
         const response = await deletePlayer(id);
-        if (response?.error) {
-          return toast.error(response?.error || "Can't Delete Player");
+        if (response.error) {
+          toast.error(response?.error || "Can't Delete Player");
+          if (response.statuscode === 401) {
+            redirect('/logout')
+          }
         }
         onClose();
         setLoad(false);
@@ -284,8 +311,11 @@ const Modal: React.FC<ModalProps> = ({
     try {
       setLoad(true);
       const response = await transactions(dataObject);
-      if (response?.error) {
-        toast.error(response?.error || "Can't Recharge");
+      if (response.error) {
+        toast.error(response?.error);
+        if (response.statuscode === 401) {
+          redirect('/logout')
+        }
         onClose();
         setLoad(false);
         return;
@@ -399,10 +429,9 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value) || 0;
-console.log(newAmount, "newer amount");
 
     setParentBetData((prev: any) => {
-      const odds =betDetails.bet_on.odds || 0;
+      const odds = betDetails.bet_on.odds || 0;
 
       const newPossibleWinningAmount = calculatePossibleWinningAmount(newAmount, odds);
       return {
@@ -426,7 +455,7 @@ console.log(newAmount, "newer amount");
           ...prev.bet_on,
           odds: newOdds,  // Correctly access and update the odds inside bet_on
         }
-        
+
       };
 
       return {
@@ -813,7 +842,7 @@ console.log(newAmount, "newer amount");
                         </>
                       ) : (
                         <div className="relative w-full flex items-start">
-                          <img
+                          <Image
                             src={bannerPreview}
                             alt="banner-Preview"
                             className="h-auto max-h-[10rem] w-full object-contain"

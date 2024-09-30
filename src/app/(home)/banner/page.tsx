@@ -3,7 +3,7 @@
 import Modal from "@/component/ui/Modal";
 import { fetchSportsCategory, getBanners } from "@/utils/action";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -11,6 +11,7 @@ const Page = () => {
   const [open, setOPen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [type, setType] = useState("");
+  const router=useRouter()
   const [categories, setCategories] = useState<string[]>([]);
   const pathname = usePathname();
   const handelOpen = (state: boolean, Type: string) => {
@@ -26,8 +27,9 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async (category: string) => {
       const categoriesData = await fetchSportsCategory();
-      if (categoriesData?.error) {
-        return toast.error(categoriesData.error);
+      if (categoriesData?.statuscode===401) {
+        toast.error(categoriesData.error)
+         router.push('/logout');
       }
       setCategories(categoriesData);
     };
