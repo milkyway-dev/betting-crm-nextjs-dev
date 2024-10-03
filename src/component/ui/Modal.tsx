@@ -166,7 +166,17 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("HERE");
+     console.log();
+     
     const newStatus = e.target.value;
+    if(betDetails.isResolved && newStatus === "pending"){
+      console.log("HERE");
+      
+      toast.error("Can't update a resolved bet to pending")
+      return;
+    }
+
     setBetDetailStatus(newStatus);
     if (newStatus !== 'custom') {
       setCustomStatus('');
