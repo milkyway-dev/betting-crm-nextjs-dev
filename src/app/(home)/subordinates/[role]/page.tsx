@@ -5,10 +5,11 @@ import { getSubordinates } from "@/utils/action";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
+  const [search, setSearch] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageCount, setPageCount] = useState<number>(1)
   const lastElementRef = useRef(null);
-  console.log(data)
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,12 +21,17 @@ const Page = ({ params, searchParams }: any) => {
           pageCount,
           10,
         );
-        console.log(result?.data,"data")
-        if ((searchParams?.search?.length > 0) || (searchParams?.date)) {
-          setData([...result?.data]);
+        console.log(result,"result data")
+        if (searchParams?.search?.length > 0 || searchParams?.date) {
+          setData([]);
+          setPageCount(1)
+          setSearch([...result?.data]);
         } else {
-          const newData = result?.data?.filter((item: any) => !data.some((stateItem) => stateItem?._id === item?._id));
-          setData([...data,...newData]);
+          const newData = result?.data?.filter(
+            (item: any) => !data.some((stateItem: any) => stateItem?._id === item?._id)
+          );
+          setData([...data, ...newData]);
+          setSearch([])
         }
       } catch (error) {
         console.error("Error fetching subordinates:", error);
@@ -60,6 +66,9 @@ const Page = ({ params, searchParams }: any) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if (searchParams?.search?.length > 0 || searchParams?.date) {
+          setPageCount(1)
+        }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
           setPageCount((prevPageCount) => prevPageCount + 1);
         } ` `
@@ -78,17 +87,15 @@ const Page = ({ params, searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data]);
+  }, [data,search]);
 
 
   return (
     <>
       <Table
         fieldsHeadings={fieldsHeadings}
-        searchDate={searchParams?.date}
-        searchquery={searchParams?.search}
         fieldData={fieldsData}
-        data={data}
+        data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data}
       />
       <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
     </>
