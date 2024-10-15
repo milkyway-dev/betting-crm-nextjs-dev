@@ -43,7 +43,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
   const [searchState, setSearchState] = useState<any[]>([]);
   const [scoresData, setScoresData] = useState<any[]>([]);
   const [uniqueId, setUniqueId] = useState('')
-
+   
   const handelShowScore = async (eventId: string, uniqueId: string) => {
     setUniqueId(uniqueId)
     try {

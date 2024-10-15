@@ -29,7 +29,6 @@ const Page = () => {
         );
         setEmpty(result?.data)
         if (searchParams.get('search')?.length > 0 || searchParams.get('date')) {
-          setData([]);
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(

@@ -832,7 +832,6 @@ export async function getPlayerTransactions(
       const error = await response.json();
       return { error: error.message };
     }
-    console.log(response,"response player transation")
     const data = await response.json();
     const transactions = data;
     return transactions;
