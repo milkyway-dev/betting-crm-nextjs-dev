@@ -5,6 +5,7 @@ import EditButton from "./EditBetButton";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useAppSelector } from "@/utils/hooks";
+import { getScores } from "@/utils/action";
 
 // Utility function for status class
 const getStatusClass = (status: string) => {
@@ -32,7 +33,6 @@ const formatDate = (timestamp: string | Date) => {
     minute: "2-digit",
   })}`;
 };
-
 const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
   const activeid: any = useAppSelector((state) => state.globlestate.betId);
   const { systemTheme, theme } = useTheme();
@@ -41,6 +41,22 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
   const isMounted = useRef(false);
   const [state, setState] = useState<any[]>([]);
   const [searchState, setSearchState] = useState<any[]>([]);
+  const [scoresData, setScoresData] = useState<any[]>([]);
+  const [uniqueId, setUniqueId] = useState('')
+
+  const handelShowScore = async (eventId: string, uniqueId: string) => {
+    setUniqueId(uniqueId)
+    try {
+      const response = await getScores(eventId)
+      if (response) {
+        setScoresData(response)
+      }
+    } catch (error) {
+
+    }
+  }
+
+
   useEffect(() => {
     if ((searchquery?.length > 0) || (searchDate)) {
       setSearchState([...data]);
@@ -93,6 +109,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
         const betRows = item.data.map((bet: any, dataIndex: number) => (
           <>
             <tr
+              onClick={() => handelShowScore(bet?.event_id, item?._id)}
               id={item._id}
               key={`${item._id}-${dataIndex}-${item.betType}`}
               className={`${item.betType === "single"
@@ -221,6 +238,55 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                 <EditButton id={bet._id} betdata={item} />
               </td>
             </tr>
+            {/* Scores */}
+            {(bet?.event_id === scoresData[0]?.event_id) && uniqueId === item?._id && <>
+              <tr className={`${item.betType === "combo" && ' border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]'} text-white text-opacity-60`}>
+                <td
+                  className="font-light uppercase px-4"
+                  colSpan={7}
+                >
+                  Scores
+                </td>
+              </tr>
+              {(scoresData?.length > 0) ? (
+                <tr className={` text-white ${item.betType === "combo" && ' border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]'} text-center`}>
+                  <td
+                    className="font-extralight py-2 text-[#FFC400]"
+                    colSpan={2}
+                  >
+                    {scoresData[0]?.home_team}
+                  </td>
+                  <td className="font-semibold py-2">
+                    {scoresData[0]?.home_score}
+                  </td>
+                  <td
+                    className="text-center text-[#dfdfdf74] font-extralight"
+                    colSpan={1}
+                  >
+                    vs
+                  </td>
+                  <td
+                    className="font-extralight py-2 text-[#FFC400]"
+                    colSpan={2}
+                  >
+                    {scoresData[0]?.away_team}
+                  </td>
+                  <td className="font-semibold py-2">
+                    {scoresData[0]?.away_score}
+                  </td>
+                </tr>
+              ) : (
+                <tr className="">
+                  <td
+                    className="font-light text-[#FFC400] text-center"
+                    colSpan={7}
+                  >
+                    Scores not available
+                  </td>
+                </tr>
+              )}
+            </>}
+            {/* Scores */}
             {item?.betType === "combo" && dataIndex === item?.data?.length - 1 && (
               <tr
                 id={item._id}
@@ -274,6 +340,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
         const betRows = item.data.map((bet: any, dataIndex: number) => (
           <>
             <tr
+              onClick={() => handelShowScore(bet?.event_id, item?._id)}
               id={item._id}
               key={`${item._id}-${dataIndex}-${item.betType}`}
               className={`${item.betType === "single"
@@ -404,6 +471,55 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                 <EditButton id={bet._id} betdata={item} />
               </td>
             </tr>
+            {/* Scores */}
+            {(bet?.event_id === scoresData[0]?.event_id) && uniqueId === item?._id && <>
+              <tr className={`${item.betType === "combo" && ' border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]'} text-white text-opacity-60`}>
+                <td
+                  className="font-light uppercase px-4"
+                  colSpan={7}
+                >
+                  Scores
+                </td>
+              </tr>
+              {(scoresData?.length > 0) ? (
+                <tr className={` text-white ${item.betType === "combo" && ' border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]'} text-center`}>
+                  <td
+                    className="font-extralight py-2 text-[#FFC400]"
+                    colSpan={2}
+                  >
+                    {scoresData[0]?.home_team}
+                  </td>
+                  <td className="font-semibold py-2">
+                    {scoresData[0]?.home_score}
+                  </td>
+                  <td
+                    className="text-center text-[#dfdfdf74] font-extralight"
+                    colSpan={1}
+                  >
+                    vs
+                  </td>
+                  <td
+                    className="font-extralight py-2 text-[#FFC400]"
+                    colSpan={2}
+                  >
+                    {scoresData[0]?.away_team}
+                  </td>
+                  <td className="font-semibold py-2">
+                    {scoresData[0]?.away_score}
+                  </td>
+                </tr>
+              ) : (
+                <tr className="">
+                  <td
+                    className="font-light text-[#FFC400] text-center"
+                    colSpan={7}
+                  >
+                    Scores not available
+                  </td>
+                </tr>
+              )}
+            </>}
+            {/* Scores */}
             {item?.betType === "combo" && dataIndex === item?.data?.length - 1 && (
               <tr
                 id={item._id}
@@ -437,11 +553,12 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
               </tr>
             )}
           </>
+
         ));
 
         return [comboRow, ...betRows];
       });
-  }, [state, searchState]);
+  }, [state, searchState, scoresData]);
 
   return (
     <table className="w-[850px] md:w-[calc(100%-2rem)] mx-auto h-auto">
