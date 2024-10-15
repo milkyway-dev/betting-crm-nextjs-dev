@@ -6,6 +6,7 @@ import SubordinatesReport from "@/component/ui/SubordinatesReport";
 import { getAllSubordinates, getSubordinatesReport } from "@/utils/action";
 import DateFilter from "@/component/ui/DateFilter";
 import { useEffect, useRef, useState } from "react";
+import DataLoader from "@/component/ui/DataLoader";
 
 
 
@@ -17,6 +18,7 @@ const Page = ({ params, searchParams }: any) => {
   const [loading, setLoading] = useState(false)
   const [report, setReport] = useState([])
   const [search,setSearch] =  useState<any[]>([])
+  const [empty,setEmpty]=useState([])
 
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.report);
@@ -38,9 +40,8 @@ const Page = ({ params, searchParams }: any) => {
           searchParams?.page,
           searchParams?.limit,
         );
+        setEmpty(result?.data)
         if (searchParams?.search?.length > 0 || searchParams?.date) {
-          setData([]);
-          setPageCount(1)
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
@@ -107,7 +108,7 @@ const Page = ({ params, searchParams }: any) => {
           observer.unobserve(lastElementRef.current);
         }
       };
-    }, [data, search]);
+    }, [data]);
   return (
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">
@@ -126,7 +127,8 @@ const Page = ({ params, searchParams }: any) => {
           </div>
           <>
             <Table fieldsHeadings={fieldsHeadings} searchDate={searchParams?.date} searchquery={searchParams?.search} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            {loading && <DataLoader />}
           </>
         </div>
       </div>

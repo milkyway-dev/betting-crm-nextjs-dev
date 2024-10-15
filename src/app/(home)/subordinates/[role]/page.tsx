@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Table from "@/component/ui/Table";
 import { getSubordinates } from "@/utils/action";
+import DataLoader from "@/component/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
@@ -9,7 +10,8 @@ const Page = ({ params, searchParams }: any) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [pageCount, setPageCount] = useState<number>(1)
   const lastElementRef = useRef(null);
- 
+  const [empty, setEmpty] = useState([])
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,13 +20,11 @@ const Page = ({ params, searchParams }: any) => {
           params?.role,
           searchParams?.search,
           searchParams?.date,
-          pageCount,
+          (searchParams?.date || searchParams?.search?.length > 0)?1:pageCount,
           10,
         );
-        console.log(result,"result data")
+        setEmpty(result?.data)
         if (searchParams?.search?.length > 0 || searchParams?.date) {
-          setData([]);
-          setPageCount(1)
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
@@ -71,7 +71,7 @@ const Page = ({ params, searchParams }: any) => {
         }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
           setPageCount((prevPageCount) => prevPageCount + 1);
-        } ` `
+        }
       },
       {
         threshold: 1
@@ -87,7 +87,7 @@ const Page = ({ params, searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data,search]);
+  }, [data]);
 
 
   return (
@@ -97,7 +97,8 @@ const Page = ({ params, searchParams }: any) => {
         fieldData={fieldsData}
         data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data}
       />
-      <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+      {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+      {loading && <DataLoader />}
     </>
   );
 };

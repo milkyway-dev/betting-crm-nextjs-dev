@@ -1,18 +1,20 @@
 "use client"
+import DataLoader from "@/component/ui/DataLoader";
 import LastItemDetector from "@/component/ui/LastItemDetector";
 import Table from "@/component/ui/Table";
 import { getAllTransactions } from "@/utils/action";
 import { getCurrentUser } from "@/utils/utils";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const Page = ({ searchParams }: any) => {
+const Page = () => {
+  const searchParams: any = useSearchParams();
   const [pageCount, setPageCount] = useState<number>(1)
   const lastElementRef = useRef(null);
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState<any[]>([]);
-
-  console.log(pageCount,"pageCount")
+  const [empty,setEmpty]=useState([])
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,14 +22,14 @@ const Page = ({ searchParams }: any) => {
         const user = await getCurrentUser();
         const result = await getAllTransactions(
           user,
-          searchParams?.search,
-          searchParams?.date,
-          pageCount,
+          searchParams.get('search'),
+          searchParams.get('date'),
+          (searchParams.get('search')?.length > 0 || searchParams.get('date')) ? 1 : pageCount,
           10,
         );
-        if (searchParams?.search?.length > 0 || searchParams?.date) {
+        setEmpty(result?.data)
+        if (searchParams.get('search')?.length > 0 || searchParams.get('date')) {
           setData([]);
-          setPageCount(1)
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
@@ -44,7 +46,7 @@ const Page = ({ searchParams }: any) => {
     };
 
     fetchData();
-  }, [searchParams?.search,searchParams?.date,pageCount]);
+  }, [searchParams.get('search'), searchParams.get('date'), pageCount]);
 
   const fieldsHeadings = ["Amount", "Type", "Sender", "Receiver", "Date"];
   const fieldsData = ["amount", "type", "sender", "receiver", "date"];
@@ -52,9 +54,10 @@ const Page = ({ searchParams }: any) => {
 
   // Use IntersectionObserver to detect when the last element is in view
   useEffect(() => {
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (searchParams?.search?.length > 0 || searchParams?.date) {
+        if (searchParams.get('search')?.length > 0 || searchParams.get('date')) {
           setPageCount(1)
         }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
@@ -75,14 +78,15 @@ const Page = ({ searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data, search]);
+  }, [data]);
 
 
   return (
     <>
-      <Table Page="transactions" width={'w-[20px]'} fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data}
+      <Table Page="transactions" width={'w-[20px]'} fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={((searchParams.get('date')) || (searchParams.get('search')?.length > 0)) ? search : data}
       />
-      <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+      {empty?.length>=10&&<div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+      {loading&&<DataLoader />}
     </>
   );
 };

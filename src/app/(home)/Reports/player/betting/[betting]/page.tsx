@@ -15,6 +15,7 @@ import PlayerBets from "@/component/ui/Playerbets";
 import { redirect } from "next/navigation";
 import Beton from "@/component/svg/Beton";
 import { useEffect, useRef, useState } from "react";
+import DataLoader from "@/component/ui/DataLoader";
 
 // Fetch player bets
 
@@ -23,9 +24,9 @@ const Page = ({ params, searchParams }: any) => {
   const lastElementRef = useRef(null);
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false)
-  const [search,setSearch] = useState<any[]>([]);
+  const [search, setSearch] = useState<any[]>([]);
   const [report, setReport] = useState([])
-  
+  const [empty,setEmpty]=useState([])
 
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.betting);
@@ -34,13 +35,14 @@ const Page = ({ params, searchParams }: any) => {
   useEffect(() => {
     handelReport()
   }, [params?.betting])
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true); // Start loading
 
         const result = await getPlayerBettings(params?.betting, searchParams?.search, searchParams?.date, pageCount, 10);
+        setEmpty(result?.data)
         if (result?.data?.statuscode === 401) {
           redirect('/logout')
         }
@@ -60,7 +62,7 @@ const Page = ({ params, searchParams }: any) => {
     };
 
     fetchData();
-  }, [params?.betting,searchParams?.search, searchParams?.date, pageCount]);
+  }, [params?.betting, searchParams?.search, searchParams?.date, pageCount]);
 
   // Memoize headers and tabs
   const headers = [
@@ -105,12 +107,12 @@ const Page = ({ params, searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data,search]);
+  }, [data, search]);
 
   return (
     <div className="flex-1 h-screen overflow-y-scroll">
       <div className="px-4 md:px-10 py-5">
-        {report&& <SubordinatesReport reportData={report} />}
+        {report && <SubordinatesReport reportData={report} />}
         <div className="md:flex items-center justify-between">
           {tabs && <ReportTabs params={params?.report} tabs={tabs} />}
           <div className="space-y-2 md:space-y-0 md:flex w-full md:w-[40%] pb-2 gap-3">
@@ -122,7 +124,8 @@ const Page = ({ params, searchParams }: any) => {
         </div>
         <div className="h-[calc(100%-13vh)] hideScrollBar border-[1px] border-white dark:border-black dark:border-opacity-10 bg-[#0E0F0F] dark:bg-white border-opacity-10 rounded-2xl overflow-y-scroll">
           <PlayerBets searchquery={searchParams?.search} searchDate={searchParams?.date} headers={headers} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-          <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+          {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+          {loading && <DataLoader />}
         </div>
       </div>
     </div>
