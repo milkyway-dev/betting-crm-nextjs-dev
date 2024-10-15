@@ -6,6 +6,7 @@ import SubordinatesReport from "@/component/ui/SubordinatesReport";
 import { getAllTransactionsSubor, getSubordinatesReport } from "@/utils/action";
 import DateFilter from "@/component/ui/DateFilter";
 import { useEffect, useRef, useState } from "react";
+import DataLoader from "@/component/ui/DataLoader";
 
 
 const Page = ({ params, searchParams }: any) => {
@@ -14,7 +15,8 @@ const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false)
   const [report, setReport] = useState([])
-  const [search,setSearch] =  useState<any[]>([])
+  const [search, setSearch] = useState<any[]>([])
+  const [empty,setEmpty]=useState([])
 
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.transaction);
@@ -22,7 +24,7 @@ const Page = ({ params, searchParams }: any) => {
   }
   useEffect(() => {
     handelReport()
-  },[params?.transaction])
+  }, [params?.transaction])
 
 
   useEffect(() => {
@@ -33,13 +35,11 @@ const Page = ({ params, searchParams }: any) => {
           params?.transaction,
           searchParams?.search,
           searchParams?.date,
-          pageCount,
+          (searchParams?.search?.length > 0 || searchParams?.date)?1:pageCount,
           10
         );
-      
+         setEmpty(result?.data)
         if (searchParams?.search?.length > 0 || searchParams?.date) {
-          setData([]);
-          setPageCount(1)
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
@@ -56,7 +56,7 @@ const Page = ({ params, searchParams }: any) => {
     };
 
     fetchData();
-  }, [params?.transaction,searchParams?.search, searchParams?.date, pageCount]);
+  }, [params?.transaction, searchParams?.search, searchParams?.date, pageCount]);
 
 
   const fieldsHeadings = ["Amount", "Type", "Sender", "Receiver", "Date"];
@@ -91,7 +91,7 @@ const Page = ({ params, searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data, search]);
+  }, [data]);
   return (
     <>
       <div
@@ -112,7 +112,8 @@ const Page = ({ params, searchParams }: any) => {
           </div>
           <>
             <Table fieldsHeadings={fieldsHeadings} searchDate={searchParams?.date} searchquery={searchParams?.search} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            {loading && <DataLoader />}
           </>
         </div>
       </div>

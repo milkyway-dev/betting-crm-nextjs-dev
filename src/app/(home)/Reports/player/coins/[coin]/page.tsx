@@ -1,13 +1,12 @@
 "use client"
 import Table from "@/component/ui/Table";
-import { config } from "@/utils/config";
-import { getCookie } from "@/utils/utils";
 import SearchBar from "@/component/ui/SearchBar";
 import SubordinatesReport from "@/component/ui/SubordinatesReport";
 import { getPlayerTransactions, getSubordinatesReport } from "@/utils/action";
 import ReportTabs from "../../../ReportTabs";
 import DateFilter from "@/component/ui/DateFilter";
 import { useEffect, useRef, useState } from "react";
+import DataLoader from "@/component/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
@@ -15,15 +14,15 @@ const Page = ({ params, searchParams }: any) => {
   const [loading, setLoading] = useState(false);
   const [pageCount, setPageCount] = useState<number>(1)
   const [report, setReport] = useState([])
-  const [search,setSearch] =  useState<any[]>([])
-
+  const [search, setSearch] = useState<any[]>([])
+  const [empty,setEmpty]=useState([])
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.coin);
     setReport(fetchedReportData)
   }
   useEffect(() => {
     handelReport()
-  },[params?.coin])
+  }, [params?.coin])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,12 +32,11 @@ const Page = ({ params, searchParams }: any) => {
           params?.coin,
           searchParams?.search,
           searchParams?.date,
-          pageCount ,
+          (searchParams?.search?.length > 0 || searchParams?.date)?1:pageCount,
           10
         );
+        setEmpty(result?.data)
         if ((searchParams?.search?.length > 0) || (searchParams?.date)) {
-          setData([]);
-          setPageCount(1)
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter((item: any) => !data.some((stateItem) => stateItem?._id === item?._id));
@@ -55,8 +53,8 @@ const Page = ({ params, searchParams }: any) => {
   }, [params?.coin, searchParams?.search, searchParams?.date, pageCount]);
 
 
-   // Use IntersectionObserver to detect when the last element is in view
-   useEffect(() => {
+  // Use IntersectionObserver to detect when the last element is in view
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (searchParams?.search?.length > 0 || searchParams?.date) {
@@ -64,7 +62,7 @@ const Page = ({ params, searchParams }: any) => {
         }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
           setPageCount((prevPageCount) => prevPageCount + 1);
-        } ` `
+        } 
       },
       {
         threshold: 1
@@ -80,7 +78,7 @@ const Page = ({ params, searchParams }: any) => {
         observer.unobserve(lastElementRef.current);
       }
     };
-  }, [data,search]);
+  }, [data]);
 
 
   const fieldsHeadings = ["Amount", "Type", "Sender", "Receiver", "Date"];
@@ -107,8 +105,9 @@ const Page = ({ params, searchParams }: any) => {
             </div>
           </div>
           <>
-            <Table fieldsHeadings={fieldsHeadings}  fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />
+            <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
+            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            {loading && <DataLoader />}
           </>
         </div>
       </div>
