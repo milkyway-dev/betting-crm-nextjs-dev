@@ -30,6 +30,7 @@ const Table: React.FC<TableProps> = ({
     fetchUserData();
   }, [data]);
 
+  const totals=["Over","Under","Draw"]
 
   return (
     <>
@@ -159,10 +160,10 @@ const Table: React.FC<TableProps> = ({
                                 className="pt-4 pb-2 xl:inline-block hidden"
                               >
                                 {data?.data[0]?.teams?.length > 0 ? (
-                                  <span>{`${data.data[0]?.teams.find(
+                                  <span>{`${totals?.includes(data?.data[0]?.bet_on?.name)?data.data[0]?.teams[1]?.name:data.data[0]?.teams.find(
                                     (team: any) =>
                                       team.name ===
-                                      data?.data[0]?.bet_on?.name
+                                      data?.data[0]?.bet_on?.name 
                                   )?.name
                                     } vs ${data?.data[0]?.teams.find(
                                       (team: any) =>

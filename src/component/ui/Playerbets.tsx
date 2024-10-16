@@ -98,12 +98,12 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
           item.betType === "combo" ? (
             <tr className="text-white font-semibold" key={`combo-${item._id}`}>
               <td
-                className="bg-black px-5 py-1 rounded-tl-2xl border-[#f3aa3589] border-x-[1px] border-b-[1px] rounded-tr-2xl  inline-block mt-2"
+                className="bg-black px-5 py-1 dark:bg-gray-200 dark:text-black  rounded-tl-2xl border-[#f3aa3589] border-x-[1px] border-b-[1px] rounded-tr-2xl  inline-block mt-2"
                 colSpan={8}
               >
                 Combo
               </td>
-            </tr>
+            </tr> 
           ) : null;
 
         const betRows = item.data.map((bet: any, dataIndex: number) => (
@@ -175,7 +175,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                       </span>
                     </span>
                   )}
-                  <span className="text-[9px] md:text-[11px] px-3 py-1.5 border-[1px] border-white dark:border-black dark:border-opacity-30 text-white text-opacity-60 rounded-lg w-fit">
+                  <span className="text-[9px] md:text-[11px] px-3 py-1.5 border-[1px] dark:text-black  border-white dark:border-black dark:border-opacity-30 text-white text-opacity-60 rounded-lg w-fit">
                     {formatDate(bet.commence_time)}
                   </span>
                 </div>
@@ -194,7 +194,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
               <td className="uppercase text-sm md:text-lg dark:text-black text-white">
                 <div className="flex items-center flex-col">
                   <span>{bet?.category || bet?.market}</span>
-                  {bet?.category !== "h2h" && <span className="text-white text-opacity-60 text-[.9rem]">{bet?.bet_on?.points}</span>}
+                  {bet?.category !== "h2h" && <span className="text-white text-opacity-60 text-[.9rem] dark:text-black">{bet?.bet_on?.points}</span>}
                 </div>
               </td>
               <td className="uppercase text-sm  dark:text-black text-white">
@@ -329,7 +329,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
           item.betType === "combo" ? (
             <tr className="text-white font-semibold" key={`combo-${item._id}`}>
               <td
-                className="bg-black px-5 py-1 rounded-tl-2xl border-[#f3aa3589] border-x-[1px] border-b-[1px] rounded-tr-2xl  inline-block mt-2"
+                className="bg-black px-5 py-1 dark:bg-gray-200 dark:text-black rounded-tl-2xl border-[#f3aa3589] border-x-[1px] border-b-[1px] rounded-tr-2xl  inline-block mt-2"
                 colSpan={8}
               >
                 Combo
@@ -407,7 +407,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                       </span>
                     </span>
                   )}
-                  <span className="text-[9px] md:text-[11px] px-3 py-1.5 border-[1px] border-white dark:border-black dark:border-opacity-30 text-white text-opacity-60 rounded-lg w-fit">
+                  <span className="text-[9px] md:text-[11px] px-3 py-1.5 dark:text-black border-[1px] border-white dark:border-black dark:border-opacity-30 text-white text-opacity-60 rounded-lg w-fit">
                     {formatDate(bet.commence_time)}
                   </span>
                 </div>
@@ -427,7 +427,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
               <td className="uppercase text-sm md:text-lg dark:text-black text-white">
                 <div className="flex items-center flex-col">
                   <span>{bet?.category || bet?.market}</span>
-                  {bet?.category !== "h2h" && <span className="text-white text-opacity-60 text-[.9rem]">{bet?.bet_on?.points}</span>}
+                  {bet?.category !== "h2h" && <span className="text-white text-opacity-60 text-[.9rem] dark:text-black">{bet?.bet_on?.points}</span>}
                 </div>
               </td>
               <td className="uppercase text-sm  dark:text-black text-white">

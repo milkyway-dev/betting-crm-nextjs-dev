@@ -792,7 +792,6 @@ export async function updateBet(payload: any) {
   }
 }
 
-
 export async function getPlayerTransactions(
   username: string,
   searchString: string,
