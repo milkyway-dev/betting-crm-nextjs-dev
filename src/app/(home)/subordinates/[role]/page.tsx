@@ -1,8 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Table from "@/components/ui/Table";
-import { getSubordinates } from "@/utils/action";
+import { getSubordinateInsights, getSubordinates } from "@/utils/action";
 import DataLoader from "@/components/ui/DataLoader";
+import toast from "react-hot-toast";
+import { ChartConfig } from "@/components/ui/chart";
+import LineChartData from "@/components/ui/LineChartData";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
@@ -11,7 +14,18 @@ const Page = ({ params, searchParams }: any) => {
   const [pageCount, setPageCount] = useState<number>(1);
   const lastElementRef = useRef(null);
   const [empty, setEmpty] = useState([]);
-
+  const [subordinateData, setSubordinateData] = useState<any>();
+  const datakey = ["users", "players"];
+  const chartConfig = {
+    users: {
+      label: "Users",
+      color: "#0000FF",
+    },
+    players: {
+      label: "Players",
+      color: "#ff0000",
+    },
+  } satisfies ChartConfig;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,6 +78,50 @@ const Page = ({ params, searchParams }: any) => {
     "actions",
   ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getSubordinateInsights();
+        console.log(data);
+        if (data?.error) {
+          return toast.error(data?.error);
+        }
+
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        const chartData = monthNames.map((month, index) => {
+          const monthData =
+            data.find((item: any) => item.month === index + 1) || {};
+          return {
+            month,
+            users: monthData.users || 0,
+            players: monthData.players || 0,
+          };
+        });
+
+        console.log(chartData);
+        setSubordinateData(chartData);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // Use IntersectionObserver to detect when the last element is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -93,6 +151,12 @@ const Page = ({ params, searchParams }: any) => {
 
   return (
     <>
+      <LineChartData
+        type="subordinates"
+        chartData={subordinateData}
+        chartConfig={chartConfig}
+        dataKey={datakey}
+      />
       <Table
         fieldsHeadings={fieldsHeadings}
         fieldData={fieldsData}

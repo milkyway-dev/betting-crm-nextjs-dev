@@ -107,7 +107,6 @@ const Page = () => {
     const fetchData = async () => {
       try {
         const transaction = await getTransactionInsights();
-        console.log(transaction);
         if (transaction?.error) {
           return toast.error(transaction?.error);
         }

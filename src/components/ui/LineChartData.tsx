@@ -8,7 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export default function TransactionChart({
+export default function LineChartData({
   type,
   chartData,
   chartConfig,

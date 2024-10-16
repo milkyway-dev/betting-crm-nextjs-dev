@@ -1010,14 +1010,42 @@ export const getScores = async (eventId: string | null) => {
 export const getTransactionInsights = async () => {
   const token = await getCookie();
   try {
-    const response = await fetch(`${config.server}/api/transactions/monthly?year=2024`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `userToken=${token}`,
-      },
-    });
+    const response = await fetch(
+      `${config.server}/api/transactions/monthly?year=2024`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
+export const getSubordinateInsights = async () => {
+  const token = await getCookie();
+  try {
+    const response = await fetch(
+      `${config.server}/api/auth/createdUser?year=2024`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
     if (!response.ok) {
       const error = await response.json();
       return { error: error.message };
