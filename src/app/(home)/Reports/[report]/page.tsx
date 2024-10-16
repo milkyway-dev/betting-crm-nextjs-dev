@@ -1,33 +1,29 @@
-"use client"
-import SearchBar from "@/component/ui/SearchBar";
-import Table from "@/component/ui/Table";
+"use client";
+import SearchBar from "@/components/ui/SearchBar";
+import Table from "@/components/ui/Table";
 import ReportTabs from "../ReportTabs";
-import SubordinatesReport from "@/component/ui/SubordinatesReport";
+import SubordinatesReport from "@/components/ui/SubordinatesReport";
 import { getAllSubordinates, getSubordinatesReport } from "@/utils/action";
-import DateFilter from "@/component/ui/DateFilter";
+import DateFilter from "@/components/ui/DateFilter";
 import { useEffect, useRef, useState } from "react";
-import DataLoader from "@/component/ui/DataLoader";
-
-
+import DataLoader from "@/components/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
-
-  const [pageCount, setPageCount] = useState<number>(1)
+  const [pageCount, setPageCount] = useState<number>(1);
   const lastElementRef = useRef(null);
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false)
-  const [report, setReport] = useState([])
-  const [search,setSearch] =  useState<any[]>([])
-  const [empty,setEmpty]=useState([])
+  const [loading, setLoading] = useState(false);
+  const [report, setReport] = useState([]);
+  const [search, setSearch] = useState<any[]>([]);
+  const [empty, setEmpty] = useState([]);
 
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.report);
-    setReport(fetchedReportData)
-  }
+    setReport(fetchedReportData);
+  };
   useEffect(() => {
-    handelReport()
-  },[params?.report])
-
+    handelReport();
+  }, [params?.report]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,17 +34,18 @@ const Page = ({ params, searchParams }: any) => {
           searchParams?.search,
           searchParams?.date,
           searchParams?.page,
-          searchParams?.limit,
+          searchParams?.limit
         );
-        setEmpty(result?.data)
+        setEmpty(result?.data);
         if (searchParams?.search?.length > 0 || searchParams?.date) {
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
-            (item: any) => !data.some((stateItem: any) => stateItem?._id === item?._id)
+            (item: any) =>
+              !data.some((stateItem: any) => stateItem?._id === item?._id)
           );
           setData([...data, ...newData]);
-          setSearch([])
+          setSearch([]);
         }
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -58,7 +55,7 @@ const Page = ({ params, searchParams }: any) => {
     };
 
     fetchData();
-  }, [params?.report,searchParams?.search, searchParams?.date, pageCount]);
+  }, [params?.report, searchParams?.search, searchParams?.date, pageCount]);
 
   const fieldsHeadings = [
     "Username",
@@ -83,32 +80,32 @@ const Page = ({ params, searchParams }: any) => {
     { name: "Coins", route: `/Reports/coins/${params?.report}` },
   ];
 
-    // Use IntersectionObserver to detect when the last element is in view
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (searchParams?.search?.length > 0 || searchParams?.date) {
-            setPageCount(1)
-          }
-          if (entries[0]?.isIntersecting && data?.length >= 10) {
-            setPageCount((prevPageCount) => prevPageCount + 1);
-          }
-        },
-        {
-          threshold: 1, // Trigger when the last element is fully in view
+  // Use IntersectionObserver to detect when the last element is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (searchParams?.search?.length > 0 || searchParams?.date) {
+          setPageCount(1);
         }
-      );
-  
-      if (lastElementRef.current) {
-        observer.observe(lastElementRef.current);
+        if (entries[0]?.isIntersecting && data?.length >= 10) {
+          setPageCount((prevPageCount) => prevPageCount + 1);
+        }
+      },
+      {
+        threshold: 1, // Trigger when the last element is fully in view
       }
-  
-      return () => {
-        if (lastElementRef.current) {
-          observer.unobserve(lastElementRef.current);
-        }
-      };
-    }, [data]);
+    );
+
+    if (lastElementRef.current) {
+      observer.observe(lastElementRef.current);
+    }
+
+    return () => {
+      if (lastElementRef.current) {
+        observer.unobserve(lastElementRef.current);
+      }
+    };
+  }, [data]);
   return (
     <>
       <div className="flex-1 h-screen overflow-y-scroll ">
@@ -126,8 +123,23 @@ const Page = ({ params, searchParams }: any) => {
             </div>
           </div>
           <>
-            <Table fieldsHeadings={fieldsHeadings} searchDate={searchParams?.date} searchquery={searchParams?.search} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            <Table
+              fieldsHeadings={fieldsHeadings}
+              searchDate={searchParams?.date}
+              searchquery={searchParams?.search}
+              fieldData={fieldsData}
+              data={
+                searchParams?.date || searchParams?.search?.length > 0
+                  ? search
+                  : data
+              }
+            />
+            {empty?.length >= 10 && (
+              <div
+                ref={lastElementRef}
+                style={{ height: "4px", width: "100%" }}
+              />
+            )}
             {loading && <DataLoader />}
           </>
         </div>

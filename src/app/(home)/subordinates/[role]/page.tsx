@@ -1,16 +1,16 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
-import Table from "@/component/ui/Table";
+import Table from "@/components/ui/Table";
 import { getSubordinates } from "@/utils/action";
-import DataLoader from "@/component/ui/DataLoader";
+import DataLoader from "@/components/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [pageCount, setPageCount] = useState<number>(1)
+  const [pageCount, setPageCount] = useState<number>(1);
   const lastElementRef = useRef(null);
-  const [empty, setEmpty] = useState([])
+  const [empty, setEmpty] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,18 +20,21 @@ const Page = ({ params, searchParams }: any) => {
           params?.role,
           searchParams?.search,
           searchParams?.date,
-          (searchParams?.date || searchParams?.search?.length > 0)?1:pageCount,
-          10,
+          searchParams?.date || searchParams?.search?.length > 0
+            ? 1
+            : pageCount,
+          10
         );
-        setEmpty(result?.data)
+        setEmpty(result?.data);
         if (searchParams?.search?.length > 0 || searchParams?.date) {
           setSearch([...result?.data]);
         } else {
           const newData = result?.data?.filter(
-            (item: any) => !data.some((stateItem: any) => stateItem?._id === item?._id)
+            (item: any) =>
+              !data.some((stateItem: any) => stateItem?._id === item?._id)
           );
           setData([...data, ...newData]);
-          setSearch([])
+          setSearch([]);
         }
       } catch (error) {
         console.error("Error fetching subordinates:", error);
@@ -61,20 +64,19 @@ const Page = ({ params, searchParams }: any) => {
     "actions",
   ];
 
-
   // Use IntersectionObserver to detect when the last element is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (searchParams?.search?.length > 0 || searchParams?.date) {
-          setPageCount(1)
+          setPageCount(1);
         }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
           setPageCount((prevPageCount) => prevPageCount + 1);
         }
       },
       {
-        threshold: 1
+        threshold: 1,
       }
     );
 
@@ -89,15 +91,18 @@ const Page = ({ params, searchParams }: any) => {
     };
   }, [data]);
 
-
   return (
     <>
       <Table
         fieldsHeadings={fieldsHeadings}
         fieldData={fieldsData}
-        data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data}
+        data={
+          searchParams?.date || searchParams?.search?.length > 0 ? search : data
+        }
       />
-      {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+      {empty?.length >= 10 && (
+        <div ref={lastElementRef} style={{ height: "4px", width: "100%" }} />
+      )}
       {loading && <DataLoader />}
     </>
   );

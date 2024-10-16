@@ -1,6 +1,6 @@
 import React from 'react'
 import Profile from '../svg/Profile'
-import Card from './Card'
+import TopCard from './TopCard'
 import ArrowUp from '../svg/ArrowUp';
 
 const SubordinatesReport = ({ reportData }: any) => {
@@ -52,7 +52,7 @@ const SubordinatesReport = ({ reportData }: any) => {
         </div>
       </div>
       <div className='grid grid-cols-12 pb-8 pt-4 gap-2 lg:gap-5'>
-        <Card TopCards={TopCards} />
+        <TopCard TopCards={TopCards} />
       </div>
     </div>
   )
