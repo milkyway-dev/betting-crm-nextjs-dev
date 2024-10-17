@@ -1007,20 +1007,23 @@ export const getScores = async (eventId: string | null) => {
   }
 };
 
-export const getTransactionInsights = async () => {
+export const getTransactionInsights = async (user: any) => {
   const token = await getCookie();
+  let url = "api/transactions/monthly/";
+  if (user?.role === "admin") {
+    url += "admin";
+  } else {
+    url += "user";
+  }
   try {
-    const response = await fetch(
-      `${config.server}/api/transactions/monthly?year=2024`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `userToken=${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${config.server}/${url}?year=2024`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
     if (!response.ok) {
       const error = await response.json();
       return { error: error.message };

@@ -15,9 +15,9 @@ export default function LineChartData({
   dataKey,
 }: any) {
   return (
-    <Card className="bg-dark_light_black dark:bg-[#dfdfdf62] w-[50%] border-none my-4">
+    <Card className="bg-dark_light_black dark:bg-[#dfdfdf62] w-full md:w-[50%] border-none my-4">
       <CardHeader>
-        <CardTitle className="text-white dark:text-black capitalize">
+        <CardTitle className="text-white dark:text-black capitalize text-md md:text-xl">
           {type}
         </CardTitle>
       </CardHeader>

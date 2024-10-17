@@ -1,7 +1,6 @@
 "use client";
 import { ChartConfig } from "@/components/ui/chart";
 import DataLoader from "@/components/ui/DataLoader";
-import LastItemDetector from "@/components/ui/LastItemDetector";
 import Table from "@/components/ui/Table";
 import LineChartData from "@/components/ui/LineChartData";
 import { getAllTransactions, getTransactionInsights } from "@/utils/action";
@@ -25,7 +24,7 @@ const Page = () => {
   const chartConfig = {
     recharge: {
       label: "Recharge",
-      color: "#0000FF",
+      color: "#00FF1E",
     },
     redeem: {
       label: "Redeem",
@@ -47,6 +46,36 @@ const Page = () => {
             : pageCount,
           10
         );
+        const transaction = await getTransactionInsights(user);
+        if (transaction?.error) {
+          return toast.error(transaction?.error);
+        }
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        const chartData = monthNames.map((month, index) => {
+          const monthData =
+            transaction?.find((item: any) => item._id === index + 1) || {};
+          return {
+            month,
+            recharge: monthData.totalRechargeAmount || 0,
+            redeem: monthData.totalRedeemAmount || 0,
+          };
+        });
+        setTransactionData(chartData);
+
         setEmpty(result?.data);
         if (
           searchParams.get("search")?.length > 0 ||
@@ -102,48 +131,6 @@ const Page = () => {
       }
     };
   }, [data]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const transaction = await getTransactionInsights();
-        if (transaction?.error) {
-          return toast.error(transaction?.error);
-        }
-
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-
-        const chartData = monthNames.map((month, index) => {
-          const monthData =
-            transaction?.data.find((item: any) => item._id === index + 1) || {};
-          return {
-            month,
-            recharge: monthData.totalRechargeAmount || 0,
-            redeem: monthData.totalRedeemAmount || 0,
-          };
-        });
-        console.log(chartData, chartData);
-        setTransactionData(chartData);
-      } catch (error) {
-        console.error("Error fetching transactions:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <>
