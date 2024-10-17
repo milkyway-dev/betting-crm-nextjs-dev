@@ -718,7 +718,7 @@ export async function getActivitiesByDateAndPlayer(
       return { error: error.message, statuscode: response?.status };
     }
 
-    const data = await response.json();
+    const data = await response.json();    
     return data;
   } catch (error) {
     Cookies.remove("token");
@@ -788,6 +788,183 @@ export async function updateBet(payload: any) {
     Cookies.remove("token");
     redirect("/login");
     return { error: "An error occurred while fetching bets and transactions." };
+  } finally {
+    revalidatePath("/");
+  }
+}
+
+
+export async function getPlayerTransactions(
+  username: string,
+  searchString: string,
+  dateString: string,
+  page: number,
+  limit: number
+) {
+
+  console.log(username,page,limit,"data")
+
+  let transaction_subordinates: string = `/api/transactions/${username}/players?type=username&page=${page || 1}&limit=${limit || 10}`;
+  if (searchString?.length > 0) {
+    transaction_subordinates += `&search=${encodeURIComponent(
+      String(searchString)
+    )}`;
+  }
+  if (dateString?.length > 0) {
+    transaction_subordinates += `&date=${encodeURIComponent(
+      String(dateString)
+    )}`;
+  }
+  const token = await getCookie();
+  try {
+    const response = await fetch(
+      `${config.server}${transaction_subordinates}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    console.log(response,"response player transation")
+    const data = await response.json();
+    const transactions = data;
+    return transactions;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getPlayerBettings(
+  username: string,
+  searchString: string,
+  dateString: string,
+  page: number,
+  limit: number
+) {
+  const token = await getCookie();
+  let url:string = `api/bets/${username}/bets?type=username&status=all&page=${page||1}&limit=${limit||10}`;
+
+  if (searchString?.length > 0) {
+    url += `?search=${encodeURIComponent(String(searchString))}`;
+  }
+  if (dateString?.length > 0) {
+    url += `&date=${encodeURIComponent(String(dateString))}`;
+  }
+
+  try {
+    const response:any = await fetch(`${config.server}/${url}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      
+      return { error: error.message,statuscode: response.status};
+    } 
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return { error: "Failed to fetch data" };
+  } finally {
+    revalidatePath("/"); // Only call this if necessary
+  }
+}
+
+export async function getAllTransactionsSubor(
+  username: string,
+  searchString: string,
+  dateString: string,
+  page: number,
+  limit: number
+) {
+  let transaction_subordinates: string = `/api/transactions/${username}/subordinate?type=username&page=${page||10}&limit=${limit||10}`;
+  if (searchString?.length > 0) {
+    transaction_subordinates += `&search=${encodeURIComponent(
+      String(searchString)
+    )}`;
+  }
+  if (dateString?.length > 0) {
+    transaction_subordinates += `&date=${encodeURIComponent(
+      String(dateString)
+    )}`;
+  }
+  const token = await getCookie();
+
+  try {
+    const response = await fetch(
+      `${config.server}${transaction_subordinates}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+
+    const data = await response.json();
+    const transactions = data;
+    return transactions;
+  } catch (error) {
+  } finally {
+    revalidatePath("/");
+  }
+}
+
+export async function getAllSubordinates(
+  username: string,
+  searchString: string,
+  dateString: string,
+  page: number,
+  limit: number
+) {
+  const token = await getCookie();
+
+  let subordinatesurl: string = `${config.server}/api/subordinates/${username}/subordinates?type=username&page=${page||1}&limit=${limit||10}`;
+  if (searchString?.length > 0) {
+    subordinatesurl += `&search=${encodeURIComponent(String(searchString))}`;
+  }
+  if (dateString?.length > 0) {
+    subordinatesurl += `&date=${encodeURIComponent(String(dateString))}`;
+  }
+  try {
+    const response = await fetch(subordinatesurl, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const data = await response.json();
+    const all = data;
+    return all;
+  } catch (error) {
   } finally {
     revalidatePath("/");
   }
