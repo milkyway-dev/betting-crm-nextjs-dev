@@ -75,8 +75,6 @@ const Page = () => {
             redeem: monthData.totalRedeemAmount || 0,
           };
         });
-        console.log(transaction, "DATA");
-        console.log(chartData, "CHartDATA");
         setTransactionData(chartData);
 
         setEmpty(result?.data);
