@@ -42,16 +42,18 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
   const isMounted = useRef(false);
   const [state, setState] = useState<any[]>([]);
   const [searchState, setSearchState] = useState<any[]>([]);
-  const [scoresData, setScoresData] = useState<any[]>([]);
-  const [uniqueId, setUniqueId] = useState<any>("");
-
+  const [scoresData, setScoresData] = useState<any>();
+  const [uniqueId, setUniqueId] = useState<any>();
+  const [scoresLoading, setScoresLoading] = useState(false);
   const handelShowScore = async (eventId: string, uniqueBetId: string) => {
     setUniqueId((prevUniqueId: any) =>
       prevUniqueId === uniqueBetId ? null : uniqueBetId
     );
 
     try {
+      setScoresLoading(true);
       const response = await getScores(eventId);
+      setScoresLoading(false);
       if (response) {
         setScoresData(response);
       }
@@ -277,45 +279,56 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                           Scores
                         </td>
                       </tr>
-                      {scoresData?.length > 0 ? (
-                        <tr
-                          className={` text-white ${
-                            item.betType === "combo" &&
-                            " border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]"
-                          } text-center`}
-                        >
-                          <td
-                            className="font-extralight py-2 text-[#FFC400]"
-                            colSpan={2}
+                      {!scoresLoading ? (
+                        scoresData &&
+                        scoresData.teams &&
+                        scoresData.teams.length > 0 ? (
+                          <tr
+                            className={`${
+                              item.betType === "combo" &&
+                              "border-[#f3aa3589] border-x-[1px]"
+                            }`}
                           >
-                            {scoresData[0]?.home_team}
-                          </td>
-                          <td className="font-semibold py-2">
-                            {scoresData[0]?.home_score}
-                          </td>
-                          <td
-                            className="text-center text-[#dfdfdf74] font-extralight"
-                            colSpan={1}
-                          >
-                            vs
-                          </td>
-                          <td
-                            className="font-extralight py-2 text-[#FFC400]"
-                            colSpan={2}
-                          >
-                            {scoresData[0]?.away_team}
-                          </td>
-                          <td className="font-semibold py-2">
-                            {scoresData[0]?.away_score}
-                          </td>
-                        </tr>
+                            <td colSpan={8}>
+                              <div className="grid grid-cols-2 gap-4">
+                                {scoresData.teams.map((team: any) => (
+                                  <div
+                                    key={team?._id}
+                                    className="bg-gray-800 p-4 rounded"
+                                  >
+                                    <div className="font-extralight text-[#FFC400] ">
+                                      {team?.name}
+                                    </div>
+                                    <div className="font-semibold text-white dark:text-black">
+                                      {team?.score}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </td>
+                          </tr>
+                        ) : (
+                          <tr>
+                            <td
+                              className="font-light text-[#FFC400] text-center border-[#f3aa3589] border-x-[1px]"
+                              colSpan={7}
+                            >
+                              Scores not available
+                            </td>
+                          </tr>
+                        )
                       ) : (
-                        <tr className="">
-                          <td
-                            className="font-light text-[#FFC400] text-center"
-                            colSpan={7}
-                          >
-                            Scores not available
+                        <tr
+                          className={`${
+                            item.betType === "combo" &&
+                            "border-[#f3aa3589] border-x-[1px]"
+                          }`}
+                        >
+                          <td colSpan={7}>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="bg-gray-800 p-4 py-10 rounded animatePulse"></div>
+                              <div className="bg-gray-800 p-4 py-10 rounded animatePulse"></div>
+                            </div>
                           </td>
                         </tr>
                       )}
@@ -523,7 +536,7 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                 </td>
               </tr>
               {/* Scores */}
-              {bet?.event_id === scoresData[0]?.event_id &&
+              {bet?.event_id === scoresData?.event_id &&
                 uniqueId === item?._id && (
                   <>
                     <tr
@@ -536,45 +549,56 @@ const PlayerBets = ({ headers, data, searchquery, searchDate }: any) => {
                         Scores
                       </td>
                     </tr>
-                    {scoresData?.length > 0 ? (
-                      <tr
-                        className={` text-white ${
-                          item.betType === "combo" &&
-                          " border-l-[.7px] border-r-[.7px] border-opacity-40 border-[#FFC400]"
-                        } text-center`}
-                      >
-                        <td
-                          className="font-extralight py-2 text-[#FFC400]"
-                          colSpan={2}
+                    {!scoresLoading ? (
+                      scoresData &&
+                      scoresData.teams &&
+                      scoresData.teams.length > 0 ? (
+                        <tr
+                          className={`${
+                            item.betType === "combo" &&
+                            "border-[#f3aa3589] border-x-[1px]"
+                          }`}
                         >
-                          {scoresData[0]?.home_team}
-                        </td>
-                        <td className="font-semibold py-2">
-                          {scoresData[0]?.home_score}
-                        </td>
-                        <td
-                          className="text-center text-[#dfdfdf74] font-extralight"
-                          colSpan={1}
-                        >
-                          vs
-                        </td>
-                        <td
-                          className="font-extralight py-2 text-[#FFC400]"
-                          colSpan={2}
-                        >
-                          {scoresData[0]?.away_team}
-                        </td>
-                        <td className="font-semibold py-2">
-                          {scoresData[0]?.away_score}
-                        </td>
-                      </tr>
+                          <td colSpan={8}>
+                            <div className="grid grid-cols-2 gap-4">
+                              {scoresData.teams.map((team: any) => (
+                                <div
+                                  key={team?._id}
+                                  className="bg-gray-800 p-4 rounded"
+                                >
+                                  <div className="font-extralight text-[#FFC400] ">
+                                    {team?.name}
+                                  </div>
+                                  <div className="font-semibold text-white dark:text-black">
+                                    {team?.score}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            className="font-light text-[#FFC400] text-center border-[#f3aa3589] border-x-[1px]"
+                            colSpan={7}
+                          >
+                            Scores not available
+                          </td>
+                        </tr>
+                      )
                     ) : (
-                      <tr className="">
-                        <td
-                          className="font-light text-[#FFC400] text-center"
-                          colSpan={7}
-                        >
-                          Scores not available
+                      <tr
+                        className={`${
+                          item.betType === "combo" &&
+                          "border-[#f3aa3589] border-x-[1px]"
+                        }`}
+                      >
+                        <td colSpan={7}>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-gray-800 p-4 py-10 rounded animatePulse"></div>
+                            <div className="bg-gray-800 p-4 py-10 rounded animatePulse"></div>
+                          </div>
                         </td>
                       </tr>
                     )}
