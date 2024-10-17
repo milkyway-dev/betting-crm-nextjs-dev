@@ -1,6 +1,6 @@
-"use client"
-import DataLoader from "@/component/ui/DataLoader";
-import Table from "@/component/ui/Table";
+"use client";
+import DataLoader from "@/components/ui/DataLoader";
+import Table from "@/components/ui/Table";
 import { getAllBets } from "@/utils/action";
 import { getCurrentUser } from "@/utils/utils";
 import { useSearchParams } from "next/navigation";

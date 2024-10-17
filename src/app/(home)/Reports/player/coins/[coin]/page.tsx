@@ -1,28 +1,28 @@
-"use client"
-import Table from "@/component/ui/Table";
-import SearchBar from "@/component/ui/SearchBar";
-import SubordinatesReport from "@/component/ui/SubordinatesReport";
+"use client";
+import Table from "@/components/ui/Table";
+import SearchBar from "@/components/ui/SearchBar";
+import SubordinatesReport from "@/components/ui/SubordinatesReport";
 import { getPlayerTransactions, getSubordinatesReport } from "@/utils/action";
 import ReportTabs from "../../../ReportTabs";
-import DateFilter from "@/component/ui/DateFilter";
+import DateFilter from "@/components/ui/DateFilter";
 import { useEffect, useRef, useState } from "react";
-import DataLoader from "@/component/ui/DataLoader";
+import DataLoader from "@/components/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
   const [data, setData] = useState<any[]>([]);
   const lastElementRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [pageCount, setPageCount] = useState<number>(1)
-  const [report, setReport] = useState([])
-  const [search, setSearch] = useState<any[]>([])
-  const [empty,setEmpty]=useState([])
+  const [pageCount, setPageCount] = useState<number>(1);
+  const [report, setReport] = useState([]);
+  const [search, setSearch] = useState<any[]>([]);
+  const [empty, setEmpty] = useState([]);
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.coin);
-    setReport(fetchedReportData)
-  }
+    setReport(fetchedReportData);
+  };
   useEffect(() => {
-    handelReport()
-  }, [params?.coin])
+    handelReport();
+  }, [params?.coin]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,14 +32,19 @@ const Page = ({ params, searchParams }: any) => {
           params?.coin,
           searchParams?.search,
           searchParams?.date,
-          (searchParams?.search?.length > 0 || searchParams?.date)?1:pageCount,
+          searchParams?.search?.length > 0 || searchParams?.date
+            ? 1
+            : pageCount,
           10
         );
-        setEmpty(result?.data)
-        if ((searchParams?.search?.length > 0) || (searchParams?.date)) {
+        setEmpty(result?.data);
+        if (searchParams?.search?.length > 0 || searchParams?.date) {
           setSearch([...result?.data]);
         } else {
-          const newData = result?.data?.filter((item: any) => !data.some((stateItem) => stateItem?._id === item?._id));
+          const newData = result?.data?.filter(
+            (item: any) =>
+              !data.some((stateItem) => stateItem?._id === item?._id)
+          );
           setData([...data, ...newData]);
         }
       } catch (error) {
@@ -52,20 +57,19 @@ const Page = ({ params, searchParams }: any) => {
     fetchData();
   }, [params?.coin, searchParams?.search, searchParams?.date, pageCount]);
 
-
   // Use IntersectionObserver to detect when the last element is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (searchParams?.search?.length > 0 || searchParams?.date) {
-          setPageCount(1)
+          setPageCount(1);
         }
         if (entries[0]?.isIntersecting && data?.length >= 10) {
           setPageCount((prevPageCount) => prevPageCount + 1);
-        } 
+        }
       },
       {
-        threshold: 1
+        threshold: 1,
       }
     );
 
@@ -79,7 +83,6 @@ const Page = ({ params, searchParams }: any) => {
       }
     };
   }, [data]);
-
 
   const fieldsHeadings = ["Amount", "Type", "Sender", "Receiver", "Date"];
   const fieldsData = ["amount", "type", "sender", "receiver", "date"];
@@ -105,8 +108,21 @@ const Page = ({ params, searchParams }: any) => {
             </div>
           </div>
           <>
-            <Table fieldsHeadings={fieldsHeadings} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            <Table
+              fieldsHeadings={fieldsHeadings}
+              fieldData={fieldsData}
+              data={
+                searchParams?.date || searchParams?.search?.length > 0
+                  ? search
+                  : data
+              }
+            />
+            {empty?.length >= 10 && (
+              <div
+                ref={lastElementRef}
+                style={{ height: "4px", width: "100%" }}
+              />
+            )}
             {loading && <DataLoader />}
           </>
         </div>

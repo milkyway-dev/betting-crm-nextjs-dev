@@ -311,9 +311,14 @@ export const getSubordinatesReport = async (username: string) => {
     revalidatePath("/");
   }
 };
-export async function getAllBets(user: any, dateString: string,page:number,limit:number) {
+export async function getAllBets(
+  user: any,
+  dateString: string,
+  page: number,
+  limit: number
+) {
   const token = await getCookie();
-  let url = `/api/bets?page=${page||1}&limit=${limit||10}`;
+  let url = `/api/bets?page=${page || 1}&limit=${limit || 10}`;
   if (user?.role === "admin") {
     if (dateString?.length > 0) {
       url += `&date=${dateString}`;
@@ -324,7 +329,7 @@ export async function getAllBets(user: any, dateString: string,page:number,limit
       url += `&date=${dateString}`;
     }
   }
-  console.log(url,"betting");
+  console.log(url, "betting");
   try {
     const response = await fetch(`${config.server}${url}`, {
       method: "GET",
@@ -339,7 +344,7 @@ export async function getAllBets(user: any, dateString: string,page:number,limit
       return { error: error.message, statuscode: response?.status };
     }
     const data = await response.json();
-    const bet = data
+    const bet = data;
     return bet;
   } catch (error) {
     Cookies.remove("token");
@@ -353,7 +358,9 @@ export async function getAllTransactions(
   page: number,
   limit: number
 ) {
-  let transaction: string = `/api/transactions?page=${page || 1}&limit=${limit || 10}`;
+  let transaction: string = `/api/transactions?page=${page || 1}&limit=${
+    limit || 10
+  }`;
   if (searchString?.length > 0) {
     transaction += `&search=${encodeURIComponent(String(searchString))}`;
   }
@@ -372,7 +379,8 @@ export async function getAllTransactions(
   const token = await getCookie();
   try {
     const response = await fetch(
-      `${config.server}${user?.role == "admin" ? transaction : transaction_subordinates
+      `${config.server}${
+        user?.role == "admin" ? transaction : transaction_subordinates
       }`,
       {
         method: "GET",
@@ -404,11 +412,12 @@ export async function getSubordinates(
   page: number,
   limit: number
 ) {
-
-  console.log(page, "Page", limit, "page")
+  console.log(page, "Page", limit, "page");
   const token = await getCookie();
   const user: any = await getCurrentUser();
-  let url: string = `/api/subordinates?type=${role}&page=${page || 1}&limit=${limit || 10}`;
+  let url: string = `/api/subordinates?type=${role}&page=${page || 1}&limit=${
+    limit || 10
+  }`;
   if (searchString?.length > 0) {
     url += `&search=${encodeURIComponent(String(searchString))}`;
   }
@@ -792,8 +801,6 @@ export async function updateBet(payload: any) {
     revalidatePath("/");
   }
 }
-
-
 export async function getPlayerTransactions(
   username: string,
   searchString: string,
@@ -801,9 +808,6 @@ export async function getPlayerTransactions(
   page: number,
   limit: number
 ) {
-
-  console.log(username,page,limit,"data")
-
   let transaction_subordinates: string = `/api/transactions/${username}/players?type=username&page=${page || 1}&limit=${limit || 10}`;
   if (searchString?.length > 0) {
     transaction_subordinates += `&search=${encodeURIComponent(
@@ -833,12 +837,11 @@ export async function getPlayerTransactions(
       const error = await response.json();
       return { error: error.message };
     }
-    console.log(response,"response player transation")
     const data = await response.json();
     const transactions = data;
     return transactions;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -852,6 +855,7 @@ export async function getPlayerBettings(
   const token = await getCookie();
   let url:string = `api/bets/${username}/bets?type=username&status=all&page=${page||1}&limit=${limit||10}`;
 
+
   if (searchString?.length > 0) {
     url += `?search=${encodeURIComponent(String(searchString))}`;
   }
@@ -861,6 +865,7 @@ export async function getPlayerBettings(
 
   try {
     const response:any = await fetch(`${config.server}/${url}`, {
+
       method: "GET",
       credentials: "include",
       headers: {
@@ -871,9 +876,9 @@ export async function getPlayerBettings(
 
     if (!response.ok) {
       const error = await response.json();
-      
       return { error: error.message,statuscode: response.status};
     } 
+
 
     const data = await response.json();
     return data;
@@ -892,6 +897,7 @@ export async function getAllTransactionsSubor(
   limit: number
 ) {
   let transaction_subordinates: string = `/api/transactions/${username}/subordinate?type=username&page=${page||10}&limit=${limit||10}`;
+
   if (searchString?.length > 0) {
     transaction_subordinates += `&search=${encodeURIComponent(
       String(searchString)
@@ -939,8 +945,8 @@ export async function getAllSubordinates(
   limit: number
 ) {
   const token = await getCookie();
-
   let subordinatesurl: string = `${config.server}/api/subordinates/${username}/subordinates?type=username&page=${page||1}&limit=${limit||10}`;
+
   if (searchString?.length > 0) {
     subordinatesurl += `&search=${encodeURIComponent(String(searchString))}`;
   }
@@ -969,3 +975,78 @@ export async function getAllSubordinates(
     revalidatePath("/");
   }
 }
+
+export const getScores = async (eventId: string | null) => {
+  const token = await getCookie();
+  try {
+    const response = await fetch(`${config.server}/api/score/${eventId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
+export const getTransactionInsights = async (user: any) => {
+  const token = await getCookie();
+  let url = "api/transactions/monthly/";
+  if (user?.role === "admin") {
+    url += "admin";
+  } else {
+    url += "user";
+  }
+  try {
+    const response = await fetch(`${config.server}/${url}?year=2024`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `userToken=${token}`,
+      },
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
+export const getSubordinateInsights = async () => {
+  const token = await getCookie();
+  try {
+    const response = await fetch(
+      `${config.server}/api/auth/createdUser?year=2024`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `userToken=${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message };
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log("error:", error);
+  }
+};

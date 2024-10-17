@@ -1,31 +1,30 @@
-"use client"
-import Table from "@/component/ui/Table";
-import ReportTabs from "../../ReportTabs";
-import SearchBar from "@/component/ui/SearchBar";
-import SubordinatesReport from "@/component/ui/SubordinatesReport";
-import { getAllTransactionsSubor, getSubordinatesReport } from "@/utils/action";
-import DateFilter from "@/component/ui/DateFilter";
-import { useEffect, useRef, useState } from "react";
-import DataLoader from "@/component/ui/DataLoader";
 
+"use client"
+import Table from "@/components/ui/Table";
+import ReportTabs from "../../ReportTabs";
+import SearchBar from "@/components/ui/SearchBar";
+import SubordinatesReport from "@/components/ui/SubordinatesReport";
+import { getAllTransactionsSubor, getSubordinatesReport } from "@/utils/action";
+import DateFilter from "@/components/ui/DateFilter";
+import { useEffect, useRef, useState } from "react";
+import DataLoader from "@/components/ui/DataLoader";
 
 const Page = ({ params, searchParams }: any) => {
-  const [pageCount, setPageCount] = useState<number>(1)
+  const [pageCount, setPageCount] = useState<number>(1);
   const lastElementRef = useRef(null);
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false)
-  const [report, setReport] = useState([])
-  const [search, setSearch] = useState<any[]>([])
-  const [empty,setEmpty]=useState([])
+  const [loading, setLoading] = useState(false);
+  const [report, setReport] = useState([]);
+  const [search, setSearch] = useState<any[]>([]);
+  const [empty, setEmpty] = useState([]);
 
   const handelReport = async () => {
     const fetchedReportData = await getSubordinatesReport(params?.transaction);
-    setReport(fetchedReportData)
-  }
+    setReport(fetchedReportData);
+  };
   useEffect(() => {
-    handelReport()
-  }, [params?.transaction])
-
+    handelReport();
+  }, [params?.transaction]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,10 +34,13 @@ const Page = ({ params, searchParams }: any) => {
           params?.transaction,
           searchParams?.search,
           searchParams?.date,
-          (searchParams?.search?.length > 0 || searchParams?.date)?1:pageCount,
+
+          searchParams?.search?.length > 0 || searchParams?.date
+            ? 1
+            : pageCount,
           10
         );
-         setEmpty(result?.data)
+        setEmpty(result?.data);
         if (searchParams?.search?.length > 0 || searchParams?.date) {
           setSearch([...result?.data]);
         } else {
@@ -94,9 +96,7 @@ const Page = ({ params, searchParams }: any) => {
   }, [data]);
   return (
     <>
-      <div
-        className="flex-1 h-screen overflow-y-scroll "
-      >
+      <div className="flex-1 h-screen overflow-y-scroll ">
         <div className="md:px-5 py-5">
           <SubordinatesReport reportData={report} />
           <div className="md:flex items-center justify-between">
@@ -111,8 +111,23 @@ const Page = ({ params, searchParams }: any) => {
             </div>
           </div>
           <>
-            <Table fieldsHeadings={fieldsHeadings} searchDate={searchParams?.date} searchquery={searchParams?.search} fieldData={fieldsData} data={((searchParams?.date) || (searchParams?.search?.length > 0)) ? search : data} />
-            {empty?.length >= 10 && <div ref={lastElementRef} style={{ height: '4px', width: '100%' }} />}
+            <Table
+              fieldsHeadings={fieldsHeadings}
+              searchDate={searchParams?.date}
+              searchquery={searchParams?.search}
+              fieldData={fieldsData}
+              data={
+                searchParams?.date || searchParams?.search?.length > 0
+                  ? search
+                  : data
+              }
+            />
+            {empty?.length >= 10 && (
+              <div
+                ref={lastElementRef}
+                style={{ height: "4px", width: "100%" }}
+              />
+            )}
             {loading && <DataLoader />}
           </>
         </div>
