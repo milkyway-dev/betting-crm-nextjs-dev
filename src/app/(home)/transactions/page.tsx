@@ -50,6 +50,7 @@ const Page = () => {
         if (transaction?.error) {
           return toast.error(transaction?.error);
         }
+
         const monthNames = [
           "January",
           "February",
@@ -74,6 +75,8 @@ const Page = () => {
             redeem: monthData.totalRedeemAmount || 0,
           };
         });
+        console.log(transaction, "DATA");
+        console.log(chartData, "CHartDATA");
         setTransactionData(chartData);
 
         setEmpty(result?.data);
